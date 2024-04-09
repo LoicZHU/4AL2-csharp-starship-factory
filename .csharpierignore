@@ -1,0 +1,10 @@
+**/.idea/
+
+Uploads/
+**/App_Data/*.cs
+**/\.*
+**/bin/
+**/docs
+**/obj/
+**/Properties/
+**/*.json
