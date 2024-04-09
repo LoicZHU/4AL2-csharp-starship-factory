@@ -13,6 +13,12 @@
       "commands": [
         "husky"
       ]
+    },
+    "dotnet-format": {
+      "version": "7.4.437506",
+      "commands": [
+        "dotnet-format"
+      ]
     }
   }
 }
