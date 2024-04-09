@@ -636,4 +636,5 @@ Temporary Items
 
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore,csharp,rider,visualstudiocode,osx,macos,intellij
 
-.idea/
+**/.idea/
+**/.vscode/
