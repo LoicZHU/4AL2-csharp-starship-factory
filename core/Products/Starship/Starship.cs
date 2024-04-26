@@ -2,12 +2,12 @@ namespace core.Products.Starship;
 
 public class Starship
 {
-	public Guid Id { get; private set; } = Guid.NewGuid();
-	public String Name { get; private set; }
-	public String Hull { get; private set; }
-	public String Engine { get; private set; }
-	public String Wing { get; private set; }
-	public List<String> Thrusters { get; private set; }
+	public Guid Id { get; } = Guid.NewGuid();
+	public String Name { get; set; }
+	public String Hull { get; set; }
+	public String Engine { get; set; }
+	public String Wing { get; set; }
+	public List<String> Thrusters { get; set; }
 
 	public Starship(
 		String name,
