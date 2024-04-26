@@ -2,6 +2,7 @@ namespace core.Products.Starship;
 
 public class Starship
 {
+	public Guid Id { get; private set; } = Guid.NewGuid();
 	public String Name { get; private set; }
 	public String Hull { get; private set; }
 	public String Engine { get; private set; }
