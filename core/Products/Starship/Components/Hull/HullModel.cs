@@ -1,6 +1,6 @@
-namespace core.Products.Starship.Components;
+namespace core.Products.Starship.Components.Hull;
 
-public static class Hulls
+public static class HullModel
 {
 	public const string Hull_HE1 = "Hull_HE1";
 	public const string Hull_HS1 = "Hull_HS1";

@@ -1,21 +1,19 @@
-using core.Products.Starship.Components;
-
 namespace core.Products.Starship;
 
 public class Starship
 {
 	public String Name { get; private set; }
-	public Component Hull { get; private set; }
-	public Component Engine { get; private set; }
-	public Component Wing { get; private set; }
-	public List<Component> Thrusters { get; private set; }
+	public String Hull { get; private set; }
+	public String Engine { get; private set; }
+	public String Wing { get; private set; }
+	public List<String> Thrusters { get; private set; }
 
 	public Starship(
 		String name,
-		Component hull,
-		Component engine,
-		Component wing,
-		List<Component> thrusters
+		String hull,
+		String engine,
+		String wing,
+		List<String> thrusters
 	)
 	{
 		Name = name;
