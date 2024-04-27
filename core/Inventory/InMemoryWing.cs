@@ -11,11 +11,6 @@ public class InMemoryWing
 		_cache.Add(wing.Id, wing);
 	}
 
-	public Int32 CountByName(String name)
-	{
-		return _cache.Values.Count(wing => wing.Name == name);
-	}
-
 	public void Remove(String name)
 	{
 		var wing = _cache.Values.FirstOrDefault(wing => wing.Name == name);
@@ -23,5 +18,10 @@ public class InMemoryWing
 		{
 			_cache.Remove(wing.Id);
 		}
+	}
+
+	public Int32 CountByName(String name)
+	{
+		return _cache.Values.Count(wing => wing.Name == name);
 	}
 }

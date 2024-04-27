@@ -11,11 +11,6 @@ public class InMemoryThruster
 		_cache.Add(thruster.Id, thruster);
 	}
 
-	public Int32 CountByName(String name)
-	{
-		return _cache.Values.Count(thruster => thruster.Name == name);
-	}
-
 	public void Remove(String name)
 	{
 		var thruster = _cache.Values.FirstOrDefault(thruster => thruster.Name == name);
@@ -23,5 +18,10 @@ public class InMemoryThruster
 		{
 			_cache.Remove(thruster.Id);
 		}
+	}
+
+	public Int32 CountByName(String name)
+	{
+		return _cache.Values.Count(thruster => thruster.Name == name);
 	}
 }

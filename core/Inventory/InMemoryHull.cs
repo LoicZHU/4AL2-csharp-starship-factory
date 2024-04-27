@@ -11,11 +11,6 @@ public class InMemoryHull
 		_cache.Add(hull.Id, hull);
 	}
 
-	public Int32 CountByName(String name)
-	{
-		return _cache.Values.Count(hull => hull.Name == name);
-	}
-
 	public void Remove(String name)
 	{
 		var hull = _cache.Values.FirstOrDefault(hull => hull.Name == name);
@@ -23,5 +18,10 @@ public class InMemoryHull
 		{
 			_cache.Remove(hull.Id);
 		}
+	}
+
+	public Int32 CountByName(String name)
+	{
+		return _cache.Values.Count(hull => hull.Name == name);
 	}
 }
