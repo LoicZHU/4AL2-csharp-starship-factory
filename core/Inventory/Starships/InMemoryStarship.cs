@@ -14,47 +14,44 @@ public class InMemoryStarship
 	{
 		_cache = new()
 		{
-			{
-				Guid.NewGuid(),
-				new Starship(
-					StarshipModel.Explorer,
-					HullModel.Hull_HE1,
-					EngineModel.Engine_EE1,
-					WingModel.Wings_WE1,
-					new() { ThrusterModel.Thruster_TE1 }
-				)
-			},
-			{
-				Guid.NewGuid(),
-				new Starship(
-					StarshipModel.Explorer,
-					HullModel.Hull_HE1,
-					EngineModel.Engine_EE1,
-					WingModel.Wings_WE1,
-					new() { ThrusterModel.Thruster_TE1 }
-				)
-			},
-			{
-				Guid.NewGuid(),
-				new Starship(
-					StarshipModel.Speeder,
-					HullModel.Hull_HS1,
-					EngineModel.Engine_ES1,
-					WingModel.Wings_WS1,
-					new() { ThrusterModel.Thruster_TS1, ThrusterModel.Thruster_TS1 }
-				)
-			},
-			{
-				Guid.NewGuid(),
-				new Starship(
-					StarshipModel.Cargo,
-					HullModel.Hull_HC1,
-					EngineModel.Engine_EC1,
-					WingModel.Wings_WC1,
-					new() { ThrusterModel.Thruster_TC1 }
-				)
-			}
+			{ Guid.NewGuid(), CreateExplorer() },
+			{ Guid.NewGuid(), CreateExplorer() },
+			{ Guid.NewGuid(), CreateSpeeder() },
+			{ Guid.NewGuid(), CreateCargo() }
 		};
+	}
+
+	private Starship CreateExplorer()
+	{
+		return new Starship(
+			StarshipModel.Explorer,
+			HullModel.Hull_HE1,
+			EngineModel.Engine_EE1,
+			WingModel.Wings_WE1,
+			new() { ThrusterModel.Thruster_TE1 }
+		);
+	}
+
+	private Starship CreateSpeeder()
+	{
+		return new Starship(
+			StarshipModel.Speeder,
+			HullModel.Hull_HS1,
+			EngineModel.Engine_ES1,
+			WingModel.Wings_WS1,
+			new() { ThrusterModel.Thruster_TS1, ThrusterModel.Thruster_TS1 }
+		);
+	}
+
+	private Starship CreateCargo()
+	{
+		return new Starship(
+			StarshipModel.Cargo,
+			HullModel.Hull_HC1,
+			EngineModel.Engine_EC1,
+			WingModel.Wings_WC1,
+			new() { ThrusterModel.Thruster_TC1 }
+		);
 	}
 
 	public void Add(Starship starship)
@@ -88,23 +85,23 @@ public class InMemoryStarship
 
 	public void PrintInventory()
 	{
-		var starshipCounts = new Dictionary<String, int>();
+		var counts = new Dictionary<String, int>();
 
 		foreach (var starship in _cache.Values)
 		{
 			var name = starship.Name;
 
-			if (!starshipCounts.ContainsKey(name))
+			if (!counts.ContainsKey(name))
 			{
-				starshipCounts[name] = 1;
+				counts[name] = 1;
 			}
 			else
 			{
-				starshipCounts[name]++;
+				counts[name]++;
 			}
 		}
 
-		foreach (var count in starshipCounts)
+		foreach (var count in counts)
 		{
 			Console.WriteLine($"{count.Value} {count.Key}");
 		}
