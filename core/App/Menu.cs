@@ -65,18 +65,11 @@ public class Menu
 
 			for (var i = 1; i < args.Length; i += 2)
 			{
-				try
+				var itemName = args[i + 1];
+				if (!int.TryParse(args[i], out var quantity))
 				{
-					var quantity = int.Parse(args[i]);
-					var itemName = args[i + 1];
-
-					Console.WriteLine($"Quantity: {quantity}, Item Name: {itemName}");
-				}
-				catch (FormatException)
-				{
-					Console.WriteLine(
-						$"Error: '{args[i]}' is not a valid integer. Skipping this item."
-					);
+					_userInterface.PrintInvalidInstructionCommand();
+					return;
 				}
 			}
 		}
@@ -84,11 +77,6 @@ public class Menu
 		{
 			_userInterface.PrintUnknownCommand();
 		}
-	}
-
-	private Boolean IsInstructionsCommandValid(String[] args)
-	{
-		return args.Length >= 3 && (args.Length - 1) % 2 == 0;
 	}
 
 	#region commands
@@ -102,6 +90,11 @@ public class Menu
 	{
 		return input is not null
 			&& input.StartsWith(Command.Instructions, StringComparison.OrdinalIgnoreCase);
+	}
+
+	private Boolean IsInstructionsCommandValid(String[] args)
+	{
+		return args.Length >= 3 && (args.Length - 1) % 2 == 0;
 	}
 
 	private Boolean IsStocksCommand(String? input)
