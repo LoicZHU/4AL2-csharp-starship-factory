@@ -1,10 +1,9 @@
-﻿using System.Runtime.CompilerServices;
-using core.Inventory;
+﻿using core.App.UI;
 using core.Inventory.Starships;
 using core.Inventory.Starships.ComponentAssembly;
 using core.Inventory.Starships.Components;
 
-namespace core;
+namespace core.App;
 
 static class Program
 {
