@@ -4,7 +4,7 @@ using core.Products.Starship.Components.Hull;
 using core.Products.Starship.Components.Thruster;
 using core.Products.Starship.Components.Wing;
 
-namespace core.Inventory;
+namespace core.Inventory.Starships;
 
 public class InMemoryStarship
 {
@@ -28,7 +28,7 @@ public class InMemoryStarship
 			HullModel.Hull_HE1,
 			EngineModel.Engine_EE1,
 			WingModel.Wings_WE1,
-			new() { ThrusterModel.Thruster_TE1 }
+			new List<string> { ThrusterModel.Thruster_TE1 }
 		);
 	}
 
@@ -39,7 +39,7 @@ public class InMemoryStarship
 			HullModel.Hull_HS1,
 			EngineModel.Engine_ES1,
 			WingModel.Wings_WS1,
-			new() { ThrusterModel.Thruster_TS1, ThrusterModel.Thruster_TS1 }
+			new List<string> { ThrusterModel.Thruster_TS1, ThrusterModel.Thruster_TS1 }
 		);
 	}
 
@@ -50,7 +50,7 @@ public class InMemoryStarship
 			HullModel.Hull_HC1,
 			EngineModel.Engine_EC1,
 			WingModel.Wings_WC1,
-			new() { ThrusterModel.Thruster_TC1 }
+			new List<string> { ThrusterModel.Thruster_TC1 }
 		);
 	}
 
