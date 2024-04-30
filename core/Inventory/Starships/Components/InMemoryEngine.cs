@@ -21,10 +21,7 @@ public class InMemoryEngine
 		var engine = _cache.Values.FirstOrDefault(engine => engine.Name == name);
 		if (engine is not null)
 		{
-			Console.WriteLine(_cache.Values.Count);
-			Console.WriteLine("Removing engine");
 			_cache.Remove(engine.Id);
-			Console.WriteLine(_cache.Values.Count);
 		}
 	}
 

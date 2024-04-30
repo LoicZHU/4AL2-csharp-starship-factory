@@ -65,8 +65,14 @@ public class UserInterface
 	}
 	#endregion
 
-	private void PrintLineBreak()
+	public void PrintUnknownStarshipModel()
 	{
-		Console.WriteLine("");
+		Console.WriteLine("❌ Modèle de vaisseau inconnu. Veuillez réessayer.");
+		this.PrintLineBreak();
+	}
+
+	public void PrintLineBreak()
+	{
+		Console.Write("\n");
 	}
 }

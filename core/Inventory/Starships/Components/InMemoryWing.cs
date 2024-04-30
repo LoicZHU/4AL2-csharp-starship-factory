@@ -8,18 +8,7 @@ public class InMemoryWing
 
 	public InMemoryWing()
 	{
-		_cache = new Dictionary<Guid, Wing>
-		{
-			{ Guid.NewGuid(), new Wing(WingModel.Wings_WC1) },
-			{ Guid.NewGuid(), new Wing(WingModel.Wings_WC1) },
-			{ Guid.NewGuid(), new Wing(WingModel.Wings_WC1) },
-			{ Guid.NewGuid(), new Wing(WingModel.Wings_WE1) },
-			{ Guid.NewGuid(), new Wing(WingModel.Wings_WE1) },
-			{ Guid.NewGuid(), new Wing(WingModel.Wings_WE1) },
-			{ Guid.NewGuid(), new Wing(WingModel.Wings_WS1) },
-			{ Guid.NewGuid(), new Wing(WingModel.Wings_WS1) },
-			{ Guid.NewGuid(), new Wing(WingModel.Wings_WS1) }
-		};
+		this.SetCache();
 	}
 
 	public void Add(Wing wing)
@@ -63,5 +52,18 @@ public class InMemoryWing
 		{
 			Console.WriteLine($"{count.Value} {count.Key}");
 		}
+	}
+
+	private void SetCache()
+	{
+		this.Add(new Wing(WingModel.Wings_WC1));
+		this.Add(new Wing(WingModel.Wings_WC1));
+		this.Add(new Wing(WingModel.Wings_WC1));
+		this.Add(new Wing(WingModel.Wings_WE1));
+		this.Add(new Wing(WingModel.Wings_WE1));
+		this.Add(new Wing(WingModel.Wings_WE1));
+		this.Add(new Wing(WingModel.Wings_WS1));
+		this.Add(new Wing(WingModel.Wings_WS1));
+		this.Add(new Wing(WingModel.Wings_WS1));
 	}
 }

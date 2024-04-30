@@ -56,7 +56,7 @@ public class Menu
 			var userInput = Console.ReadLine()?.Trim();
 			if (IsHelpCommand(userInput))
 			{
-				_userInterface.PrintHelp();
+				this._userInterface.PrintHelp();
 			}
 			else if (IsStocksCommand(userInput))
 			{
@@ -64,138 +64,126 @@ public class Menu
 			}
 			else if (IsInstructionsCommand(userInput))
 			{
-				var args = userInput.Split();
-				if (!IsInstructionsCommandValid(args))
-				{
-					_userInterface.PrintInvalidInstructionCommand();
-					return;
-				}
-
-				for (var i = 1; i < args.Length; i += 2)
-				{
-					var starshipModelArg = args[i + 1];
-					if (!int.TryParse(args[i], out var quantity))
-					{
-						_userInterface.PrintInvalidInstructionCommand();
-						return;
-					}
-
-					if (
-						starshipModelArg.Equals(
-							StarshipModel.Cargo,
-							StringComparison.OrdinalIgnoreCase
-						)
-					)
-					{
-						// TODO: Implement
-						/**
-						 *o Hull_HC1
-						  o Engine_EC1
-						  o Wings_WC1
-						  o Thruster_TC1
-						 */
-						var hullCount = this._inMemoryHull.CountByName(HullModel.Hull_HC1);
-						var engineCount = this._inMemoryHull.CountByName(EngineModel.Engine_EC1);
-						var wingsCount = this._inMemoryHull.CountByName(WingModel.Wings_WC1);
-						var thrusterCount = this._inMemoryHull.CountByName(
-							ThrusterModel.Thruster_TC1
-						);
-						if (
-							!IsMoreInventoryRequired(
-								quantity,
-								hullCount,
-								engineCount,
-								wingsCount,
-								thrusterCount
-							)
-						)
-						{
-							this._userInterface.PrintStarshipProductionStarting(starshipModelArg);
-
-							this.HandleCargoProduction(quantity, starshipModelArg);
-
-							this._userInterface.PrintStarshipProductionFinishing(starshipModelArg);
-						}
-					}
-					else if (
-						starshipModelArg.Equals(
-							StarshipModel.Explorer,
-							StringComparison.OrdinalIgnoreCase
-						)
-					)
-					{
-						// TODO: Implement
-						/**
-						 * o Hull_HE1
-						  o Engine_EE1
-						  o Wings_WE1
-						  o Thruster_TE1
-						 */
-					}
-					else if (
-						starshipModelArg.Equals(
-							StarshipModel.Speeder,
-							StringComparison.OrdinalIgnoreCase
-						)
-					)
-					{
-						// TODO: Implement
-						/**
-						 * o Hull_HS1
-						  o Engine_ES1
-						  o Wings_WS1
-						  o Thruster_TS1
-						  o Thruster_TS1
-						 */
-					}
-				}
+				this.HandleInstructionsCommand(userInput);
 			}
 			else
 			{
-				_userInterface.PrintUnknownCommand();
+				this._userInterface.PrintUnknownCommand();
 			}
 		}
 	}
 
-	private void HandleCargoProduction(int quantity, string starshipModelArg)
+	private void HandleInstructionsCommand(String? userInput)
 	{
-		for (var i = 0; i < quantity; i++)
+		var userArgs = userInput.Split();
+		if (!IsInstructionsCommandValid(userArgs))
 		{
-			this._userInterface.PrintGetOutStockMessage(1, HullModel.Hull_HC1);
-			this._inMemoryHull.Remove(HullModel.Hull_HC1);
+			_userInterface.PrintInvalidInstructionCommand();
+			return;
+		}
 
-			this._userInterface.PrintGetOutStockMessage(1, EngineModel.Engine_EC1);
-			this._inMemoryEngine.Remove(EngineModel.Engine_EC1);
-
-			this._userInterface.PrintGetOutStockMessage(1, WingModel.Wings_WC1);
-			this._inMemoryWing.Remove(WingModel.Wings_WC1);
-
-			this._userInterface.PrintGetOutStockMessage(1, ThrusterModel.Thruster_TC1);
-			this._inMemoryThruster.Remove(ThrusterModel.Thruster_TC1);
-
-			var componentAssembly = new ComponentAssembly(String.Empty, new List<string>());
-			this._inMemoryComponentAssembly.Add(componentAssembly);
-
-			foreach (var componentModel in StarshipAssembly.ComponentsMap[starshipModelArg])
+		for (var i = 1; i < userArgs.Length; i += 2)
+		{
+			var starshipModelArg = userArgs[i + 1];
+			if (!int.TryParse(userArgs[i], out var quantity))
 			{
-				this._userInterface.PrintAssemblingComponentsMessage(
-					componentAssembly,
-					componentModel
-				);
-				this._inMemoryComponentAssembly.AddComponent(
-					componentAssembly.Id,
-					componentModel
-				);
+				_userInterface.PrintInvalidInstructionCommand();
+				return;
+			}
+
+			var hullCount = this._inMemoryHull.CountByName(HullModel.Hull_HC1);
+			var engineCount = this._inMemoryHull.CountByName(EngineModel.Engine_EC1);
+			var wingsCount = this._inMemoryHull.CountByName(WingModel.Wings_WC1);
+			var thrusterCount = this._inMemoryHull.CountByName(ThrusterModel.Thruster_TC1);
+
+			if (IsCargoStarship(starshipModelArg))
+			{
+				if (
+					IsMoreInventoryRequired(
+						quantity,
+						hullCount,
+						engineCount,
+						wingsCount,
+						thrusterCount
+					)
+				)
+				{
+					return;
+				}
+
+				this.HandleCargoStarshipAssembly(StarshipModel.Cargo, quantity);
+			}
+			else if (IsExplorerStarship(starshipModelArg))
+			{
+				if (
+					IsMoreInventoryRequired(
+						quantity,
+						hullCount,
+						engineCount,
+						wingsCount,
+						thrusterCount
+					)
+				)
+				{
+					return;
+				}
+
+				this.HandleExplorerStarshipAssembly(StarshipModel.Explorer, quantity);
+			}
+			else if (IsSpeederStarship(starshipModelArg))
+			{
+				if (
+					IsMoreInventoryRequired(
+						quantity,
+						hullCount,
+						engineCount,
+						wingsCount,
+						thrusterCount
+					)
+				)
+				{
+					return;
+				}
+
+				this.HandleSpeederStarshipAssembly(StarshipModel.Speeder, quantity);
+			}
+			else
+			{
+				this._userInterface.PrintUnknownStarshipModel();
 			}
 		}
+	}
+
+	private Boolean IsSpeederStarship(string starshipModelArg)
+	{
+		return starshipModelArg.Equals(
+			StarshipModel.Speeder,
+			StringComparison.OrdinalIgnoreCase
+		);
+	}
+
+	private Boolean IsExplorerStarship(string starshipModelArg)
+	{
+		return starshipModelArg.Equals(
+			StarshipModel.Explorer,
+			StringComparison.OrdinalIgnoreCase
+		);
+	}
+
+	private Boolean IsCargoStarship(string starshipModelArg)
+	{
+		return starshipModelArg.Equals(
+			StarshipModel.Cargo,
+			StringComparison.OrdinalIgnoreCase
+		);
 	}
 
 	private bool IsMoreInventoryRequired(
-		int quantity,
-		int hullCount,
-		int engineCount,
-		int wingsCount,
-		int thrusterCount
+		Int32 quantity,
+		Int32 hullCount,
+		Int32 engineCount,
+		Int32 wingsCount,
+		Int32 thrusterCount
 	)
 	{
 		return hullCount < 1 * quantity
@@ -203,6 +191,145 @@ public class Menu
 			&& wingsCount < 1 * quantity
 			&& thrusterCount < 1 * quantity;
 	}
+
+	#region HandleStarshipAssembly
+	private void HandleCargoStarshipAssembly(string starshipModelArg, int quantity)
+	{
+		this._userInterface.PrintStarshipProductionStarting(starshipModelArg);
+
+		for (var i = 0; i < quantity; i++)
+		{
+			GetOutCargoComponentsFromInventories();
+
+			var componentAssembly = new ComponentAssembly(String.Empty, new List<string>());
+			this._inMemoryComponentAssembly.Add(componentAssembly);
+
+			foreach (var componentModel in StarshipAssembly.ComponentsMap[starshipModelArg])
+			{
+				AddComponentAssemblyToItsInventory(componentAssembly, componentModel);
+			}
+		}
+
+		this._userInterface.PrintStarshipProductionFinishing(starshipModelArg);
+	}
+
+	private void HandleExplorerStarshipAssembly(String starshipModelArg, Int32 quantity)
+	{
+		this._userInterface.PrintStarshipProductionStarting(starshipModelArg);
+
+		for (var i = 0; i < quantity; i++)
+		{
+			GetOutExplorerComponentsFromInventories();
+
+			var componentAssembly = new ComponentAssembly(String.Empty, new List<string>());
+			this._inMemoryComponentAssembly.Add(componentAssembly);
+
+			foreach (var componentModel in StarshipAssembly.ComponentsMap[starshipModelArg])
+			{
+				AddComponentAssemblyToItsInventory(componentAssembly, componentModel);
+			}
+		}
+
+		this._userInterface.PrintStarshipProductionFinishing(starshipModelArg);
+	}
+
+	private void HandleSpeederStarshipAssembly(String starshipModelArg, Int32 quantity)
+	{
+		this._userInterface.PrintStarshipProductionStarting(starshipModelArg);
+
+		for (var i = 0; i < quantity; i++)
+		{
+			GetOutSpeederComponentsFromInventories();
+
+			var componentAssembly = new ComponentAssembly(String.Empty, new List<string>());
+			this._inMemoryComponentAssembly.Add(componentAssembly);
+
+			foreach (var componentModel in StarshipAssembly.ComponentsMap[starshipModelArg])
+			{
+				AddComponentAssemblyToItsInventory(componentAssembly, componentModel);
+			}
+		}
+
+		this._userInterface.PrintStarshipProductionFinishing(starshipModelArg);
+	}
+
+	private void AddComponentAssemblyToItsInventory(
+		ComponentAssembly componentAssembly,
+		string componentModel
+	)
+	{
+		this._userInterface.PrintAssemblingComponentsMessage(
+			componentAssembly,
+			componentModel
+		);
+
+		this._inMemoryComponentAssembly.AddComponent(componentAssembly.Id, componentModel);
+	}
+
+	private void GetOutCargoComponentsFromInventories()
+	{
+		this.GetOutHullFromItsInventory(HullModel.Hull_HC1, 1);
+		this.GetOutEngineFromItsInventory(EngineModel.Engine_EC1, 1);
+		this.GetOutWingFromItsInventory(WingModel.Wings_WC1, 1);
+		this.GetOutThrusterFromItsInventory(ThrusterModel.Thruster_TC1, 1);
+	}
+
+	private void GetOutExplorerComponentsFromInventories()
+	{
+		this.GetOutHullFromItsInventory(HullModel.Hull_HE1, 1);
+		this.GetOutEngineFromItsInventory(EngineModel.Engine_EE1, 1);
+		this.GetOutWingFromItsInventory(WingModel.Wings_WE1, 1);
+		this.GetOutThrusterFromItsInventory(ThrusterModel.Thruster_TE1, 1);
+	}
+
+	private void GetOutSpeederComponentsFromInventories()
+	{
+		this.GetOutHullFromItsInventory(HullModel.Hull_HS1, 1);
+		this.GetOutEngineFromItsInventory(EngineModel.Engine_ES1, 1);
+		this.GetOutWingFromItsInventory(WingModel.Wings_WS1, 1);
+		this.GetOutThrusterFromItsInventory(ThrusterModel.Thruster_TS1, 2);
+	}
+
+	private void GetOutHullFromItsInventory(String componentModel, Int32 quantity)
+	{
+		this._userInterface.PrintGetOutStockMessage(quantity, componentModel);
+
+		for (var i = 1; i <= quantity; i++)
+		{
+			this._inMemoryHull.Remove(componentModel);
+		}
+	}
+
+	private void GetOutEngineFromItsInventory(String componentModel, Int32 quantity)
+	{
+		this._userInterface.PrintGetOutStockMessage(quantity, componentModel);
+
+		for (var i = 1; i <= quantity; i++)
+		{
+			this._inMemoryEngine.Remove(componentModel);
+		}
+	}
+
+	private void GetOutWingFromItsInventory(String componentModel, Int32 quantity)
+	{
+		this._userInterface.PrintGetOutStockMessage(quantity, componentModel);
+
+		for (var i = 1; i <= quantity; i++)
+		{
+			this._inMemoryWing.Remove(componentModel);
+		}
+	}
+
+	private void GetOutThrusterFromItsInventory(String componentModel, Int32 quantity)
+	{
+		this._userInterface.PrintGetOutStockMessage(quantity, componentModel);
+
+		for (var i = 1; i <= quantity; i++)
+		{
+			this._inMemoryThruster.Remove(componentModel);
+		}
+	}
+	#endregion
 
 	#region commands
 	private Boolean IsHelpCommand(String? input)
@@ -230,7 +357,6 @@ public class Menu
 	#endregion
 
 	#region PrintInventory
-
 	private void PrintAllInventories()
 	{
 		this.PrintInventory(this._inMemoryStarship);
@@ -239,6 +365,7 @@ public class Menu
 		this.PrintInventory(this._inMemoryWing);
 		this.PrintInventory(this._inMemoryThruster);
 		this.PrintInventory(this._inMemoryComponentAssembly);
+		this._userInterface.PrintLineBreak();
 	}
 
 	private void PrintInventory(InMemoryStarship inMemory)
