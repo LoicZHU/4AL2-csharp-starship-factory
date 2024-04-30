@@ -8,18 +8,7 @@ public class InMemoryEngine
 
 	public InMemoryEngine()
 	{
-		_cache = new()
-		{
-			{ Guid.NewGuid(), new Engine(EngineModel.Engine_EE1) },
-			{ Guid.NewGuid(), new Engine(EngineModel.Engine_EE1) },
-			{ Guid.NewGuid(), new Engine(EngineModel.Engine_EE1) },
-			{ Guid.NewGuid(), new Engine(EngineModel.Engine_ES1) },
-			{ Guid.NewGuid(), new Engine(EngineModel.Engine_ES1) },
-			{ Guid.NewGuid(), new Engine(EngineModel.Engine_ES1) },
-			{ Guid.NewGuid(), new Engine(EngineModel.Engine_EC1) },
-			{ Guid.NewGuid(), new Engine(EngineModel.Engine_EC1) },
-			{ Guid.NewGuid(), new Engine(EngineModel.Engine_EC1) }
-		};
+		SetCache();
 	}
 
 	public void Add(Engine engine)
@@ -63,5 +52,18 @@ public class InMemoryEngine
 		{
 			Console.WriteLine($"{count.Value} {count.Key}");
 		}
+	}
+
+	private void SetCache()
+	{
+		this.Add(new Engine(EngineModel.Engine_EE1));
+		this.Add(new Engine(EngineModel.Engine_EE1));
+		this.Add(new Engine(EngineModel.Engine_EE1));
+		this.Add(new Engine(EngineModel.Engine_ES1));
+		this.Add(new Engine(EngineModel.Engine_ES1));
+		this.Add(new Engine(EngineModel.Engine_ES1));
+		this.Add(new Engine(EngineModel.Engine_EC1));
+		this.Add(new Engine(EngineModel.Engine_EC1));
+		this.Add(new Engine(EngineModel.Engine_EC1));
 	}
 }

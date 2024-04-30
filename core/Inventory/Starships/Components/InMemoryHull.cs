@@ -8,18 +8,7 @@ public class InMemoryHull
 
 	public InMemoryHull()
 	{
-		_cache = new()
-		{
-			{ Guid.NewGuid(), new Hull(HullModel.Hull_HC1) },
-			{ Guid.NewGuid(), new Hull(HullModel.Hull_HC1) },
-			{ Guid.NewGuid(), new Hull(HullModel.Hull_HC1) },
-			{ Guid.NewGuid(), new Hull(HullModel.Hull_HE1) },
-			{ Guid.NewGuid(), new Hull(HullModel.Hull_HE1) },
-			{ Guid.NewGuid(), new Hull(HullModel.Hull_HE1) },
-			{ Guid.NewGuid(), new Hull(HullModel.Hull_HS1) },
-			{ Guid.NewGuid(), new Hull(HullModel.Hull_HS1) },
-			{ Guid.NewGuid(), new Hull(HullModel.Hull_HS1) }
-		};
+		this.SetCache();
 	}
 
 	public void Add(Hull hull)
@@ -63,5 +52,18 @@ public class InMemoryHull
 		{
 			Console.WriteLine($"{count.Value} {count.Key}");
 		}
+	}
+
+	private void SetCache()
+	{
+		this.Add(new Hull(HullModel.Hull_HC1));
+		this.Add(new Hull(HullModel.Hull_HC1));
+		this.Add(new Hull(HullModel.Hull_HC1));
+		this.Add(new Hull(HullModel.Hull_HE1));
+		this.Add(new Hull(HullModel.Hull_HE1));
+		this.Add(new Hull(HullModel.Hull_HE1));
+		this.Add(new Hull(HullModel.Hull_HS1));
+		this.Add(new Hull(HullModel.Hull_HS1));
+		this.Add(new Hull(HullModel.Hull_HS1));
 	}
 }

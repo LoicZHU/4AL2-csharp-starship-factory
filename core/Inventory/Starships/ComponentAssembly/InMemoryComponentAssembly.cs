@@ -37,6 +37,28 @@ public class InMemoryComponentAssembly
 		};
 	}
 
+	public void Add(ComponentAssembly componentAssembly)
+	{
+		_cache.Add(componentAssembly.Id, componentAssembly);
+	}
+
+	public void AddComponent(Guid id, String component)
+	{
+		var componentAssembly = _cache[id];
+
+		componentAssembly.Components.Add(component);
+	}
+
+	public ComponentAssembly GetComponentAssembly(Guid id)
+	{
+		return _cache[id];
+	}
+
+	public void Remove(Guid id)
+	{
+		this._cache.Remove(id);
+	}
+
 	public void PrintInventory()
 	{
 		foreach (var componentAssembly in _cache.Values)
@@ -49,7 +71,7 @@ public class InMemoryComponentAssembly
 			}
 			else
 			{
-				Console.WriteLine($"[{string.Join(", ", componentAssembly.Components)}]");
+				Console.WriteLine($"[{string.Join(",", componentAssembly.Components)}]");
 			}
 		}
 	}

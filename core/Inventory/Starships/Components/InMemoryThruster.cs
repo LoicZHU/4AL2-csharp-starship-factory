@@ -8,21 +8,7 @@ public class InMemoryThruster
 
 	public InMemoryThruster()
 	{
-		_cache = new()
-		{
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TC1) },
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TC1) },
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TC1) },
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TC1) },
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TE1) },
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TE1) },
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TE1) },
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TE1) },
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TS1) },
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TS1) },
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TS1) },
-			{ Guid.NewGuid(), new Thruster(ThrusterModel.Thruster_TS1) }
-		};
+		this.SetCache();
 	}
 
 	public void Add(Thruster thruster)
@@ -66,5 +52,21 @@ public class InMemoryThruster
 		{
 			Console.WriteLine($"{count.Value} {count.Key}");
 		}
+	}
+
+	private void SetCache()
+	{
+		this.Add(new Thruster(ThrusterModel.Thruster_TC1));
+		this.Add(new Thruster(ThrusterModel.Thruster_TC1));
+		this.Add(new Thruster(ThrusterModel.Thruster_TC1));
+		this.Add(new Thruster(ThrusterModel.Thruster_TC1));
+		this.Add(new Thruster(ThrusterModel.Thruster_TE1));
+		this.Add(new Thruster(ThrusterModel.Thruster_TE1));
+		this.Add(new Thruster(ThrusterModel.Thruster_TE1));
+		this.Add(new Thruster(ThrusterModel.Thruster_TE1));
+		this.Add(new Thruster(ThrusterModel.Thruster_TS1));
+		this.Add(new Thruster(ThrusterModel.Thruster_TS1));
+		this.Add(new Thruster(ThrusterModel.Thruster_TS1));
+		this.Add(new Thruster(ThrusterModel.Thruster_TS1));
 	}
 }
