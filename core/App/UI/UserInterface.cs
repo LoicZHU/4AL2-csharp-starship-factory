@@ -1,3 +1,4 @@
+using core.App.UI.constants;
 using core.Products.Starship.ComponentAssembly;
 
 namespace core.App.UI;
@@ -34,6 +35,15 @@ public class UserInterface
 		Console.WriteLine(
 			"❌ La commande doit respecter ce format : INSTRUCTIONS <quantité> <nom_de_l'élément> [<quantité> <nom_de_l'élément> ...]"
 		);
+		this.PrintLineBreak();
+	}
+
+	public void PrintInvalidUserInstructionCommand()
+	{
+		Console.WriteLine(
+			"❌ La commande doit respecter ce format : [USER_INSTRUCTION] <quantité> <nom_du_vaisseau> [, <quantité> <nom_du_vaisseau>, ...]"
+		);
+
 		this.PrintLineBreak();
 	}
 

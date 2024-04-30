@@ -1,4 +1,5 @@
 using core.App.UI;
+using core.App.UI.constants;
 using core.Inventory.Starships;
 using core.Inventory.Starships.ComponentAssembly;
 using core.Inventory.Starships.Components;
@@ -66,6 +67,10 @@ public class Menu
 			{
 				this.HandleInstructionsCommand(userInput);
 			}
+			else if (IsUserInstructionCommand(userInput))
+			{
+				this.HandleUserInstructionCommand(userInput);
+			}
 			else
 			{
 				this._userInterface.PrintUnknownCommand();
@@ -73,10 +78,32 @@ public class Menu
 		}
 	}
 
-	private void HandleInstructionsCommand(String? userInput)
+	private Boolean IsUserInstructionCommand(String? input)
+	{
+		return input is not null
+			&& input.StartsWith(Command.UserInstruction, StringComparison.OrdinalIgnoreCase);
+	}
+
+	private void HandleUserInstructionCommand(String userInput)
 	{
 		var userArgs = userInput.Split();
-		if (!IsInstructionsCommandValid(userArgs))
+		if (!IsUserInstructionCommandValid(userArgs))
+		{
+			this._userInterface.PrintInvalidUserInstructionCommand();
+			return;
+		}
+		// TODO ...
+	}
+
+	private Boolean IsUserInstructionCommandValid(String[] input)
+	{
+		return input.Length >= 3 && (input.Length - 1) % 2 == 0;
+	}
+
+	private void HandleInstructionsCommand(String userInput)
+	{
+		var userArgs = userInput.Split();
+		if (!this.IsInstructionsCommandValid(userArgs))
 		{
 			_userInterface.PrintInvalidInstructionCommand();
 			return;
