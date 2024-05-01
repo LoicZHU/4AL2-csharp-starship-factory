@@ -18,33 +18,31 @@ public class UserInterface
 	public void PrintHelp()
 	{
 		Console.WriteLine("\nCommandes disponibles :");
-		Console.WriteLine($"👉 {Command.Stocks} : afficher l'inventaire des vaisseaux");
 		Console.WriteLine($"👉 {Command.Help} : afficher les commandes disponibles");
+		Console.WriteLine($"👉 {Command.Instructions} : assembler des vaisseaux");
+		Console.WriteLine($"👉 {Command.Stocks} : afficher l'inventaire des vaisseaux");
+		Console.WriteLine($"👉 {Command.UserInstruction} : assembler des ");
 		Console.WriteLine($"👉 {Command.Exit} : quitter l'application");
 		this.PrintLineBreak();
 	}
 
 	public void PrintUnknownCommand()
 	{
-		Console.WriteLine("❌ Commande inconnue. Veuillez réessayer.");
-		this.PrintLineBreak();
+		Console.WriteLine("❌ Commande inconnue. Veuillez réessayer.\n");
 	}
 
 	public void PrintInvalidInstructionCommand()
 	{
 		Console.WriteLine(
-			"❌ La commande doit respecter ce format : INSTRUCTIONS <quantité> <nom_de_l'élément> [<quantité> <nom_de_l'élément> ...]"
+			"❌ La commande doit respecter ce format : INSTRUCTIONS <quantité> <nom_de_l'élément> [<quantité> <nom_de_l'élément> ...]\n"
 		);
-		this.PrintLineBreak();
 	}
 
 	public void PrintInvalidUserInstructionCommand()
 	{
 		Console.WriteLine(
-			"❌ La commande doit respecter ce format : [USER_INSTRUCTION] <quantité> <nom_du_vaisseau> [, <quantité> <nom_du_vaisseau>, ...]"
+			"❌ La commande doit respecter ce format : [USER_INSTRUCTION] <quantité> <nom_du_vaisseau> [, <quantité> <nom_du_vaisseau>, ...]\n"
 		);
-
-		this.PrintLineBreak();
 	}
 
 	#region Instructions
@@ -70,15 +68,13 @@ public class UserInterface
 
 	public void PrintStarshipProductionFinishing(String starshipModel)
 	{
-		Console.WriteLine($"{Instruction.Finished} {starshipModel}");
-		this.PrintLineBreak();
+		Console.WriteLine($"{Instruction.Finished} {starshipModel}\n");
 	}
 	#endregion
 
 	public void PrintUnknownStarshipModel()
 	{
-		Console.WriteLine("❌ Modèle de vaisseau inconnu. Veuillez réessayer.");
-		this.PrintLineBreak();
+		Console.WriteLine("❌ Modèle de vaisseau inconnu...\n");
 	}
 
 	public void PrintLineBreak()

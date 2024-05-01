@@ -1,5 +1,7 @@
+using System.Text.RegularExpressions;
 using core.App.UI;
 using core.App.UI.constants;
+using core.App.UserInstructionOrder;
 using core.Inventory.Starships;
 using core.Inventory.Starships.ComponentAssembly;
 using core.Inventory.Starships.Components;
@@ -14,6 +16,8 @@ namespace core.App;
 
 public class Menu
 {
+	private static readonly string QuantityWithStarshipPattern = @"(\d+)\s+(\w+)";
+
 	private readonly UserInterface _userInterface;
 	private readonly InMemoryStarship _inMemoryStarship;
 	private readonly InMemoryEngine _inMemoryEngine;
@@ -21,6 +25,7 @@ public class Menu
 	private readonly InMemoryWing _inMemoryWing;
 	private readonly InMemoryThruster _inMemoryThruster;
 	private readonly InMemoryComponentAssembly _inMemoryComponentAssembly;
+	private readonly InMemoryUserInstruction _inMemoryUserInstruction;
 
 	public Menu(
 		UserInterface userInterface,
@@ -29,7 +34,8 @@ public class Menu
 		InMemoryHull inMemoryHull,
 		InMemoryWing inMemoryWing,
 		InMemoryThruster inMemoryThruster,
-		InMemoryComponentAssembly inMemoryComponentAssembly
+		InMemoryComponentAssembly inMemoryComponentAssembly,
+		InMemoryUserInstruction inMemoryUserInstruction
 	)
 	{
 		this._userInterface = userInterface;
@@ -39,12 +45,12 @@ public class Menu
 		this._inMemoryWing = inMemoryWing;
 		this._inMemoryThruster = inMemoryThruster;
 		this._inMemoryComponentAssembly = inMemoryComponentAssembly;
+		this._inMemoryUserInstruction = inMemoryUserInstruction;
 	}
 
 	public void Start()
 	{
 		_userInterface.PrintWelcomeMessage();
-
 		this.InviteUserToInteractWithTheUserInterface();
 	}
 
@@ -78,12 +84,6 @@ public class Menu
 		}
 	}
 
-	private Boolean IsUserInstructionCommand(String? input)
-	{
-		return input is not null
-			&& input.StartsWith(Command.UserInstruction, StringComparison.OrdinalIgnoreCase);
-	}
-
 	private void HandleUserInstructionCommand(String userInput)
 	{
 		var userArgs = userInput.Split();
@@ -92,7 +92,61 @@ public class Menu
 			this._userInterface.PrintInvalidUserInstructionCommand();
 			return;
 		}
-		// TODO ...
+
+		var userInputParts = userInput.Split(new[] { ' ' }, 2);
+		if (!IsUserInstructionCommandNameSeparatedByOneSpace(userInputParts))
+		{
+			this._userInterface.PrintInvalidUserInstructionCommand();
+			return;
+		}
+
+		var starshipsPart = userInputParts[1];
+		var userInstruction = GetCompleteUserInstructionFrom(starshipsPart);
+
+		this._inMemoryUserInstruction.Add(userInstruction);
+	}
+
+	private UserInstruction GetCompleteUserInstructionFrom(String starshipsPart)
+	{
+		var userInstruction = new UserInstruction();
+
+		foreach (var quantityAndStarship in starshipsPart.Split(", "))
+		{
+			var match = Regex.Match(quantityAndStarship.Trim(), QuantityWithStarshipPattern);
+			if (!IsMatching(match))
+			{
+				this._userInterface.PrintInvalidUserInstructionCommand();
+				continue;
+			}
+
+			if (!int.TryParse(match.Groups[1].Value, out var quantity))
+			{
+				this._userInterface.PrintInvalidUserInstructionCommand();
+				continue;
+			}
+
+			var starshipModelInput = match.Groups[2].Value;
+			var starshipModel = this.GetStarshipModel(starshipModelInput);
+			if (IsUnknownStarship(starshipModel))
+			{
+				this._userInterface.PrintUnknownStarshipModel();
+				continue;
+			}
+
+			userInstruction.Add(starshipModel, quantity);
+		}
+
+		return userInstruction;
+	}
+
+	private Boolean IsMatching(Match match)
+	{
+		return match.Success;
+	}
+
+	private Boolean IsUserInstructionCommandNameSeparatedByOneSpace(String[] userInputParts)
+	{
+		return userInputParts.Length == 2;
 	}
 
 	private Boolean IsUserInstructionCommandValid(String[] input)
@@ -118,61 +172,35 @@ public class Menu
 				return;
 			}
 
-			var hullCount = this._inMemoryHull.CountByName(HullModel.Hull_HC1);
-			var engineCount = this._inMemoryHull.CountByName(EngineModel.Engine_EC1);
-			var wingsCount = this._inMemoryHull.CountByName(WingModel.Wings_WC1);
-			var thrusterCount = this._inMemoryHull.CountByName(ThrusterModel.Thruster_TC1);
+			var starshipModel = this.GetStarshipModel(starshipModelArg);
+			var (hullCount, engineCount, wingsCount, thrusterCount) =
+				GetStarshipComponentsCountFromInventories();
 
-			if (IsCargoStarship(starshipModelArg))
-			{
-				if (
-					IsMoreInventoryRequired(
-						quantity,
-						hullCount,
-						engineCount,
-						wingsCount,
-						thrusterCount
-					)
+			if (
+				IsMoreInventoryRequired(
+					starshipModel,
+					quantity,
+					hullCount,
+					engineCount,
+					wingsCount,
+					thrusterCount
 				)
-				{
-					return;
-				}
-
-				this.HandleCargoStarshipAssembly(StarshipModel.Cargo, quantity);
+			)
+			{
+				return;
 			}
-			else if (IsExplorerStarship(starshipModelArg))
-			{
-				if (
-					IsMoreInventoryRequired(
-						quantity,
-						hullCount,
-						engineCount,
-						wingsCount,
-						thrusterCount
-					)
-				)
-				{
-					return;
-				}
 
-				this.HandleExplorerStarshipAssembly(StarshipModel.Explorer, quantity);
+			if (IsCargoStarship(starshipModel))
+			{
+				this.HandleCargoStarshipAssembly(starshipModel, quantity);
 			}
-			else if (IsSpeederStarship(starshipModelArg))
+			else if (IsExplorerStarship(starshipModel))
 			{
-				if (
-					IsMoreInventoryRequired(
-						quantity,
-						hullCount,
-						engineCount,
-						wingsCount,
-						thrusterCount
-					)
-				)
-				{
-					return;
-				}
-
-				this.HandleSpeederStarshipAssembly(StarshipModel.Speeder, quantity);
+				this.HandleExplorerStarshipAssembly(starshipModel, quantity);
+			}
+			else if (IsSpeederStarship(starshipModel))
+			{
+				this.HandleSpeederStarshipAssembly(starshipModel, quantity);
 			}
 			else
 			{
@@ -181,23 +209,35 @@ public class Menu
 		}
 	}
 
-	private Boolean IsSpeederStarship(string starshipModelArg)
+	private (Int32, Int32, Int32, Int32) GetStarshipComponentsCountFromInventories()
 	{
-		return starshipModelArg.Equals(
-			StarshipModel.Speeder,
-			StringComparison.OrdinalIgnoreCase
+		return (
+			this._inMemoryHull.CountByName(HullModel.Hull_HC1),
+			this._inMemoryEngine.CountByName(EngineModel.Engine_EC1),
+			this._inMemoryWing.CountByName(WingModel.Wings_WC1),
+			this._inMemoryThruster.CountByName(ThrusterModel.Thruster_TC1)
 		);
 	}
 
-	private Boolean IsExplorerStarship(string starshipModelArg)
+	private String GetStarshipModel(String model)
 	{
-		return starshipModelArg.Equals(
-			StarshipModel.Explorer,
-			StringComparison.OrdinalIgnoreCase
-		);
+		if (this.IsCargoStarship(model))
+		{
+			return StarshipModel.Cargo;
+		}
+		if (this.IsExplorerStarship(model))
+		{
+			return StarshipModel.Explorer;
+		}
+		if (this.IsSpeederStarship(model))
+		{
+			return StarshipModel.Speeder;
+		}
+
+		return StarshipModel.Unknown;
 	}
 
-	private Boolean IsCargoStarship(string starshipModelArg)
+	private Boolean IsCargoStarship(String starshipModelArg)
 	{
 		return starshipModelArg.Equals(
 			StarshipModel.Cargo,
@@ -205,7 +245,76 @@ public class Menu
 		);
 	}
 
-	private bool IsMoreInventoryRequired(
+	private Boolean IsExplorerStarship(String starshipModelArg)
+	{
+		return starshipModelArg.Equals(
+			StarshipModel.Explorer,
+			StringComparison.OrdinalIgnoreCase
+		);
+	}
+
+	private Boolean IsSpeederStarship(String starshipModelArg)
+	{
+		return starshipModelArg.Equals(
+			StarshipModel.Speeder,
+			StringComparison.OrdinalIgnoreCase
+		);
+	}
+
+	private Boolean IsUnknownStarship(String starshipModelArg)
+	{
+		return starshipModelArg.Equals(
+			StarshipModel.Unknown,
+			StringComparison.OrdinalIgnoreCase
+		);
+	}
+
+	private Boolean IsMoreInventoryRequired(
+		String starshipModelArg,
+		Int32 quantity,
+		Int32 hullCount,
+		Int32 engineCount,
+		Int32 wingsCount,
+		Int32 thrusterCount
+	)
+	{
+		if (IsCargoStarship(starshipModelArg))
+		{
+			return IsMoreInventoryRequiredForCargoStarship(
+				quantity,
+				hullCount,
+				engineCount,
+				wingsCount,
+				thrusterCount
+			);
+		}
+
+		if (IsExplorerStarship(starshipModelArg))
+		{
+			return IsMoreInventoryRequiredForExplorerStarship(
+				quantity,
+				hullCount,
+				engineCount,
+				wingsCount,
+				thrusterCount
+			);
+		}
+
+		if (IsSpeederStarship(starshipModelArg))
+		{
+			return IsMoreInventoryRequiredForSpeederStarship(
+				quantity,
+				hullCount,
+				engineCount,
+				wingsCount,
+				thrusterCount
+			);
+		}
+
+		return false;
+	}
+
+	private bool IsMoreInventoryRequiredForCargoStarship(
 		Int32 quantity,
 		Int32 hullCount,
 		Int32 engineCount,
@@ -219,8 +328,36 @@ public class Menu
 			&& thrusterCount < 1 * quantity;
 	}
 
+	private bool IsMoreInventoryRequiredForExplorerStarship(
+		Int32 quantity,
+		Int32 hullCount,
+		Int32 engineCount,
+		Int32 wingsCount,
+		Int32 thrusterCount
+	)
+	{
+		return hullCount < 1 * quantity
+			&& engineCount < 1 * quantity
+			&& wingsCount < 1 * quantity
+			&& thrusterCount < 2 * quantity;
+	}
+
+	private bool IsMoreInventoryRequiredForSpeederStarship(
+		Int32 quantity,
+		Int32 hullCount,
+		Int32 engineCount,
+		Int32 wingsCount,
+		Int32 thrusterCount
+	)
+	{
+		return hullCount < 1 * quantity
+			&& engineCount < 1 * quantity
+			&& wingsCount < 1 * quantity
+			&& thrusterCount < 2 * quantity;
+	}
+
 	#region HandleStarshipAssembly
-	private void HandleCargoStarshipAssembly(string starshipModelArg, int quantity)
+	private void HandleCargoStarshipAssembly(String starshipModelArg, int quantity)
 	{
 		this._userInterface.PrintStarshipProductionStarting(starshipModelArg);
 
@@ -380,6 +517,12 @@ public class Menu
 	{
 		return input is not null
 			&& input.Equals(Command.Stocks, StringComparison.OrdinalIgnoreCase);
+	}
+
+	private Boolean IsUserInstructionCommand(String? input)
+	{
+		return input is not null
+			&& input.StartsWith(Command.UserInstruction, StringComparison.OrdinalIgnoreCase);
 	}
 	#endregion
 
