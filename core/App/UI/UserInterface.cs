@@ -19,11 +19,31 @@ public class UserInterface
 	public void PrintHelp()
 	{
 		Console.WriteLine("\nCommandes disponibles :");
-		Console.WriteLine($"👉 {Command.Help} : afficher les commandes disponibles");
-		Console.WriteLine($"👉 {Command.Instructions} : assembler des vaisseaux");
-		Console.WriteLine($"👉 {Command.Stocks} : afficher l'inventaire des vaisseaux");
-		Console.WriteLine($"👉 {Command.UserInstruction} : assembler des ");
-		Console.WriteLine($"👉 {Command.Exit} : quitter l'application");
+
+		this.ColorizeMessageWithoutLinebreak(Command.Exit, Magenta);
+		Console.WriteLine(" : quitter l'application.");
+
+		this.ColorizeMessageWithoutLinebreak(Command.Help, Magenta);
+		Console.WriteLine(" : afficher les commandes disponibles.");
+
+		this.ColorizeMessageWithoutLinebreak(Command.Instructions, Magenta);
+		Console.WriteLine(" : assembler des vaisseaux.");
+
+		this.ColorizeMessageWithoutLinebreak(Command.Produce, Magenta);
+		Console.WriteLine(" : produire des vaisseaux.");
+
+		this.ColorizeMessageWithoutLinebreak(Command.Stocks, Magenta);
+		Console.WriteLine(" : afficher l'inventaire des vaisseaux.");
+
+		this.ColorizeMessageWithoutLinebreak(Command.UserInstruction, Magenta);
+		Console.WriteLine(" : enregistrer une commande.");
+
+		this.ColorizeMessageWithoutLinebreak(Command.UserInstructions, Magenta);
+		Console.WriteLine(" : lister les commandes en attente.");
+
+		this.ColorizeMessageWithoutLinebreak(Command.Verify, Magenta);
+		Console.WriteLine(" : vérifier la disponibilité de vaisseaux.");
+
 		this.PrintLineBreak();
 	}
 
