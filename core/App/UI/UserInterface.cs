@@ -129,4 +129,9 @@ public class UserInterface
 	{
 		Console.WriteLine("❌ Commande invalide. Veuillez réessayer.\n");
 	}
+
+	public void PrintStockUpdatedMessage()
+	{
+		this.ColorizeMessageWithLinebreak(Production.StockUpdated, Yellow);
+	}
 }

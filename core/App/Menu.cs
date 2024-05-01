@@ -85,11 +85,22 @@ public class Menu
 			{
 				this.HandleVerifyCommand(userInput!); // `!`: kill the build warning 🤌
 			}
+			else if (IsProduceCommand(userInput))
+			{
+				this.HandleProduceCommand(userInput!); // `!`: kill the build warning 🤌
+			}
 			else
 			{
 				this._userInterface.PrintUnknownCommand();
 			}
 		}
+	}
+
+	private void HandleProduceCommand(String userInput)
+	{
+		// TODO
+
+		this._userInterface.PrintStockUpdatedMessage();
 	}
 
 	private void HandleVerifyCommand(String userInput)
@@ -666,6 +677,12 @@ public class Menu
 	{
 		return input is not null
 			&& input.StartsWith(Command.Verify, StringComparison.OrdinalIgnoreCase);
+	}
+
+	private Boolean IsProduceCommand(String? userInput)
+	{
+		return userInput is not null
+			&& userInput.StartsWith(Command.Produce, StringComparison.OrdinalIgnoreCase);
 	}
 	#endregion
 
