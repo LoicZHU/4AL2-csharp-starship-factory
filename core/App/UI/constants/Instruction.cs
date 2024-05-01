@@ -1,6 +1,6 @@
-namespace core.App.UI;
+namespace core.App.UI.constants;
 
-public class Instruction
+public static class Instruction
 {
 	public const string Assemble = "ASSEMBLE";
 	public const string GetOutStock = "GET_OUT_STOCK";

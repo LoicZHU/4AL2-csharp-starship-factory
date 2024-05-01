@@ -7,12 +7,12 @@ namespace core.Products.Starship;
 
 public static class StarshipAssembly
 {
-	public static readonly Dictionary<string, List<string>> ComponentsMap =
+	public static readonly Dictionary<String, List<String>> ComponentsMap =
 		new()
 		{
 			{
 				StarshipModel.Cargo,
-				new List<string>
+				new List<String>
 				{
 					HullModel.Hull_HC1,
 					EngineModel.Engine_EC1,
@@ -22,7 +22,7 @@ public static class StarshipAssembly
 			},
 			{
 				StarshipModel.Explorer,
-				new List<string>
+				new List<String>
 				{
 					HullModel.Hull_HE1,
 					EngineModel.Engine_EE1,
@@ -32,7 +32,7 @@ public static class StarshipAssembly
 			},
 			{
 				StarshipModel.Speeder,
-				new List<string>
+				new List<String>
 				{
 					HullModel.Hull_HS1,
 					EngineModel.Engine_ES1,

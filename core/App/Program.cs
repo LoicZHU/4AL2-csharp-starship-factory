@@ -1,4 +1,5 @@
 ﻿using core.App.UI;
+using core.App.UserInstructionOrder;
 using core.Inventory.Starships;
 using core.Inventory.Starships.ComponentAssembly;
 using core.Inventory.Starships.Components;
@@ -15,12 +16,19 @@ static class Program
 	private static InMemoryWing _inMemoryWing;
 	private static InMemoryThruster _inMemoryThruster;
 	private static InMemoryComponentAssembly _inMemoryComponentAssembly;
+	private static InMemoryUserInstruction _inMemoryUserInstruction;
 
 	public static void Main(string[] args)
 	{
+		SetUpDependencies();
+		StartMenu();
+	}
+
+	private static void SetUpDependencies()
+	{
 		SetUserInterface();
-		SetAllInMemoryStuff();
-		SetAndStartMenu();
+		SetAllInMemories();
+		SetMenu();
 	}
 
 	private static void SetUserInterface()
@@ -28,20 +36,20 @@ static class Program
 		_ui = new UserInterface();
 	}
 
-	private static void SetAllInMemoryStuff()
+	private static void SetAllInMemories()
+	{
+		SetComponentInMemories();
+		_inMemoryComponentAssembly = new InMemoryComponentAssembly();
+		_inMemoryUserInstruction = new InMemoryUserInstruction();
+	}
+
+	private static void SetComponentInMemories()
 	{
 		_inMemoryStarship = new InMemoryStarship();
 		_inMemoryEngine = new InMemoryEngine();
 		_inMemoryHull = new InMemoryHull();
 		_inMemoryWing = new InMemoryWing();
 		_inMemoryThruster = new InMemoryThruster();
-		_inMemoryComponentAssembly = new InMemoryComponentAssembly();
-	}
-
-	private static void SetAndStartMenu()
-	{
-		SetMenu();
-		StartMenu();
 	}
 
 	private static void SetMenu()
@@ -53,7 +61,8 @@ static class Program
 			_inMemoryHull,
 			_inMemoryWing,
 			_inMemoryThruster,
-			_inMemoryComponentAssembly
+			_inMemoryComponentAssembly,
+			_inMemoryUserInstruction
 		);
 	}
 
