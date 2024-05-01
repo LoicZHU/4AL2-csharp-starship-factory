@@ -1,5 +1,6 @@
 using core.App.Products.Starship;
 using core.App.UI.constants;
+using static System.ConsoleColor;
 
 namespace core.App.UI;
 
@@ -48,12 +49,15 @@ public class UserInterface
 	#region Instructions
 	public void PrintStarshipProductionStarting(String starshipModel)
 	{
-		Console.WriteLine($"{Instruction.Producing} {starshipModel}");
+		this.ColorizeMessageWithoutLinebreak(Instruction.Producing, Green);
+		Console.WriteLine($" {starshipModel}");
 	}
 
 	public void PrintGetOutStockMessage(Int32 quantity, String componentModel)
 	{
-		Console.WriteLine($"{Instruction.GetOutStock} {quantity} {componentModel}");
+		this.ColorizeMessageWithoutLinebreak(Instruction.GetOutStock, Green);
+		this.ColorizeMessageWithoutLinebreak($" {quantity}", Yellow);
+		Console.WriteLine($" {componentModel}");
 	}
 
 	public void PrintAssemblingComponentsMessage(
@@ -61,14 +65,30 @@ public class UserInterface
 		String componentToAdd
 	)
 	{
+		this.ColorizeMessageWithoutLinebreak(Instruction.Assemble, Green);
 		Console.WriteLine(
-			$"{Instruction.Assemble} [{string.Join(", ", componentAssembly.Components)}] {componentToAdd}"
+			$" [{string.Join(", ", componentAssembly.Components)}] {componentToAdd}"
 		);
+	}
+
+	private void ColorizeMessageWithLinebreak(String message, ConsoleColor color)
+	{
+		Console.ForegroundColor = color;
+		Console.WriteLine(message);
+		Console.ResetColor();
+	}
+
+	private void ColorizeMessageWithoutLinebreak(String message, ConsoleColor color)
+	{
+		Console.ForegroundColor = color;
+		Console.Write(message);
+		Console.ResetColor();
 	}
 
 	public void PrintStarshipProductionFinishing(String starshipModel)
 	{
-		Console.WriteLine($"{Instruction.Finished} {starshipModel}\n");
+		this.ColorizeMessageWithoutLinebreak(Instruction.Finished, Green);
+		Console.WriteLine($" {starshipModel}\n");
 	}
 	#endregion
 
@@ -80,5 +100,33 @@ public class UserInterface
 	public void PrintLineBreak()
 	{
 		Console.Write("\n");
+	}
+
+	public void PrintInvalidStarshipInputArgument(String argument)
+	{
+		this.ColorizeMessageWithoutLinebreak(Verification.Error, Red);
+		Console.WriteLine($" `{argument}` is not a recognized spaceship\n");
+	}
+
+	public void PrintAvailableMessage()
+	{
+		this.ColorizeMessageWithLinebreak(Verification.Available, Yellow);
+	}
+
+	public void PrintUnavailableMessage()
+	{
+		this.ColorizeMessageWithLinebreak(Verification.Unavailable, Yellow);
+	}
+
+	public void PrintInvalidCommandArguments()
+	{
+		Console.WriteLine(
+			"❌ Les arguments de la commande sont invalides. Veuillez réessayer.\n"
+		);
+	}
+
+	public void PrintInvalidCommand()
+	{
+		Console.WriteLine("❌ Commande invalide. Veuillez réessayer.\n");
 	}
 }

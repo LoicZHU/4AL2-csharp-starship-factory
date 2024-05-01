@@ -81,6 +81,10 @@ public class Menu
 				this._inMemoryUserInstruction.PrintAll();
 				this._userInterface.PrintLineBreak();
 			}
+			else if (IsVerifyCommand(userInput))
+			{
+				this.HandleVerifyCommand(userInput!); // `!`: kill the build warning 🤌
+			}
 			else
 			{
 				this._userInterface.PrintUnknownCommand();
@@ -88,10 +92,60 @@ public class Menu
 		}
 	}
 
+	private void HandleVerifyCommand(String userInput)
+	{
+		var userArgs = userInput.Split();
+		if (!this.IsUserInputArgumentsValid(userArgs))
+		{
+			this._userInterface.PrintInvalidCommand();
+			return;
+		}
+
+		var userInputParts = userInput.Split(new[] { ' ' }, 2);
+		if (!this.IsUserInstructionCommandNameSeparatedByOneSpace(userInputParts))
+		{
+			this._userInterface.PrintInvalidCommandArguments();
+			return;
+		}
+
+		foreach (var quantityAndStarship in userInputParts[1].Split(", "))
+		{
+			var match = Regex.Match(quantityAndStarship.Trim(), QuantityWithStarshipPattern);
+			if (!IsMatching(match))
+			{
+				this._userInterface.PrintInvalidCommandArguments();
+				continue;
+			}
+
+			if (!int.TryParse(match.Groups[1].Value, out var quantity))
+			{
+				this._userInterface.PrintInvalidCommandArguments();
+				continue;
+			}
+
+			var starshipModelInput = match.Groups[2].Value;
+			var starshipModel = this.GetStarshipModel(starshipModelInput);
+			if (IsUnknownStarship(starshipModel))
+			{
+				this._userInterface.PrintInvalidStarshipInputArgument(starshipModelInput);
+				continue;
+			}
+		}
+
+		// TODO
+		// if (!stock suffisant)
+		// {
+		// this._userInterface.PrintUnavailableMessage();
+		// } else
+		// {
+		// this._userInterface.PrintAvailableMessage();
+		// }
+	}
+
 	private void HandleUserInstructionCommand(String userInput)
 	{
 		var userArgs = userInput.Split();
-		if (!IsUserInstructionCommandValid(userArgs))
+		if (!IsUserInputArgumentsValid(userArgs))
 		{
 			this._userInterface.PrintInvalidUserInstructionCommand();
 			return;
@@ -154,7 +208,7 @@ public class Menu
 		return userInputParts.Length == 2;
 	}
 
-	private Boolean IsUserInstructionCommandValid(String[] input)
+	private Boolean IsUserInputArgumentsValid(String[] input)
 	{
 		return input.Length >= 3 && (input.Length - 1) % 2 == 0;
 	}
@@ -534,6 +588,12 @@ public class Menu
 	{
 		return input is not null
 			&& input.Equals(Command.UserInstructions, StringComparison.OrdinalIgnoreCase);
+	}
+
+	private Boolean IsVerifyCommand(String? input)
+	{
+		return input is not null
+			&& input.StartsWith(Command.Verify, StringComparison.OrdinalIgnoreCase);
 	}
 	#endregion
 
