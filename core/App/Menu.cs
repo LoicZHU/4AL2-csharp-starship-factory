@@ -119,29 +119,32 @@ public class Menu
 			return;
 		}
 
-		foreach (var quantityAndStarship in userInputParts[1].Split(", "))
-		{
-			var match = Regex.Match(quantityAndStarship.Trim(), QuantityWithStarshipPattern);
-			if (!IsMatching(match))
-			{
-				this._userInterface.PrintInvalidCommandArguments();
-				continue;
-			}
+		var starshipPart = userInputParts[1];
+		var userInstruction = this.GetCompleteUserInstructionFrom(starshipPart);
 
-			if (!int.TryParse(match.Groups[1].Value, out var quantity))
-			{
-				this._userInterface.PrintInvalidCommandArguments();
-				continue;
-			}
-
-			var starshipModelInput = match.Groups[2].Value;
-			var starshipModel = this.GetStarshipModel(starshipModelInput);
-			if (IsUnknownStarship(starshipModel))
-			{
-				this._userInterface.PrintInvalidStarshipInputArgument(starshipModelInput);
-				continue;
-			}
-		}
+		// foreach (var quantityAndStarship in starshipPart.Split(", "))
+		// {
+		// 	var match = Regex.Match(quantityAndStarship.Trim(), QuantityWithStarshipPattern);
+		// 	if (!IsMatching(match))
+		// 	{
+		// 		this._userInterface.PrintInvalidCommandArguments();
+		// 		continue;
+		// 	}
+		//
+		// 	if (!int.TryParse(match.Groups[1].Value, out var quantity))
+		// 	{
+		// 		this._userInterface.PrintInvalidCommandArguments();
+		// 		continue;
+		// 	}
+		//
+		// 	var starshipModelInput = match.Groups[2].Value;
+		// 	var starshipModel = this.GetStarshipModel(starshipModelInput);
+		// 	if (IsUnknownStarship(starshipModel))
+		// 	{
+		// 		this._userInterface.PrintInvalidStarshipInputArgument(starshipModelInput);
+		// 		continue;
+		// 	}
+		//   }
 
 		// TODO
 		// if (!stock suffisant)
