@@ -222,16 +222,88 @@ public class Menu
 			return;
 		}
 
-		for (var i = 1; i < userArgs.Length; i += 2)
+		// for (var i = 1; i < userArgs.Length; i += 2)
+		// {
+		// 	var starshipModelArg = userArgs[i + 1];
+		// 	if (!int.TryParse(userArgs[i], out var quantity))
+		// 	{
+		// 		_userInterface.PrintInvalidInstructionCommand();
+		// 		return;
+		// 	}
+		//
+		// 	var starshipModel = this.GetStarshipModel(starshipModelArg);
+		// 	var (hullCount, engineCount, wingsCount, thrusterCount) =
+		// 		GetStarshipComponentsCountFromInventories();
+		//
+		// 	if (
+		// 		IsMoreInventoryRequired(
+		// 			starshipModel,
+		// 			quantity,
+		// 			hullCount,
+		// 			engineCount,
+		// 			wingsCount,
+		// 			thrusterCount
+		// 		)
+		// 	)
+		// 	{
+		// 		return;
+		// 	}
+		//
+		// 	if (IsCargoStarship(starshipModel))
+		// 	{
+		// 		this.HandleCargoStarshipAssembly(starshipModel, quantity);
+		// 	}
+		// 	else if (IsExplorerStarship(starshipModel))
+		// 	{
+		// 		this.HandleExplorerStarshipAssembly(starshipModel, quantity);
+		// 	}
+		// 	else if (IsSpeederStarship(starshipModel))
+		// 	{
+		// 		this.HandleSpeederStarshipAssembly(starshipModel, quantity);
+		// 	}
+		// 	else
+		// 	{
+		// 		this._userInterface.PrintUnknownStarshipModel();
+		// 	}
+		// }
+
+		if (!IsUserInputArgumentsValid(userArgs))
 		{
-			var starshipModelArg = userArgs[i + 1];
-			if (!int.TryParse(userArgs[i], out var quantity))
+			this._userInterface.PrintInvalidUserInstructionCommand();
+			return;
+		}
+
+		var userInputParts = userInput.Split(new[] { ' ' }, 2);
+		if (!IsUserInstructionCommandNameSeparatedByOneSpace(userInputParts))
+		{
+			this._userInterface.PrintInvalidUserInstructionCommand();
+			return;
+		}
+
+		var starshipsPart = userInputParts[1];
+		foreach (var quantityAndStarship in starshipsPart.Split(", "))
+		{
+			var match = Regex.Match(quantityAndStarship.Trim(), QuantityWithStarshipPattern);
+			if (!IsMatching(match))
 			{
-				_userInterface.PrintInvalidInstructionCommand();
-				return;
+				this._userInterface.PrintInvalidUserInstructionCommand();
+				continue;
 			}
 
-			var starshipModel = this.GetStarshipModel(starshipModelArg);
+			if (!int.TryParse(match.Groups[1].Value, out var quantity))
+			{
+				this._userInterface.PrintInvalidUserInstructionCommand();
+				continue;
+			}
+
+			var starshipModelInput = match.Groups[2].Value;
+			var starshipModel = this.GetStarshipModel(starshipModelInput);
+			if (IsUnknownStarship(starshipModel))
+			{
+				this._userInterface.PrintUnknownStarshipModel();
+				continue;
+			}
+
 			var (hullCount, engineCount, wingsCount, thrusterCount) =
 				GetStarshipComponentsCountFromInventories();
 
