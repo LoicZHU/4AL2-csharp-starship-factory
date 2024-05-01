@@ -124,4 +124,9 @@ public class UserInterface
 			"❌ Les arguments de la commande sont invalides. Veuillez réessayer.\n"
 		);
 	}
+
+	public void PrintInvalidCommand()
+	{
+		Console.WriteLine("❌ Commande invalide. Veuillez réessayer.\n");
+	}
 }

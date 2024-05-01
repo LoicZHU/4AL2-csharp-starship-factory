@@ -97,7 +97,7 @@ public class Menu
 		var userArgs = userInput.Split();
 		if (!this.IsUserInputArgumentsValid(userArgs))
 		{
-			// TODO
+			this._userInterface.PrintInvalidCommand();
 			return;
 		}
 
@@ -132,12 +132,13 @@ public class Menu
 			}
 		}
 
+		// TODO
 		// if (!stock suffisant)
 		// {
-		//   this._userInterface.PrintUnavailable();
+		// this._userInterface.PrintUnavailableMessage();
 		// } else
 		// {
-		//   this._userInterface.PrintAvailable();
+		// this._userInterface.PrintAvailableMessage();
 		// }
 	}
 
@@ -592,7 +593,7 @@ public class Menu
 	private Boolean IsVerifyCommand(String? input)
 	{
 		return input is not null
-			&& input.Equals(Command.Verify, StringComparison.OrdinalIgnoreCase);
+			&& input.StartsWith(Command.Verify, StringComparison.OrdinalIgnoreCase);
 	}
 	#endregion
 
