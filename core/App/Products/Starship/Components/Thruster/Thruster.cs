@@ -1,4 +1,4 @@
-namespace core.Products.Starship.Components.Thruster;
+namespace core.App.Products.Starship.Components.Thruster;
 
 public class Thruster
 {

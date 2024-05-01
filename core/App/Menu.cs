@@ -1,16 +1,15 @@
 using System.Text.RegularExpressions;
+using core.App.Products.Starship;
+using core.App.Products.Starship.Components.Engine;
+using core.App.Products.Starship.Components.Hull;
+using core.App.Products.Starship.Components.Thruster;
+using core.App.Products.Starship.Components.Wing;
 using core.App.UI;
 using core.App.UI.constants;
 using core.App.UserInstructionOrder;
-using core.Inventory.Starships;
-using core.Inventory.Starships.ComponentAssembly;
-using core.Inventory.Starships.Components;
-using core.Products.Starship;
-using core.Products.Starship.ComponentAssembly;
-using core.Products.Starship.Components.Engine;
-using core.Products.Starship.Components.Hull;
-using core.Products.Starship.Components.Thruster;
-using core.Products.Starship.Components.Wing;
+using core.In_memory;
+using core.In_memory.Inventory;
+using core.In_memory.Inventory.Components;
 
 namespace core.App;
 
@@ -71,11 +70,16 @@ public class Menu
 			}
 			else if (IsInstructionsCommand(userInput))
 			{
-				this.HandleInstructionsCommand(userInput);
+				this.HandleInstructionsCommand(userInput!); // `!`: kill the build warning 🤌
 			}
 			else if (IsUserInstructionCommand(userInput))
 			{
-				this.HandleUserInstructionCommand(userInput);
+				this.HandleUserInstructionCommand(userInput!); // `!`: kill the build warning 🤌
+			}
+			else if (IsUserInstructionsCommand(userInput))
+			{
+				this._inMemoryUserInstruction.PrintAll();
+				this._userInterface.PrintLineBreak();
 			}
 			else
 			{
@@ -104,6 +108,7 @@ public class Menu
 		var userInstruction = GetCompleteUserInstructionFrom(starshipsPart);
 
 		this._inMemoryUserInstruction.Add(userInstruction);
+		this._userInterface.PrintLineBreak();
 	}
 
 	private UserInstruction GetCompleteUserInstructionFrom(String starshipsPart)
@@ -523,6 +528,12 @@ public class Menu
 	{
 		return input is not null
 			&& input.StartsWith(Command.UserInstruction, StringComparison.OrdinalIgnoreCase);
+	}
+
+	private Boolean IsUserInstructionsCommand(String? input)
+	{
+		return input is not null
+			&& input.Equals(Command.UserInstructions, StringComparison.OrdinalIgnoreCase);
 	}
 	#endregion
 

@@ -1,4 +1,4 @@
-namespace core.Products.Starship.Components.Engine;
+namespace core.App.Products.Starship.Components.Engine;
 
 public static class EngineModel
 {

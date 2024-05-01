@@ -1,6 +1,6 @@
-using core.Products.Starship.Components.Engine;
+using core.App.Products.Starship.Components.Engine;
 
-namespace core.Inventory.Starships.Components;
+namespace core.In_memory.Inventory.Components;
 
 public class InMemoryEngine
 {

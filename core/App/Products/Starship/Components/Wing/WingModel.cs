@@ -1,4 +1,4 @@
-namespace core.Products.Starship.Components.Wing;
+namespace core.App.Products.Starship.Components.Wing;
 
 public static class WingModel
 {

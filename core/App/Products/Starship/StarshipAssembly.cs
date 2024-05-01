@@ -1,9 +1,9 @@
-using core.Products.Starship.Components.Engine;
-using core.Products.Starship.Components.Hull;
-using core.Products.Starship.Components.Thruster;
-using core.Products.Starship.Components.Wing;
+using core.App.Products.Starship.Components.Engine;
+using core.App.Products.Starship.Components.Hull;
+using core.App.Products.Starship.Components.Thruster;
+using core.App.Products.Starship.Components.Wing;
 
-namespace core.Products.Starship;
+namespace core.App.Products.Starship;
 
 public static class StarshipAssembly
 {

@@ -1,4 +1,4 @@
-namespace core.Products.Starship;
+namespace core.App.Products.Starship;
 
 public static class StarshipModel
 {

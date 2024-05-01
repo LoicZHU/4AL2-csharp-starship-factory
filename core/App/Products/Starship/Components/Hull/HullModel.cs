@@ -1,4 +1,4 @@
-namespace core.Products.Starship.Components.Hull;
+namespace core.App.Products.Starship.Components.Hull;
 
 public static class HullModel
 {

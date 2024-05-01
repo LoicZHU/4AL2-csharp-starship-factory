@@ -1,9 +1,8 @@
-using core.Products.Starship.Components.Engine;
-using core.Products.Starship.Components.Hull;
+using core.App.Products.Starship;
+using core.App.Products.Starship.Components.Engine;
+using core.App.Products.Starship.Components.Hull;
 
-namespace core.Inventory.Starships.ComponentAssembly;
-
-using core.Products.Starship.ComponentAssembly;
+namespace core.In_memory.Inventory;
 
 public class InMemoryComponentAssembly
 {
