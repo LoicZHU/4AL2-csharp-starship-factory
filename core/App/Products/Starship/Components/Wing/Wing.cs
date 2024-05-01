@@ -1,11 +1,11 @@
-namespace core.Products.Starship.Components.Engine;
+namespace core.App.Products.Starship.Components.Wing;
 
-public class Engine
+public class Wing
 {
 	public Guid Id { get; private set; } = Guid.NewGuid();
 	public String Name { get; private set; }
 
-	public Engine(String name)
+	public Wing(String name)
 	{
 		Name = name;
 	}

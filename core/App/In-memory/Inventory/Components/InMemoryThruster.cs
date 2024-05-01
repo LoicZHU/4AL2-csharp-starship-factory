@@ -1,6 +1,6 @@
-using core.Products.Starship.Components.Thruster;
+using core.App.Products.Starship.Components.Thruster;
 
-namespace core.Inventory.Starships.Components;
+namespace core.In_memory.Inventory.Components;
 
 public class InMemoryThruster
 {

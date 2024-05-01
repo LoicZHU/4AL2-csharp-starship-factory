@@ -1,5 +1,5 @@
+using core.App.Products.Starship;
 using core.App.UI.constants;
-using core.Products.Starship.ComponentAssembly;
 
 namespace core.App.UI;
 

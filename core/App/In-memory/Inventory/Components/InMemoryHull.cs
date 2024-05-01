@@ -1,6 +1,6 @@
-using core.Products.Starship.Components.Hull;
+using core.App.Products.Starship.Components.Hull;
 
-namespace core.Inventory.Starships.Components;
+namespace core.In_memory.Inventory.Components;
 
 public class InMemoryHull
 {

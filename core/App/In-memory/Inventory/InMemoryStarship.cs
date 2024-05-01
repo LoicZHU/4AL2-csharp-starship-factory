@@ -1,10 +1,10 @@
-using core.Products.Starship;
-using core.Products.Starship.Components.Engine;
-using core.Products.Starship.Components.Hull;
-using core.Products.Starship.Components.Thruster;
-using core.Products.Starship.Components.Wing;
+using core.App.Products.Starship;
+using core.App.Products.Starship.Components.Engine;
+using core.App.Products.Starship.Components.Hull;
+using core.App.Products.Starship.Components.Thruster;
+using core.App.Products.Starship.Components.Wing;
 
-namespace core.Inventory.Starships;
+namespace core.In_memory.Inventory;
 
 public class InMemoryStarship
 {

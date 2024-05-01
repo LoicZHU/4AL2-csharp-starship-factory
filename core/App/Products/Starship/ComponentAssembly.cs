@@ -1,4 +1,4 @@
-namespace core.Products.Starship.ComponentAssembly;
+namespace core.App.Products.Starship;
 
 public class ComponentAssembly
 {
