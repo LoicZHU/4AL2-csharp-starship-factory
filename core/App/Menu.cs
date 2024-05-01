@@ -154,6 +154,12 @@ public class Menu
 		// {
 		// this._userInterface.PrintAvailableMessage();
 		// }
+
+
+		// foreach (var (starshipModelKey, quantityValue) in userInstruction.Instructions)
+		// {
+		// 	var count = this._inMemoryStarship.CountByName(starshipModelKey);
+		// }
 	}
 
 	private void HandleUserInstructionCommand(String userInput)
