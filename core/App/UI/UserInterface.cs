@@ -24,7 +24,7 @@ public static class UserInterface
 			switch (instruction)
 			{
 				case Command.Exit:
-					Terminal.PrintGoodbyeMessage("Merci d'avoir utilisé Capsule Corp ! 🚀");
+					Terminal.PrintGoodbyeMessage("👋 Merci d'avoir utilisé Capsule Corp !");
 					return;
 				case Command.Help:
 					PrintHelp();

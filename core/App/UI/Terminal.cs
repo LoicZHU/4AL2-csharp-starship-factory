@@ -30,7 +30,7 @@ public static class Terminal
 		Console.WriteLine(" : quitter l'application.");
 
 		TerminalHelper.ColorizeMessageWithoutLinebreak(Command.Help, Magenta);
-		Console.WriteLine(" : afficher les commandes disponibles.");
+		Console.WriteLine(" : afficher les commandes utilisables.");
 
 		TerminalHelper.ColorizeMessageWithoutLinebreak(Command.Instructions, Magenta);
 		Console.WriteLine(" : assembler des vaisseaux.");
@@ -39,13 +39,13 @@ public static class Terminal
 		Console.WriteLine(" : produire des vaisseaux.");
 
 		TerminalHelper.ColorizeMessageWithoutLinebreak(Command.Stocks, Magenta);
-		Console.WriteLine(" : afficher l'inventaire des vaisseaux.");
+		Console.WriteLine(" : afficher l'inventaire.");
 
 		TerminalHelper.ColorizeMessageWithoutLinebreak(Command.UserInstruction, Magenta);
-		Console.WriteLine(" : enregistrer une commande.");
+		Console.WriteLine(" : enregistrer une commande de vaisseaux.");
 
 		TerminalHelper.ColorizeMessageWithoutLinebreak(Command.UserInstructions, Magenta);
-		Console.WriteLine(" : lister les commandes en attente.");
+		Console.WriteLine(" : lister les commandes de vaisseaux en attente.");
 
 		TerminalHelper.ColorizeMessageWithoutLinebreak(Command.Verify, Magenta);
 		Console.WriteLine(" : vérifier la disponibilité de vaisseaux.");
