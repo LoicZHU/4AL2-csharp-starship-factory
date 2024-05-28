@@ -12,6 +12,11 @@ public static class Terminal
 		TerminalHelper.PrintLineBreak();
 	}
 
+	public static void PrintGoodbyeMessage(String message)
+	{
+		Console.WriteLine(message);
+	}
+
 	public static void PrintInvitationToUserInteraction(String message)
 	{
 		Console.WriteLine(message);
@@ -46,5 +51,10 @@ public static class Terminal
 		Console.WriteLine(" : vérifier la disponibilité de vaisseaux.");
 
 		TerminalHelper.PrintLineBreak();
+	}
+
+	public static void PrintUnknownInstruction(String instruction)
+	{
+		Console.WriteLine(instruction);
 	}
 }
