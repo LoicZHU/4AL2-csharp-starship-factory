@@ -1,6 +1,6 @@
 namespace core.UI.constants;
 
-public class Verification
+public static class Verification
 {
 	public const String Error = "ERROR";
 	public const String Available = "AVAILABLE";

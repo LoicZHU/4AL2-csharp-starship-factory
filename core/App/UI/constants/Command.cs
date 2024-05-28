@@ -1,6 +1,6 @@
 namespace core.UI.constants;
 
-public class Command
+public static class Command
 {
 	public const String Help = "HELP";
 	public const String Exit = "EXIT";
