@@ -103,7 +103,7 @@ public sealed class StarshipBuilder : IStarshipBuilder
 
 	private void CheckThrusters(List<Thruster> thrusters)
 	{
-		if (thrusters.Count != 2)
+		if (thrusters.Count == 0)
 		{
 			throw new ArgumentException("Invalid thruster count");
 		}
@@ -111,11 +111,6 @@ public sealed class StarshipBuilder : IStarshipBuilder
 		if (thrusters.TrueForAll(thruster => IsValidThrusterComponent(thruster.Name)))
 		{
 			throw new ArgumentException("Invalid thruster name");
-		}
-
-		if (!thrusters[0].Name.Equals(thrusters[1].Name, StringComparison.OrdinalIgnoreCase))
-		{
-			throw new ArgumentException("Thrusters must be the same type");
 		}
 	}
 

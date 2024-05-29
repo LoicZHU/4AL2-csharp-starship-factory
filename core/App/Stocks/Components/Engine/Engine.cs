@@ -1,6 +1,8 @@
+using core.Items.Components;
+
 namespace core.Components;
 
-public sealed class Engine
+public sealed class Engine : IComponent
 {
 	public Guid Id { get; private set; }
 	public String Name { get; private set; }
@@ -8,7 +10,7 @@ public sealed class Engine
 	private Engine(Guid id, String name)
 	{
 		this.Id = id;
-		Name = name;
+		this.Name = name;
 	}
 
 	public static Engine Create(String name)

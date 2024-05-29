@@ -3,7 +3,7 @@ using static System.ConsoleColor;
 
 namespace core.UI;
 
-public static class Terminal
+public static class MainTerminal
 {
 	public static void PrintWelcomeMessage(String message)
 	{
