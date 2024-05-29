@@ -1,6 +1,8 @@
+using core.Items.Components;
+
 namespace core.Components;
 
-public sealed class Thruster
+public sealed class Thruster : IComponent
 {
 	public Guid Id { get; private set; }
 	public String Name { get; private set; }
@@ -8,7 +10,7 @@ public sealed class Thruster
 	private Thruster(Guid id, String name)
 	{
 		this.Id = id;
-		Name = name;
+		this.Name = name;
 	}
 
 	public static Thruster Create(String name)

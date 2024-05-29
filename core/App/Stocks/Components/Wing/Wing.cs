@@ -1,6 +1,8 @@
+using core.Items.Components;
+
 namespace core.Components;
 
-public sealed class Wing
+public sealed class Wing : IComponent
 {
 	public Guid Id { get; private set; }
 	public String Name { get; private set; }
@@ -8,7 +10,7 @@ public sealed class Wing
 	private Wing(Guid id, String name)
 	{
 		this.Id = id;
-		Name = name;
+		this.Name = name;
 	}
 
 	public static Wing Create(String name)

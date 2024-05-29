@@ -20,12 +20,12 @@ public sealed class Starship
 		List<Thruster> thrusters
 	)
 	{
-		Id = id;
-		Name = name;
-		Hull = hull;
-		Engine = engine;
-		Wing = wing;
-		Thrusters = thrusters;
+		this.Id = id;
+		this.Name = name;
+		this.Hull = hull;
+		this.Engine = engine;
+		this.Wing = wing;
+		this.Thrusters = thrusters;
 	}
 
 	public static Starship Create(
