@@ -10,13 +10,24 @@ public class InMemoryStarship : Singleton<InMemoryStarship>
 
 	public InMemoryStarship()
 	{
-		_cache = new()
+		_cache = new();
+
+		this.SetCache();
+	}
+
+	private void SetCache()
+	{
+		try
 		{
-			{ Guid.NewGuid(), BuildExplorer() },
-			{ Guid.NewGuid(), BuildExplorer() },
-			{ Guid.NewGuid(), BuildSpeeder() },
-			{ Guid.NewGuid(), CreateCargo() }
-		};
+			this.Add(BuildExplorer());
+			this.Add(BuildExplorer());
+			this.Add(BuildSpeeder());
+			this.Add(CreateCargo());
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
+		}
 	}
 
 	private Starship BuildExplorer()
@@ -63,9 +74,9 @@ public class InMemoryStarship : Singleton<InMemoryStarship>
 
 	public void Add(Starship starship)
 	{
-		if (!_cache.ContainsKey(starship.Id))
+		if (_cache.ContainsKey(starship.Id))
 		{
-			return;
+			throw new ArgumentException($"Starship with id {starship.Id} already exists.");
 		}
 
 		_cache.Add(starship.Id, starship);
@@ -86,6 +97,20 @@ public class InMemoryStarship : Singleton<InMemoryStarship>
 		{
 			_cache.Remove(starship.Id);
 		}
+	}
+
+	public Dictionary<String, Int32> GetStock()
+	{
+		var stock = new Dictionary<String, Int32>();
+
+		foreach (var starship in _cache.Values)
+		{
+			stock[starship.Name] = !stock.ContainsKey(starship.Name)
+				? 1
+				: stock[starship.Name] + 1;
+		}
+
+		return stock;
 	}
 
 	public Int32 CountByName(String name)

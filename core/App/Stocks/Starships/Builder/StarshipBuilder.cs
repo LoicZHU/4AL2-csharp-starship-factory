@@ -108,7 +108,7 @@ public sealed class StarshipBuilder : IStarshipBuilder
 			throw new ArgumentException("Invalid thruster count");
 		}
 
-		if (thrusters.TrueForAll(thruster => IsValidThrusterComponent(thruster.Name)))
+		if (!thrusters.TrueForAll(thruster => IsValidThrusterComponent(thruster.Name)))
 		{
 			throw new ArgumentException("Invalid thruster name");
 		}
