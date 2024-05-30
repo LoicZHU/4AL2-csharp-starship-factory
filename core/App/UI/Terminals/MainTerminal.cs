@@ -57,4 +57,9 @@ public static class MainTerminal
 	{
 		Console.WriteLine(instruction);
 	}
+
+	public static void PrintMessage(String message)
+	{
+		Console.WriteLine(message);
+	}
 }
