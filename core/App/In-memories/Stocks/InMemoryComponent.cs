@@ -27,64 +27,118 @@ public class InMemoryComponent : Singleton<InMemoryComponent>
 	#region set caches
 	private void SetEngineCache()
 	{
-		for (var i = 1; i <= 3; i++)
+		try
 		{
-			this.Add(Engine.Create(EngineComponent.Engine_EE1));
-			this.Add(Engine.Create(EngineComponent.Engine_EC1));
-			this.Add(Engine.Create(EngineComponent.Engine_ES1));
+			for (var i = 1; i <= 3; i++)
+			{
+				this.Add(Engine.Create(EngineComponent.Engine_EE1));
+				this.Add(Engine.Create(EngineComponent.Engine_EC1));
+				this.Add(Engine.Create(EngineComponent.Engine_ES1));
+			}
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
 		}
 	}
 
 	private void SetHullCache()
 	{
-		for (var i = 1; i <= 3; i++)
+		try
 		{
-			this.Add(Hull.Create(HullComponent.Hull_HC1));
-			this.Add(Hull.Create(HullComponent.Hull_HE1));
-			this.Add(Hull.Create(HullComponent.Hull_HS1));
+			for (var i = 1; i <= 3; i++)
+			{
+				this.Add(Hull.Create(HullComponent.Hull_HC1));
+				this.Add(Hull.Create(HullComponent.Hull_HE1));
+				this.Add(Hull.Create(HullComponent.Hull_HS1));
+			}
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
 		}
 	}
 
 	private void SetThrusterCache()
 	{
-		for (var i = 1; i <= 4; i++)
+		try
 		{
-			this.Add(Thruster.Create(ThrusterComponent.Thruster_TC1));
-			this.Add(Thruster.Create(ThrusterComponent.Thruster_TE1));
-			this.Add(Thruster.Create(ThrusterComponent.Thruster_TS1));
+			for (var i = 1; i <= 4; i++)
+			{
+				this.Add(Thruster.Create(ThrusterComponent.Thruster_TC1));
+				this.Add(Thruster.Create(ThrusterComponent.Thruster_TE1));
+				this.Add(Thruster.Create(ThrusterComponent.Thruster_TS1));
+			}
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
 		}
 	}
 
 	private void SetWingCache()
 	{
-		for (var i = 1; i <= 3; i++)
+		try
 		{
-			this.Add(Wing.Create(WingComponent.Wings_WC1));
-			this.Add(Wing.Create(WingComponent.Wings_WE1));
-			this.Add(Wing.Create(WingComponent.Wings_WS1));
+			for (var i = 1; i <= 3; i++)
+			{
+				this.Add(Wing.Create(WingComponent.Wings_WC1));
+				this.Add(Wing.Create(WingComponent.Wings_WE1));
+				this.Add(Wing.Create(WingComponent.Wings_WS1));
+			}
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
 		}
 	}
 	#endregion set caches
 
-	public void Add<T>(T item)
+	/// <summary>
+	/// 👉 TODO: refactor
+	/// </summary>
+	/// <param name="item"></param>
+	/// <typeparam name="TItem"></typeparam>
+	/// <exception cref="ArgumentException"></exception>
+	public void Add<TItem>(TItem item)
 	{
 		switch (item)
 		{
 			case Engine engine:
+				if (_engineCache.ContainsKey(engine.Id))
+				{
+					throw new ArgumentException($"Engine with id {engine.Id} already exists");
+				}
+
 				_engineCache.Add(engine.Id, engine);
 				break;
 			case Hull hull:
+				if (_hullCache.ContainsKey(hull.Id))
+				{
+					throw new ArgumentException($"Hull with id {hull.Id} already exists");
+				}
+
 				_hullCache.Add(hull.Id, hull);
 				break;
 			case Thruster thruster:
+				if (_thrusterCache.ContainsKey(thruster.Id))
+				{
+					throw new ArgumentException($"Thruster with id {thruster.Id} already exists");
+				}
+
 				_thrusterCache.Add(thruster.Id, thruster);
 				break;
 			case Wing wing:
+				if (_wingCache.ContainsKey(wing.Id))
+				{
+					throw new ArgumentException($"Wing with id {wing.Id} already exists");
+				}
+
 				_wingCache.Add(wing.Id, wing);
 				break;
 			default:
 				throw new ArgumentException(
-					$"Invalid component: with type {typeof(T).Name} | with name {nameof(item)}"
+					$"Invalid component: with type {typeof(TItem).Name} | with name {nameof(item)}"
 				);
 		}
 	}
@@ -127,7 +181,7 @@ public class InMemoryComponent : Singleton<InMemoryComponent>
 		throw new ArgumentException("Invalid component name", nameof(name));
 	}
 
-	public List<Dictionary<String, Int32>> GetAllCounts()
+	public List<Dictionary<String, Int32>> GetStockOfEachComponent()
 	{
 		var cacheMap = new Dictionary<string, Dictionary<Guid, IComponent>>
 		{
@@ -137,19 +191,21 @@ public class InMemoryComponent : Singleton<InMemoryComponent>
 			{ "Wing", _wingCache }
 		};
 
-		var result = new List<Dictionary<String, Int32>>();
-		foreach (var cache in cacheMap)
+		var counts = new List<Dictionary<String, Int32>>();
+		foreach (var prefix in cacheMap.Keys)
 		{
-			var cacheName = cache.Key;
-			var cacheValues = cache.Value.Values;
-			var cacheCount = cacheValues.Count();
+			var count = new Dictionary<String, Int32>();
+			foreach (var component in cacheMap[prefix].Values)
+			{
+				count[component.Name] = !count.ContainsKey(component.Name)
+					? 1
+					: count[component.Name] + 1;
+			}
 
-			var cacheResult = new Dictionary<String, Int32> { { cacheName, cacheCount } };
-
-			result.Add(cacheResult);
+			counts.Add(count);
 		}
 
-		return result;
+		return counts;
 	}
 
 	public Int32 CountByName(String name)

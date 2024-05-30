@@ -1,18 +1,12 @@
 using core.UI;
+using core.Utils;
 
 namespace core.Menus;
 
-public class UserInterface
+public class UserInterface : Singleton<UserInterface>
 {
 	public void Start()
 	{
-		// MainMenu.PrintWelcomeMessage();
-		this.InviteUserToInteract();
-	}
-
-	private void InviteUserToInteract()
-	{
-		// MainMenu.PrintUserInteractionInvitation();
-		// MainMenu.HandleUserInstruction();
+		Menu.Instance.Start();
 	}
 }

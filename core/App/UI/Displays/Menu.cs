@@ -4,24 +4,14 @@ using core.Utils;
 
 namespace core.UI;
 
-public class MainMenu : Singleton<MainMenu>
+public class Menu : Singleton<Menu>
 {
-	// private readonly InMemoryComponent _inMemoryComponent;
-	// private readonly InMemoryStarship _inMemoryStarship;
-
-	public MainMenu(
-	// InMemoryComponent inMemoryComponent,
-	// InMemoryStarship inMemoryStarship
-	)
-	{
-		// _inMemoryComponent = inMemoryComponent;
-		// _inMemoryStarship = inMemoryStarship;
-	}
-
 	public void Start()
 	{
 		this.PrintWelcomeMessage();
 		this.PrintUserInteractionInvitation();
+
+		this.HandleUserInstruction();
 	}
 
 	public void PrintWelcomeMessage()
@@ -56,8 +46,8 @@ public class MainMenu : Singleton<MainMenu>
 					// ProduceShipsMenu ?
 					break;
 				case Command.Stocks:
-					// DisplayStocksMenu ?
-					// var counts
+					StockDisplay.Instance.PrintStarshipStock();
+					StockDisplay.Instance.PrintComponentStock();
 					break;
 				case Command.UserInstruction:
 					// RegisterOrderMenu ?
