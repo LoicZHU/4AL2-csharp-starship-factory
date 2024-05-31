@@ -3,7 +3,7 @@ using core.Utils;
 
 namespace core.Menus;
 
-public class UserInterface : Singleton<UserInterface>
+public class UserInterface : AbstractSingleton<UserInterface>
 {
 	public void Start()
 	{

@@ -1,6 +1,6 @@
 namespace core.Utils;
 
-public abstract class Singleton<TClass>
+public abstract class AbstractSingleton<TClass>
 	where TClass : new()
 {
 	private static TClass _instance;

@@ -4,7 +4,7 @@ using core.Utils;
 
 namespace core.In_memories.Items;
 
-public class InMemoryComponent : Singleton<InMemoryComponent>
+public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 {
 	private readonly Dictionary<Guid, IComponent> _engineCache = new();
 	private readonly Dictionary<Guid, IComponent> _hullCache = new();
