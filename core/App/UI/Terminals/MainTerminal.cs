@@ -12,16 +12,6 @@ public static class MainTerminal
 		TerminalHelper.PrintLineBreak();
 	}
 
-	public static void PrintGoodbyeMessage(String message)
-	{
-		Console.WriteLine(message);
-	}
-
-	public static void PrintInvitationToUserInteraction(String message)
-	{
-		Console.WriteLine(message);
-	}
-
 	public static void PrintHelp()
 	{
 		Console.WriteLine("\nCommandes disponibles :");
@@ -51,11 +41,6 @@ public static class MainTerminal
 		Console.WriteLine(" : vérifier la disponibilité de vaisseaux.");
 
 		TerminalHelper.PrintLineBreak();
-	}
-
-	public static void PrintUnknownInstruction(String instruction)
-	{
-		Console.WriteLine(instruction);
 	}
 
 	public static void PrintMessage(String message)
