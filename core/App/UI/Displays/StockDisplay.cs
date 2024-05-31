@@ -3,9 +3,9 @@ using core.Utils;
 
 namespace core.UI;
 
-public class StockDisplay : AbstractSingleton<StockDisplay>
+public static class StockDisplay
 {
-	public void PrintStarshipStock()
+	public static void PrintStarshipStock()
 	{
 		var inMemoryStarship = InMemoryStarship.Instance;
 		var starshipCounts = inMemoryStarship.GetStock();
@@ -22,7 +22,7 @@ public class StockDisplay : AbstractSingleton<StockDisplay>
 		TerminalHelper.PrintLineBreak();
 	}
 
-	public void PrintComponentStock()
+	public static void PrintComponentStock()
 	{
 		var inMemoryComponent = InMemoryComponent.Instance;
 		var counts = inMemoryComponent.GetStockOfEachComponent();

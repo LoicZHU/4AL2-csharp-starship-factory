@@ -6,4 +6,9 @@ public static class HelperFunction
 	{
 		return input is null;
 	}
+
+	public static Boolean IsNullOrWhiteSpace(String? input)
+	{
+		return String.IsNullOrWhiteSpace(input);
+	}
 }
