@@ -4,7 +4,7 @@ using core.Utils;
 
 namespace core.In_memories.Items;
 
-public class InMemoryStarship : Singleton<InMemoryStarship>
+public class InMemoryStarship : AbstractSingleton<InMemoryStarship>
 {
 	private readonly Dictionary<Guid, Starship> _cache;
 

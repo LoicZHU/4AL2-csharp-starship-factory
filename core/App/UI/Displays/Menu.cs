@@ -1,13 +1,11 @@
-using System.Text.RegularExpressions;
+using core.InputHandlers;
 using core.In_memories;
-using core.In_memories.Items;
-using core.Starships;
 using core.UI.constants;
 using core.Utils;
 
 namespace core.UI;
 
-public class Menu : Singleton<Menu>
+public class Menu : AbstractSingleton<Menu>
 {
 	public void Start()
 	{
@@ -78,12 +76,9 @@ public class Menu : Singleton<Menu>
 					// VerifyStocksMenu ?
 					break;
 				default:
-					if (
-						input.StartsWith(Command.UserInstruction, StringComparison.OrdinalIgnoreCase)
-					)
+					if (IsUserInstructionCommand(input))
 					{
-						// RegisterOrderMenu ?
-						this.HandleUserInstructionCommand(input);
+						UserInstructionHandler.HandleInput(input);
 						break;
 					}
 
@@ -100,121 +95,8 @@ public class Menu : Singleton<Menu>
 		MainTerminal.PrintHelp();
 	}
 
-	private void HandleUserInstructionCommand(String input)
+	private Boolean IsUserInstructionCommand(String input)
 	{
-		Console.WriteLine("input: " + input);
-		if (!this.IsUserInputValid(input.Split()))
-		{
-			this.PrintInvalidUserInstructionCommandMessage();
-			return;
-		}
-
-		var splittedBySpaceInput = input.Split(new[] { ' ' }, 2);
-		if (!IsCommandNameSeparatedByOneSpace(splittedBySpaceInput))
-		{
-			this.PrintInvalidUserInstructionCommandMessage();
-			return;
-		}
-
-		var userInstructionBody = splittedBySpaceInput[1];
-		var userInstruction = GetCompleteUserInstructionFrom(userInstructionBody);
-
-		InMemoryUserInstruction.Instance.Add(userInstruction);
-		// this._userInterface.PrintLineBreak();
-	}
-
-	private Boolean IsUserInputValid(String[] input)
-	{
-		return input.Length >= 3 && (input.Length - 1) % 2 == 0;
-	}
-
-	private void PrintInvalidUserInstructionCommandMessage()
-	{
-		MainTerminal.PrintMessage(
-			"❌ La commande doit respecter ce format : [USER_INSTRUCTION] <quantité> <nom_du_vaisseau> [, <quantité> <nom_du_vaisseau>, ...]"
-		);
-	}
-
-	private Boolean IsCommandNameSeparatedByOneSpace(String[] parts)
-	{
-		return parts.Length == 2;
-	}
-
-	private static readonly string QuantityWithStarshipPattern = @"(\d+)\s+(\w+)";
-
-	private UserInstruction GetCompleteUserInstructionFrom(String starshipsPart)
-	{
-		var userInstruction = UserInstruction.Create(new Dictionary<String, int>());
-
-		foreach (var quantityAndStarship in starshipsPart.Split(", "))
-		{
-			var match = Regex.Match(quantityAndStarship.Trim(), QuantityWithStarshipPattern);
-			if (!IsMatch(match))
-			{
-				this.PrintInvalidUserInstructionCommandMessage();
-				continue;
-			}
-
-			if (!int.TryParse(match.Groups[1].Value, out var quantity))
-			{
-				this.PrintInvalidUserInstructionCommandMessage();
-				continue;
-			}
-
-			var starshipModelInput = match.Groups[2].Value;
-			var starshipName = this.GetStarshipName(starshipModelInput);
-			if (IsUnknownStarship(starshipName))
-			{
-				MainTerminal.PrintMessage("❌ Modèle de vaisseau inconnu...");
-				continue;
-			}
-
-			userInstruction.Add(starshipName, quantity);
-		}
-
-		return userInstruction;
-	}
-
-	private Boolean IsMatch(Match match)
-	{
-		return match.Success;
-	}
-
-	private String GetStarshipName(String name)
-	{
-		if (this.IsCargoStarship(name))
-		{
-			return StarshipName.Cargo;
-		}
-		if (this.IsExplorerStarship(name))
-		{
-			return StarshipName.Explorer;
-		}
-		if (this.IsSpeederStarship(name))
-		{
-			return StarshipName.Speeder;
-		}
-
-		return StarshipName.Unknown;
-	}
-
-	private Boolean IsCargoStarship(String name)
-	{
-		return name.Equals(StarshipName.Cargo, StringComparison.OrdinalIgnoreCase);
-	}
-
-	private Boolean IsExplorerStarship(String name)
-	{
-		return name.Equals(StarshipName.Explorer, StringComparison.OrdinalIgnoreCase);
-	}
-
-	private Boolean IsSpeederStarship(String name)
-	{
-		return name.Equals(StarshipName.Speeder, StringComparison.OrdinalIgnoreCase);
-	}
-
-	private Boolean IsUnknownStarship(String name)
-	{
-		return name.Equals(StarshipName.Unknown, StringComparison.OrdinalIgnoreCase);
+		return input.StartsWith(Command.UserInstruction, StringComparison.OrdinalIgnoreCase);
 	}
 }

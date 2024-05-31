@@ -2,7 +2,7 @@ using core.Utils;
 
 namespace core.In_memories;
 
-public class InMemoryUserInstruction : Singleton<InMemoryUserInstruction>
+public class InMemoryUserInstruction : AbstractSingleton<InMemoryUserInstruction>
 {
 	private readonly Dictionary<Guid, Dictionary<String, Int32>> _cache = new();
 

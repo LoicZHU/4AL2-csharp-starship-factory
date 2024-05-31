@@ -3,7 +3,7 @@ using core.Utils;
 
 namespace core.UI;
 
-public class StockDisplay : Singleton<StockDisplay>
+public class StockDisplay : AbstractSingleton<StockDisplay>
 {
 	public void PrintStarshipStock()
 	{
