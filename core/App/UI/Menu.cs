@@ -1,5 +1,4 @@
 using core.InputHandlers;
-using core.In_memories;
 using core.UI.constants;
 using core.Utils;
 
@@ -13,12 +12,12 @@ public class Menu : AbstractSingleton<Menu>
 		this.HandleUserInteractionsWithTerminal();
 	}
 
-	public void HandleUserInteractionsWithTerminal()
+	private void HandleUserInteractionsWithTerminal()
 	{
 		while (true)
 		{
 			var input = Console.ReadLine()?.ToUpper();
-			if (HelperFunction.IsNullOrWhiteSpace(input))
+			if (Utils.UtilsFunction.IsNullOrWhiteSpace(input))
 			{
 				this.PrintEmptyInstructionMessage();
 				continue;
@@ -32,12 +31,8 @@ public class Menu : AbstractSingleton<Menu>
 				case Command.Help:
 					this.PrintHelpMenu();
 					break;
-				case Command.Instructions:
-					// AssembleShipsMenu ?
-
-					break;
 				case Command.Produce:
-					// ProduceShipsMenu ?
+					// ProduceShips ?
 					break;
 				case Command.Stocks:
 					this.PrintStarshipAndComponentStocks();
@@ -46,10 +41,16 @@ public class Menu : AbstractSingleton<Menu>
 					this.PrintStarshipCountsForEachInstruction();
 					break;
 				case Command.Verify:
-					// VerifyStocksMenu ?
+					// VerifyStocks ?
 					break;
 				default:
-					if (IsUserInstructionCommand(input))
+					if (this.IsInstructionsCommand(input))
+					{
+						this.HandleInstructionsCommand(input);
+						break;
+					}
+
+					if (this.IsUserInstructionCommand(input))
 					{
 						this.HandleUserInstructionCommand(input);
 						break;
@@ -59,6 +60,11 @@ public class Menu : AbstractSingleton<Menu>
 					break;
 			}
 		}
+	}
+
+	private Boolean IsInstructionsCommand(String input)
+	{
+		return input.StartsWith(Command.Instructions, StringComparison.OrdinalIgnoreCase);
 	}
 
 	private void PrintEmptyInstructionMessage()
@@ -89,12 +95,17 @@ public class Menu : AbstractSingleton<Menu>
 		UserInstructionsDisplay.PrintStarshipCountsForEachInstruction();
 	}
 
+	private void HandleInstructionsCommand(String input)
+	{
+		InstructionsHandler.HandleInput(input);
+	}
+
 	private Boolean IsUserInstructionCommand(String input)
 	{
 		return input.StartsWith(Command.UserInstruction, StringComparison.OrdinalIgnoreCase);
 	}
 
-	private void HandleUserInstructionCommand(string input)
+	private void HandleUserInstructionCommand(String input)
 	{
 		UserInstructionHandler.HandleInput(input);
 	}
