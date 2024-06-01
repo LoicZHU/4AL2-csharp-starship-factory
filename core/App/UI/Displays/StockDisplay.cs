@@ -9,7 +9,7 @@ public static class StockDisplay
 	{
 		var inMemoryStarship = InMemoryStarship.Instance;
 		var starshipCounts = inMemoryStarship.GetStock();
-		if (HelperFunction.IsNull(starshipCounts))
+		if (Utils.UtilsFunction.IsNull(starshipCounts))
 		{
 			return;
 		}
@@ -26,7 +26,7 @@ public static class StockDisplay
 	{
 		var inMemoryComponent = InMemoryComponent.Instance;
 		var counts = inMemoryComponent.GetStockOfEachComponent();
-		if (HelperFunction.IsNull(counts))
+		if (Utils.UtilsFunction.IsNull(counts))
 		{
 			return;
 		}

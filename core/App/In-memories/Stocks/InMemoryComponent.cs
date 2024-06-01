@@ -172,13 +172,11 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 				component.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
 			);
 
-			if (component is not null)
+			if (!UtilsFunction.IsNull(component))
 			{
 				actualCache.Remove(component.Id);
 			}
 		}
-
-		throw new ArgumentException("Invalid component name", nameof(name));
 	}
 
 	public List<Dictionary<String, Int32>> GetStockOfEachComponent()
@@ -233,8 +231,11 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 			}
 
 			var actualCache = cacheMap[prefix];
-			var component = actualCache.Values.FirstOrDefault(cache => cache.Name == name);
-			if (component is not null)
+			var component = actualCache.Values.FirstOrDefault(cache =>
+				cache.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
+			);
+
+			if (!UtilsFunction.IsNull(component))
 			{
 				return actualCache.Values.Count(component =>
 					component.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
@@ -242,6 +243,6 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 			}
 		}
 
-		throw new ArgumentException("Invalid name", nameof(name));
+		return 0;
 	}
 }

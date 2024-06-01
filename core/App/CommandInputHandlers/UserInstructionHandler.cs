@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using core.In_memories;
 using core.Starships;
 using core.UI;
+using core.Utils;
 
 namespace core.InputHandlers;
 
@@ -13,16 +14,16 @@ public static class UserInstructionHandler
 
 	public static void HandleInput(String input)
 	{
-		if (!IsInputValid(input.Split()))
+		if (!HandlerHelper.IsCommandInputValid(input.Split()))
 		{
-			PrintInvalidCommandMessage(InvalidCommandMessage);
+			PrintInvalidCommand(InvalidCommandMessage);
 			return;
 		}
 
 		var splittedBySpaceInput = input.Split(new[] { ' ' }, 2);
-		if (!IsCommandNameSeparatedByOneSpace(splittedBySpaceInput))
+		if (!HandlerHelper.IsCommandNameSeparatedByOneSpace(splittedBySpaceInput))
 		{
-			PrintInvalidCommandMessage(InvalidCommandMessage);
+			PrintInvalidCommand(InvalidCommandMessage);
 			return;
 		}
 
@@ -32,19 +33,10 @@ public static class UserInstructionHandler
 		InMemoryUserInstruction.Instance.Add(userInstruction);
 	}
 
-	private static Boolean IsInputValid(String[] input)
-	{
-		return input.Length >= 3 && (input.Length - 1) % 2 == 0;
-	}
-
-	private static void PrintInvalidCommandMessage(String message)
+	private static void PrintInvalidCommand(String message)
 	{
 		MainTerminal.PrintMessage(message);
-	}
-
-	private static Boolean IsCommandNameSeparatedByOneSpace(String[] parts)
-	{
-		return parts.Length == 2;
+		TerminalHelper.PrintLineBreak();
 	}
 
 	private static UserInstruction GetCompleteUserInstructionFrom(String starshipsPart)
@@ -54,23 +46,23 @@ public static class UserInstructionHandler
 		foreach (var quantityAndStarship in starshipsPart.Split(", "))
 		{
 			var match = Regex.Match(quantityAndStarship.Trim(), QuantityWithStarshipPattern);
-			if (!IsMatch(match))
+			if (!HandlerHelper.IsMatch(match))
 			{
-				PrintInvalidCommandMessage(InvalidCommandMessage);
+				PrintInvalidCommand(InvalidCommandMessage);
 				continue;
 			}
 
 			if (!int.TryParse(match.Groups[1].Value, out var quantity))
 			{
-				PrintInvalidCommandMessage(InvalidCommandMessage);
+				PrintInvalidCommand(InvalidCommandMessage);
 				continue;
 			}
 
-			var starshipModelInput = match.Groups[2].Value;
-			var starshipName = GetStarshipName(starshipModelInput);
-			if (IsUnknownStarship(starshipName))
+			var starshipNameInput = match.Groups[2].Value;
+			var starshipName = HandlerHelper.GetStarshipName(starshipNameInput);
+			if (HandlerHelper.IsUnknownStarship(starshipName))
 			{
-				MainTerminal.PrintMessage($"❌ Vaisseau '{starshipModelInput}' inconnu.");
+				MainTerminal.PrintMessage($"❌ Vaisseau '{starshipNameInput}' inconnu.");
 				continue;
 			}
 
@@ -78,48 +70,5 @@ public static class UserInstructionHandler
 		}
 
 		return userInstruction;
-	}
-
-	private static Boolean IsMatch(Match match)
-	{
-		return match.Success;
-	}
-
-	private static String GetStarshipName(String name)
-	{
-		if (IsCargoStarship(name))
-		{
-			return StarshipName.Cargo;
-		}
-		if (IsExplorerStarship(name))
-		{
-			return StarshipName.Explorer;
-		}
-		if (IsSpeederStarship(name))
-		{
-			return StarshipName.Speeder;
-		}
-
-		return StarshipName.Unknown;
-	}
-
-	private static Boolean IsCargoStarship(String name)
-	{
-		return name.Equals(StarshipName.Cargo, StringComparison.OrdinalIgnoreCase);
-	}
-
-	private static Boolean IsExplorerStarship(String name)
-	{
-		return name.Equals(StarshipName.Explorer, StringComparison.OrdinalIgnoreCase);
-	}
-
-	private static Boolean IsSpeederStarship(String name)
-	{
-		return name.Equals(StarshipName.Speeder, StringComparison.OrdinalIgnoreCase);
-	}
-
-	private static Boolean IsUnknownStarship(String name)
-	{
-		return name.Equals(StarshipName.Unknown, StringComparison.OrdinalIgnoreCase);
 	}
 }
