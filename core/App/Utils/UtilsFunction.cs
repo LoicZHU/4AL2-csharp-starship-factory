@@ -1,6 +1,6 @@
 namespace core.Utils;
 
-public static class HelperFunction
+public static class Utils
 {
 	public static Boolean IsNull<TInput>(TInput input)
 	{
