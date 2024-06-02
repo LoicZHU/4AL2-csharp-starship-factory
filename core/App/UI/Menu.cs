@@ -31,9 +31,6 @@ public class Menu : AbstractSingleton<Menu>
 				case Command.Help:
 					this.PrintHelpMenu();
 					break;
-				case Command.Produce:
-					// ProduceShips ?
-					break;
 				case Command.Stocks:
 					this.PrintStarshipAndComponentStocks();
 					break;
@@ -44,6 +41,12 @@ public class Menu : AbstractSingleton<Menu>
 					if (this.IsInstructionsCommand(input))
 					{
 						this.HandleInstructionsCommand(input);
+						break;
+					}
+
+					if (this.IsProduceCommand(input))
+					{
+						ProduceHandler.HandleInput(input);
 						break;
 					}
 
@@ -101,6 +104,11 @@ public class Menu : AbstractSingleton<Menu>
 	private void HandleInstructionsCommand(String input)
 	{
 		InstructionsHandler.HandleInput(input);
+	}
+
+	private Boolean IsProduceCommand(String input)
+	{
+		return input.StartsWith(Command.Produce, StringComparison.OrdinalIgnoreCase);
 	}
 
 	private Boolean IsVerifyCommand(String input)
