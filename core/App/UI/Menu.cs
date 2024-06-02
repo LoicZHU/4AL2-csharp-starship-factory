@@ -40,13 +40,16 @@ public class Menu : AbstractSingleton<Menu>
 				case Command.UserInstructions:
 					this.PrintStarshipCountsForEachInstruction();
 					break;
-				case Command.Verify:
-					// VerifyStocks ?
-					break;
 				default:
 					if (this.IsInstructionsCommand(input))
 					{
 						this.HandleInstructionsCommand(input);
+						break;
+					}
+
+					if (this.IsVerifyCommand(input))
+					{
+						this.HandleVerifyCommand(input);
 						break;
 					}
 
@@ -98,6 +101,16 @@ public class Menu : AbstractSingleton<Menu>
 	private void HandleInstructionsCommand(String input)
 	{
 		InstructionsHandler.HandleInput(input);
+	}
+
+	private Boolean IsVerifyCommand(String input)
+	{
+		return input.StartsWith(Command.Verify, StringComparison.OrdinalIgnoreCase);
+	}
+
+	private void HandleVerifyCommand(String input)
+	{
+		VerifyHandler.HandleInput(input);
 	}
 
 	private Boolean IsUserInstructionCommand(String input)

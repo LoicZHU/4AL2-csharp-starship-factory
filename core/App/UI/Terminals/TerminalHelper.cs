@@ -2,7 +2,7 @@ namespace core.UI;
 
 public static class TerminalHelper
 {
-	private static void ColorizeMessageWithLinebreak(String message, ConsoleColor color)
+	public static void ColorizeMessageWithLinebreak(String message, ConsoleColor color)
 	{
 		Console.ForegroundColor = color;
 		Console.WriteLine(message);
