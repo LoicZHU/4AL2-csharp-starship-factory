@@ -36,13 +36,13 @@ public static class InstructionsHandler
 			if (!HandlerHelper.IsMatch(match))
 			{
 				PrintInvalidCommand(InvalidCommandMessage);
-				continue;
+				break;
 			}
 
 			if (!int.TryParse(match.Groups[1].Value, out var quantity))
 			{
 				PrintInvalidCommand(InvalidCommandMessage);
-				continue;
+				break;
 			}
 
 			var starshipNameInput = match.Groups[2].Value;
@@ -50,7 +50,7 @@ public static class InstructionsHandler
 			if (HandlerHelper.IsUnknownStarship(starshipName))
 			{
 				PrintUnknownStarship($"❌ Vaisseau '{starshipNameInput}' inconnu.");
-				continue;
+				break;
 			}
 
 			var (hullCount, engineCount, wingCount, thrusterCount) =
