@@ -44,6 +44,12 @@ public class Menu : AbstractSingleton<Menu>
 						break;
 					}
 
+					if (this.IsNeededStocksCommand(input))
+					{
+						this.HandleNeededStocksCommand(input);
+						break;
+					}
+
 					if (this.IsProduceCommand(input))
 					{
 						ProduceHandler.HandleInput(input);
@@ -104,6 +110,16 @@ public class Menu : AbstractSingleton<Menu>
 	private void HandleInstructionsCommand(String input)
 	{
 		InstructionsHandler.HandleInput(input);
+	}
+
+	private Boolean IsNeededStocksCommand(String input)
+	{
+		return input.StartsWith(Command.NeededStocks, StringComparison.OrdinalIgnoreCase);
+	}
+
+	private void HandleNeededStocksCommand(String input)
+	{
+		NeededStocksHandler.HandleInput(input);
 	}
 
 	private Boolean IsProduceCommand(String input)
