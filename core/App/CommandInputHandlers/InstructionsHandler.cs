@@ -198,9 +198,12 @@ public static class InstructionsHandler
 			var componentAssembly = ComponentAssembly.Create(String.Empty, new List<String>());
 			InMemoryComponentAssembly.Instance.Add(componentAssembly);
 
-			foreach (var componentName in StarshipAssembly.ComponentsMap[starshipName])
+			foreach (var (componentName, count) in StarshipAssembly.ComponentsMap[starshipName])
 			{
-				AddComponentAssemblyToItsInventory(componentAssembly, componentName);
+				for (var j = 1; j <= count; j++)
+				{
+					AddComponentAssemblyToItsInventory(componentAssembly, componentName);
+				}
 			}
 
 			InstructionsDisplay.PrintStarshipProductionFinishing(starshipName, i);

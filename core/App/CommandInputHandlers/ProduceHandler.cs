@@ -201,9 +201,12 @@ public static class ProduceHandler
 			var componentAssembly = ComponentAssembly.Create(String.Empty, new List<String>());
 			InMemoryComponentAssembly.Instance.Add(componentAssembly);
 
-			foreach (var componentName in StarshipAssembly.ComponentsMap[starshipName])
+			foreach (var (componentName, count) in StarshipAssembly.ComponentsMap[starshipName])
 			{
-				AddComponentAssemblyToItsInventory(componentAssembly, componentName);
+				for (var j = 1; j <= count; j++)
+				{
+					AddComponentAssemblyToItsInventory(componentAssembly, componentName);
+				}
 			}
 
 			InstructionsDisplay.PrintStarshipProductionFinishing(starshipName, i);
@@ -218,11 +221,13 @@ public static class ProduceHandler
 		{
 			return GetOutCargoComponentsFromStock;
 		}
-		else if (HandlerHelper.IsExplorerStarship(starshipName))
+
+		if (HandlerHelper.IsExplorerStarship(starshipName))
 		{
 			return GetOutExplorerComponentsFromStock;
 		}
-		else if (HandlerHelper.IsSpeederStarship(starshipName))
+
+		if (HandlerHelper.IsSpeederStarship(starshipName))
 		{
 			return GetOutSpeederComponentsFromStock;
 		}
