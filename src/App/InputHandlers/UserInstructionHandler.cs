@@ -39,7 +39,7 @@ public class UserInstructionHandler : IInputHandler
 
 	private UserInstruction GetCompleteUserInstructionFrom(String starshipsPart)
 	{
-		var userInstruction = UserInstruction.Create(new Dictionary<String, int>());
+		var userInstruction = UserInstruction.Create(new Dictionary<String, Int32>());
 
 		foreach (var quantityAndStarship in starshipsPart.Split(", "))
 		{
