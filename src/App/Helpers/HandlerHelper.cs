@@ -5,6 +5,10 @@ namespace core.Utils;
 
 public static class HandlerHelper
 {
+	public const String InvalidCommandMessage = "Commande invalide.";
+
+	private const String QuantityWithStarshipPattern = @"(\d+)\s+(\w+)";
+
 	public static Boolean IsCommandInputValid(String[] input)
 	{
 		Boolean hasAtLeastThreeArguments = input.Length >= 3;
@@ -66,5 +70,30 @@ public static class HandlerHelper
 	public static Boolean IsUnknownStarship(String name)
 	{
 		return name.Equals(StarshipName.Unknown, StringComparison.OrdinalIgnoreCase);
+	}
+
+	public static (
+		Boolean isValid,
+		String name,
+		Int32 quantity,
+		String errorMessage
+	) ParseQuantityAndStarship(String input)
+	{
+		var match = Regex.Match(input.Trim(), QuantityWithStarshipPattern);
+		if (!IsMatch(match))
+		{
+			return (false, String.Empty, 0, InvalidCommandMessage);
+		}
+		if (!Int32.TryParse(match.Groups[1].Value, out var quantity))
+		{
+			return (false, String.Empty, 0, InvalidCommandMessage);
+		}
+
+		var starshipNameInput = match.Groups[2].Value;
+		var starshipName = GetStarshipName(starshipNameInput);
+
+		return IsUnknownStarship(starshipName)
+			? (false, StarshipName.Unknown, 0, $"🤷‍♂️ Vaisseau inconnu : {starshipNameInput}")
+			: (true, starshipName, quantity, String.Empty);
 	}
 }

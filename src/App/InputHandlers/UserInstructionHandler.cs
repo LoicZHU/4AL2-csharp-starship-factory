@@ -43,24 +43,16 @@ public class UserInstructionHandler : IInputHandler
 
 		foreach (var quantityAndStarship in starshipsPart.Split(", "))
 		{
-			var match = Regex.Match(quantityAndStarship.Trim(), QuantityWithStarshipPattern);
-			if (!HandlerHelper.IsMatch(match))
+			var (isValid, starshipName, quantity, errorMessage) =
+				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
+			if (!isValid)
 			{
 				this.PrintInvalidCommand(InvalidCommandMessage);
 				continue;
 			}
-
-			if (!int.TryParse(match.Groups[1].Value, out var quantity))
-			{
-				this.PrintInvalidCommand(InvalidCommandMessage);
-				continue;
-			}
-
-			var starshipNameInput = match.Groups[2].Value;
-			var starshipName = HandlerHelper.GetStarshipName(starshipNameInput);
 			if (HandlerHelper.IsUnknownStarship(starshipName))
 			{
-				Terminal.PrintMessageWithLinebreak($"❌ Vaisseau '{starshipNameInput}' inconnu.");
+				Terminal.PrintMessageWithLinebreak(errorMessage);
 				continue;
 			}
 
