@@ -77,6 +77,6 @@ public class NeededStocksHandler : IInputHandler
 
 	private void PrintUnknownStarship(String message)
 	{
-		Terminal.PrintMessageWithLinebreak(message);
+		NeededStocksDisplayHandler.PrintUnknownStarship(message);
 	}
 }

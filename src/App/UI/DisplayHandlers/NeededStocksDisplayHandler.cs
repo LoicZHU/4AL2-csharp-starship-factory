@@ -59,4 +59,9 @@ public static class NeededStocksDisplayHandler
 			NeededStockTerminal.PrintItem(component, count);
 		}
 	}
+
+	public static void PrintUnknownStarship(String message)
+	{
+		NeededStockTerminal.PrintUnknownStarship(message);
+	}
 }

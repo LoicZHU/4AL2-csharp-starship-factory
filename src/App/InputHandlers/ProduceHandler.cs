@@ -4,9 +4,7 @@ using core.Components;
 using core.In_memories;
 using core.In_memories.Items;
 using core.UI;
-using core.UI.constants;
 using core.Utils;
-using static System.ConsoleColor;
 
 namespace core.InputHandlers;
 
@@ -184,7 +182,7 @@ public class ProduceHandler : IInputHandler
 
 	private void HandleStarshipAssembly(String starshipName, Int32 quantity)
 	{
-		var getComponentsOutFromStock = this.GetComponentsOutFromStock(starshipName);
+		var getComponentsOutFromStock = this.GetComponentsOutFromStockDelegate(starshipName);
 		if (UtilsFunction.IsNull(getComponentsOutFromStock))
 		{
 			throw new InvalidOperationException(
@@ -214,7 +212,7 @@ public class ProduceHandler : IInputHandler
 		Terminal.PrintLinebreak();
 	}
 
-	private Action? GetComponentsOutFromStock(String starshipName)
+	private Action? GetComponentsOutFromStockDelegate(String starshipName)
 	{
 		if (HandlerHelper.IsCargoStarship(starshipName))
 		{
@@ -281,7 +279,6 @@ public class ProduceHandler : IInputHandler
 
 	private void PrintStockUpdatedMessage()
 	{
-		TerminalHelper.ColorizeMessageWithLinebreak(Production.StockUpdated, Yellow);
-		Terminal.PrintLinebreak();
+		ProduceDisplayHandler.PrintStockUpdated();
 	}
 }

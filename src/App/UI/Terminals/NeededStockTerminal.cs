@@ -15,4 +15,9 @@ public static class NeededStockTerminal
 		TerminalHelper.ColorizeMessageWithoutLinebreak($"{quantity}", Yellow);
 		Terminal.PrintMessageWithLinebreak($" {component}");
 	}
+
+	public static void PrintUnknownStarship(String message)
+	{
+		Terminal.PrintMessageWithLinebreak(message);
+	}
 }
