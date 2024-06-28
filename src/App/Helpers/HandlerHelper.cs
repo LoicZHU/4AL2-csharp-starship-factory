@@ -5,8 +5,7 @@ namespace core.Utils;
 
 public static class HandlerHelper
 {
-	public const String InvalidCommandMessage = "Commande invalide.";
-
+	private const String InvalidCommandMessage = "La commande est invalide.";
 	private const String QuantityWithStarshipPattern = @"(\d+)\s+(\w+)";
 
 	public static Boolean IsCommandInputValid(String[] input)

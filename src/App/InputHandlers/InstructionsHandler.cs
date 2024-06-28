@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using core.Assemblies;
 using core.Components;
 using core.In_memories;
@@ -10,9 +9,8 @@ namespace core.InputHandlers;
 
 public class InstructionsHandler : IInputHandler
 {
-	private const String QuantityWithStarshipPattern = @"(\d+)\s+(\w+)";
 	private const String InvalidCommandMessage =
-		"❌ La commande doit respecter ce format : INSTRUCTIONS <quantité> <nom_de_l'élément> [<quantité> <nom_de_l'élément> ...]";
+		"La commande doit respecter ce format : INSTRUCTIONS <quantité> <nom_de_l'élément> [<quantité> <nom_de_l'élément> ...]";
 
 	public void HandleInput(String input)
 	{

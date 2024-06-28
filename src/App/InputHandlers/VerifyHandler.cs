@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using core.Components;
 using core.In_memories.Items;
 using core.UI;
@@ -8,7 +7,6 @@ namespace core.InputHandlers;
 
 public class VerifyHandler : IInputHandler
 {
-	private const String QuantityWithStarshipPattern = @"(\d+)\s+(\w+)";
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
 	public void HandleInput(String input)
@@ -19,14 +17,14 @@ public class VerifyHandler : IInputHandler
 			return;
 		}
 
-		var splittedBySpaceInput = input.Split(new[] { ' ' }, 2);
-		if (!HandlerHelper.IsCommandNameSeparatedByOneSpace(splittedBySpaceInput))
+		var splitBySpaceInput = input.Split(new[] { ' ' }, 2);
+		if (!HandlerHelper.IsCommandNameSeparatedByOneSpace(splitBySpaceInput))
 		{
 			this.PrintInvalidCommand(InvalidCommandMessage);
 			return;
 		}
 
-		var instructionBody = splittedBySpaceInput[1];
+		var instructionBody = splitBySpaceInput[1];
 		foreach (var quantityAndStarship in instructionBody.Split(", "))
 		{
 			var (isValid, starshipName, quantity, errorMessage) =
@@ -34,7 +32,7 @@ public class VerifyHandler : IInputHandler
 			if (!isValid)
 			{
 				this.PrintInvalidCommand(InvalidCommandMessage);
-				break;
+				return;
 			}
 
 			var (hullCount, engineCount, wingCount, thrusterCount) =

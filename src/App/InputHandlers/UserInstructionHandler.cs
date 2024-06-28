@@ -7,7 +7,6 @@ namespace core.InputHandlers;
 
 public class UserInstructionHandler : IInputHandler
 {
-	private const String QuantityWithStarshipPattern = @"(\d+)\s+(\w+)";
 	private const String InvalidCommandMessage =
 		"❌ La commande doit respecter ce format : [USER_INSTRUCTION] <quantité> <nom_du_vaisseau> [, <quantité> <nom_du_vaisseau>, ...]";
 
@@ -28,8 +27,10 @@ public class UserInstructionHandler : IInputHandler
 
 		var userInstructionBody = splittedBySpaceInput[1];
 		var userInstruction = this.GetCompleteUserInstructionFrom(userInstructionBody);
-
-		InMemoryUserInstruction.Instance.Add(userInstruction);
+		if (!UtilsFunction.IsNull(userInstruction))
+		{
+			InMemoryUserInstruction.Instance.Add(userInstruction);
+		}
 	}
 
 	private void PrintInvalidCommand(String message)
@@ -37,7 +38,7 @@ public class UserInstructionHandler : IInputHandler
 		UserInstructionsDisplayHandler.PrintInvalidCommand(message);
 	}
 
-	private UserInstruction GetCompleteUserInstructionFrom(String starshipsPart)
+	private UserInstruction? GetCompleteUserInstructionFrom(String starshipsPart)
 	{
 		var userInstruction = UserInstruction.Create(new Dictionary<String, Int32>());
 
@@ -48,12 +49,12 @@ public class UserInstructionHandler : IInputHandler
 			if (!isValid)
 			{
 				this.PrintInvalidCommand(InvalidCommandMessage);
-				continue;
+				return null;
 			}
 			if (HandlerHelper.IsUnknownStarship(starshipName))
 			{
 				Terminal.PrintMessageWithLinebreak(errorMessage);
-				continue;
+				return null;
 			}
 
 			userInstruction.Add(starshipName, quantity);
