@@ -24,14 +24,19 @@ public class VerifyHandler : IInputHandler
 			return;
 		}
 
-		var instructionBody = splitBySpaceInput[1];
-		foreach (var quantityAndStarship in instructionBody.Split(", "))
+		var inputContent = splitBySpaceInput[1];
+		VerifyStockAvailability(inputContent);
+	}
+
+	private void VerifyStockAvailability(String inputContent)
+	{
+		foreach (var quantityAndStarship in inputContent.Split(", "))
 		{
 			var (isValid, starshipName, quantity, errorMessage) =
 				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
 			if (!isValid)
 			{
-				this.PrintInvalidCommand(InvalidCommandMessage);
+				this.PrintInvalidCommand(errorMessage);
 				return;
 			}
 
@@ -57,14 +62,41 @@ public class VerifyHandler : IInputHandler
 		this.PrintSufficientStock();
 	}
 
+	private Dictionary<String, Int32> GetStarshipSumsFromInput(String input)
+	{
+		var starshipCounts = new Dictionary<String, Int32>();
+
+		foreach (var quantityAndStarship in input.Split(", "))
+		{
+			var (isValid, starshipName, quantity, errorMessage) =
+				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
+			if (!isValid)
+			{
+				this.PrintInvalidCommand(errorMessage);
+				return new Dictionary<String, Int32>();
+			}
+			if (HandlerHelper.IsUnknownStarship(starshipName))
+			{
+				// this.PrintUnknownStarship(errorMessage);
+				return new Dictionary<String, Int32>();
+			}
+
+			if (!starshipCounts.ContainsKey(starshipName))
+			{
+				starshipCounts.Add(starshipName, quantity);
+			}
+			else
+			{
+				starshipCounts[starshipName] += quantity;
+			}
+		}
+
+		return starshipCounts;
+	}
+
 	private void PrintInvalidCommand(String message)
 	{
 		VerifyDisplayHandler.PrintInvalidCommand(message);
-	}
-
-	private void PrintUnknownStarship(String message)
-	{
-		Terminal.PrintMessageWithLinebreak(message);
 	}
 
 	private (Int32, Int32, Int32, Int32) GetStarshipComponentsCountFromInventories()

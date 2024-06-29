@@ -15,7 +15,7 @@ public static class UserInstructionsDisplayHandler
 
 		foreach (var (guidKey, instructions) in userInstructions)
 		{
-			Terminal.PrintMessageWithLinebreak($"Commande n°{guidKey}");
+			Terminal.PrintMessageWithLinebreak($"Commande : {guidKey}");
 			foreach (var (starship, count) in instructions)
 			{
 				Terminal.PrintMessageWithLinebreak($"{starship} : {count}");

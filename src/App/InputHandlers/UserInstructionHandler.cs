@@ -18,15 +18,15 @@ public class UserInstructionHandler : IInputHandler
 			return;
 		}
 
-		var splittedBySpaceInput = input.Split(new[] { ' ' }, 2);
-		if (!HandlerHelper.IsCommandNameSeparatedByOneSpace(splittedBySpaceInput))
+		var splitBySpaceInput = input.Split(new[] { ' ' }, 2);
+		if (!HandlerHelper.IsCommandNameSeparatedByOneSpace(splitBySpaceInput))
 		{
 			this.PrintInvalidCommand(InvalidCommandMessage);
 			return;
 		}
 
-		var userInstructionBody = splittedBySpaceInput[1];
-		var userInstruction = this.GetCompleteUserInstructionFrom(userInstructionBody);
+		var inputContent = splitBySpaceInput[1];
+		var userInstruction = this.GetCompleteUserInstructionFrom(inputContent);
 		if (!UtilsFunction.IsNull(userInstruction))
 		{
 			InMemoryUserInstruction.Instance.Add(userInstruction);
@@ -48,7 +48,7 @@ public class UserInstructionHandler : IInputHandler
 				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
 			if (!isValid)
 			{
-				this.PrintInvalidCommand(InvalidCommandMessage);
+				this.PrintInvalidCommand(errorMessage);
 				return null;
 			}
 			if (HandlerHelper.IsUnknownStarship(starshipName))

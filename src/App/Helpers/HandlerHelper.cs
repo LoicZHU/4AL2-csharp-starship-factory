@@ -21,6 +21,13 @@ public static class HandlerHelper
 		return parts.Length == 2;
 	}
 
+	public static Boolean IsDictionaryEmpty<TKey, TValue>(
+		Dictionary<TKey, TValue> dictionary
+	)
+	{
+		return dictionary.Count == 0;
+	}
+
 	public static Boolean IsMatch(Match match)
 	{
 		return match.Success;
@@ -92,7 +99,7 @@ public static class HandlerHelper
 		var starshipName = GetStarshipName(starshipNameInput);
 
 		return IsUnknownStarship(starshipName)
-			? (false, StarshipName.Unknown, 0, $"🤷‍♂️ Vaisseau inconnu : {starshipNameInput}")
+			? (false, StarshipName.Unknown, 0, $"Vaisseau inconnu : {starshipNameInput}")
 			: (true, starshipName, quantity, String.Empty);
 	}
 }

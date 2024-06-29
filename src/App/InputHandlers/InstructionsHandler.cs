@@ -9,8 +9,7 @@ namespace core.InputHandlers;
 
 public class InstructionsHandler : IInputHandler
 {
-	private const String InvalidCommandMessage =
-		"La commande doit respecter ce format : INSTRUCTIONS <quantité> <nom_de_l'élément> [<quantité> <nom_de_l'élément> ...]";
+	private const String InvalidCommandMessage = "La commande est invalide.";
 
 	public void HandleInput(String input)
 	{
@@ -27,49 +26,49 @@ public class InstructionsHandler : IInputHandler
 			return;
 		}
 
-		var instructionsBody = splitBySpaceInput[1];
-		foreach (var quantityAndStarship in instructionsBody.Split(", "))
+		var inputContent = splitBySpaceInput[1];
+		var starshipCounts = this.GetStarshipSumsFromInput(inputContent);
+		if (!HandlerHelper.IsDictionaryEmpty(starshipCounts))
+		{
+			this.AssembleStarships(starshipCounts);
+		}
+	}
+
+	private void PrintInvalidCommand(String message)
+	{
+		InstructionsDisplayHandler.PrintInvalidCommand(message);
+	}
+
+	private Dictionary<String, Int32> GetStarshipSumsFromInput(String input)
+	{
+		var starshipCounts = new Dictionary<String, Int32>();
+
+		foreach (var quantityAndStarship in input.Split(", "))
 		{
 			var (isValid, starshipName, quantity, errorMessage) =
 				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
 			if (!isValid)
 			{
-				this.PrintInvalidCommand(InvalidCommandMessage);
-				break;
+				this.PrintInvalidCommand(errorMessage);
+				return new Dictionary<String, Int32>();
 			}
 			if (HandlerHelper.IsUnknownStarship(starshipName))
 			{
 				this.PrintUnknownStarship(errorMessage);
-				break;
+				return new Dictionary<String, Int32>();
 			}
 
-			var (hullCount, engineCount, wingCount, thrusterCount) =
-				this.GetStarshipComponentsCountFromInventories();
-
-			if (
-				this.IsMoreInventoryRequired(
-					starshipName,
-					quantity,
-					hullCount,
-					engineCount,
-					wingCount,
-					thrusterCount
-				)
-			)
+			if (!starshipCounts.ContainsKey(starshipName))
 			{
-				this.PrintInsufficientStock();
-				return;
+				starshipCounts.Add(starshipName, quantity);
 			}
-
-			try
+			else
 			{
-				this.HandleStarshipAssembly(starshipName, quantity);
-			}
-			catch (Exception e)
-			{
-				Terminal.PrintMessageWithLinebreak(e.Message);
+				starshipCounts[starshipName] += quantity;
 			}
 		}
+
+		return starshipCounts;
 	}
 
 	private void PrintUnknownStarship(String message)
@@ -77,9 +76,37 @@ public class InstructionsHandler : IInputHandler
 		InstructionsDisplayHandler.PrintUnknownStarship(message);
 	}
 
-	private void PrintInvalidCommand(String message)
+	private void AssembleStarships(Dictionary<String, Int32> starshipCounts)
 	{
-		InstructionsDisplayHandler.PrintInvalidCommand(message);
+		try
+		{
+			foreach (var (starshipName, quantity) in starshipCounts)
+			{
+				var (hullCount, engineCount, wingCount, thrusterCount) =
+					this.GetStarshipComponentsCountFromInventories();
+
+				if (
+					this.IsMoreInventoryRequired(
+						starshipName,
+						quantity,
+						hullCount,
+						engineCount,
+						wingCount,
+						thrusterCount
+					)
+				)
+				{
+					this.PrintInsufficientStock();
+					return;
+				}
+
+				this.HandleStarshipAssembly(starshipName, quantity);
+			}
+		}
+		catch (Exception e)
+		{
+			Terminal.PrintMessageWithLinebreak(e.Message);
+		}
 	}
 
 	private (Int32, Int32, Int32, Int32) GetStarshipComponentsCountFromInventories()
@@ -241,6 +268,16 @@ public class InstructionsHandler : IInputHandler
 		this.GetComponentsOutFromStock(ThrusterComponent.ThrusterTc1, 1);
 	}
 
+	private void GetComponentsOutFromStock(String componentName, Int32 quantity)
+	{
+		InstructionsDisplayHandler.PrintGetOutStock(quantity, componentName);
+
+		for (var i = 1; i <= quantity; i++)
+		{
+			InMemoryComponent.Instance.Remove(componentName);
+		}
+	}
+
 	private void GetExplorerComponentsOutFromStock()
 	{
 		this.GetComponentsOutFromStock(HullComponent.HullHe1, 1);
@@ -255,15 +292,5 @@ public class InstructionsHandler : IInputHandler
 		this.GetComponentsOutFromStock(EngineComponent.EngineEs1, 1);
 		this.GetComponentsOutFromStock(WingComponent.WingsWs1, 1);
 		this.GetComponentsOutFromStock(ThrusterComponent.ThrusterTs1, 2);
-	}
-
-	private void GetComponentsOutFromStock(String componentName, Int32 quantity)
-	{
-		InstructionsDisplayHandler.PrintGetOutStock(quantity, componentName);
-
-		for (var i = 1; i <= quantity; i++)
-		{
-			InMemoryComponent.Instance.Remove(componentName);
-		}
 	}
 }

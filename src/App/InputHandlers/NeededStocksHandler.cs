@@ -23,9 +23,8 @@ public class NeededStocksHandler : IInputHandler
 		}
 
 		var inputBody = splitBySpaceInput[1];
-
 		var starshipCounts = this.GetStarshipSumsFromInput(inputBody);
-		if (!UtilsFunction.IsNull(starshipCounts))
+		if (!HandlerHelper.IsDictionaryEmpty(starshipCounts))
 		{
 			NeededStocksDisplayHandler.PrintNeededStocks(starshipCounts);
 		}
@@ -36,7 +35,7 @@ public class NeededStocksHandler : IInputHandler
 		NeededStocksDisplayHandler.PrintInvalidCommand(message);
 	}
 
-	private Dictionary<String, Int32>? GetStarshipSumsFromInput(String input)
+	private Dictionary<String, Int32> GetStarshipSumsFromInput(String input)
 	{
 		var starshipCounts = new Dictionary<String, Int32>();
 
@@ -46,13 +45,13 @@ public class NeededStocksHandler : IInputHandler
 				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
 			if (!isValid)
 			{
-				this.PrintInvalidCommand(InvalidCommandMessage);
-				return null;
+				this.PrintInvalidCommand(errorMessage);
+				return new Dictionary<String, Int32>();
 			}
 			if (HandlerHelper.IsUnknownStarship(starshipName))
 			{
 				this.PrintUnknownStarship(errorMessage);
-				return null;
+				return new Dictionary<String, Int32>();
 			}
 
 			if (!starshipCounts.ContainsKey(starshipName))
