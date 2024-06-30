@@ -9,11 +9,6 @@ public static class InstructionsDisplayHandler
 		Terminal.PrintInvalidCommand(message);
 	}
 
-	public static void PrintUnknownStarship(String message)
-	{
-		InstructionsTerminal.PrintUnknownStarship(message);
-	}
-
 	public static void PrintAssemblingComponents(
 		ComponentAssembly componentAssembly,
 		String componentToAdd

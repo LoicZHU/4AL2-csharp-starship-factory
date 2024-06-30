@@ -90,16 +90,18 @@ public static class HandlerHelper
 		{
 			return (false, String.Empty, 0, InvalidCommandMessage);
 		}
+
+		// seems to be useless:
 		if (!Int32.TryParse(match.Groups[1].Value, out var quantity))
 		{
-			return (false, String.Empty, 0, InvalidCommandMessage);
+			return (false, String.Empty, quantity, InvalidCommandMessage);
 		}
 
 		var starshipNameInput = match.Groups[2].Value;
 		var starshipName = GetStarshipName(starshipNameInput);
 
 		return IsUnknownStarship(starshipName)
-			? (false, StarshipName.Unknown, 0, $"Vaisseau inconnu : {starshipNameInput}")
+			? (false, StarshipName.Unknown, quantity, $"Vaisseau inconnu : {starshipNameInput}")
 			: (true, starshipName, quantity, String.Empty);
 	}
 }

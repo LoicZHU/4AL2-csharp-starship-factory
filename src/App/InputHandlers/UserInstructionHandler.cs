@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using core.In_memories;
 using core.UI;
 using core.Utils;
@@ -7,8 +6,7 @@ namespace core.InputHandlers;
 
 public class UserInstructionHandler : IInputHandler
 {
-	private const String InvalidCommandMessage =
-		"❌ La commande doit respecter ce format : [USER_INSTRUCTION] <quantité> <nom_du_vaisseau> [, <quantité> <nom_du_vaisseau>, ...]";
+	private const String InvalidCommandMessage = "La commande est invalide.";
 
 	public void HandleInput(String input)
 	{
@@ -49,11 +47,6 @@ public class UserInstructionHandler : IInputHandler
 			if (!isValid)
 			{
 				this.PrintInvalidCommand(errorMessage);
-				return null;
-			}
-			if (HandlerHelper.IsUnknownStarship(starshipName))
-			{
-				Terminal.PrintMessageWithLinebreak(errorMessage);
 				return null;
 			}
 

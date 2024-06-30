@@ -25,21 +25,17 @@ public class VerifyHandler : IInputHandler
 		}
 
 		var inputContent = splitBySpaceInput[1];
-		VerifyStockAvailability(inputContent);
+		var starshipCounts = this.GetStarshipSumsFromInput(inputContent);
+		if (!HandlerHelper.IsDictionaryEmpty(starshipCounts))
+		{
+			VerifyStockAvailability(starshipCounts);
+		}
 	}
 
-	private void VerifyStockAvailability(String inputContent)
+	private void VerifyStockAvailability(Dictionary<String, Int32> starshipCounts)
 	{
-		foreach (var quantityAndStarship in inputContent.Split(", "))
+		foreach (var (starshipName, quantity) in starshipCounts)
 		{
-			var (isValid, starshipName, quantity, errorMessage) =
-				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
-			if (!isValid)
-			{
-				this.PrintInvalidCommand(errorMessage);
-				return;
-			}
-
 			var (hullCount, engineCount, wingCount, thrusterCount) =
 				this.GetStarshipComponentsCountFromInventories();
 
@@ -73,11 +69,6 @@ public class VerifyHandler : IInputHandler
 			if (!isValid)
 			{
 				this.PrintInvalidCommand(errorMessage);
-				return new Dictionary<String, Int32>();
-			}
-			if (HandlerHelper.IsUnknownStarship(starshipName))
-			{
-				// this.PrintUnknownStarship(errorMessage);
 				return new Dictionary<String, Int32>();
 			}
 

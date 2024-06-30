@@ -1,10 +1,11 @@
+using core.App.UI;
 using core.InputHandlers;
 using core.UI.constants;
 using core.Utils;
 
 namespace core.UI;
 
-public class Menu : AbstractSingleton<Menu>
+public class Menu : AbstractSingleton<Menu>, IUserInterface
 {
 	public void Start()
 	{

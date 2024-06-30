@@ -52,11 +52,6 @@ public class InstructionsHandler : IInputHandler
 				this.PrintInvalidCommand(errorMessage);
 				return new Dictionary<String, Int32>();
 			}
-			if (HandlerHelper.IsUnknownStarship(starshipName))
-			{
-				this.PrintUnknownStarship(errorMessage);
-				return new Dictionary<String, Int32>();
-			}
 
 			if (!starshipCounts.ContainsKey(starshipName))
 			{
@@ -69,11 +64,6 @@ public class InstructionsHandler : IInputHandler
 		}
 
 		return starshipCounts;
-	}
-
-	private void PrintUnknownStarship(String message)
-	{
-		InstructionsDisplayHandler.PrintUnknownStarship(message);
 	}
 
 	private void AssembleStarships(Dictionary<String, Int32> starshipCounts)
