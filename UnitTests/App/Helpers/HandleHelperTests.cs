@@ -27,7 +27,7 @@ public class HandleHelperTests
 	[Theory]
 	[InlineData(new[] { "command", "arg" }, true)]
 	[InlineData(new[] { "command" }, false)]
-	// [InlineData(new[] { "command", "arg", "extra" }, false)]
+	[InlineData(new[] { "command", "arg", "extra" }, false)]
 	public void IsCommandNameSeparatedByOneSpace_ShouldReturnExpectedResult(
 		String[] parts,
 		Boolean expected
@@ -38,6 +38,56 @@ public class HandleHelperTests
 
 		// Assert
 		Assert.Equal(expected, result);
+	}
+
+	[Fact]
+	public void IsDictionaryEmpty_WithEmptyDictionary_ReturnsTrue()
+	{
+		// Arrange
+		var dictionary = new Dictionary<String, String>();
+
+		// Act
+		var result = HandlerHelper.IsDictionaryEmpty(dictionary);
+
+		// Assert
+		Assert.True(result);
+	}
+
+	[Fact]
+	public void IsDictionaryEmpty_WithNonEmptyDictionary_ReturnsFalse()
+	{
+		// Arrange
+		var dictionary = new Dictionary<String, String> { { "key", "value" } };
+
+		// Act
+		var result = HandlerHelper.IsDictionaryEmpty(dictionary);
+
+		// Assert
+		Assert.False(result);
+	}
+
+	[Theory]
+	[InlineData("two", false, "", 0, "La commande est invalide.")]
+	[InlineData("Invalid input", false, "", 0, "La commande est invalide.")]
+	[InlineData("12abc Explorer", false, "", 0, "La commande est invalide.")]
+	[InlineData("3 unknown", false, StarshipName.Unknown, 3, "Vaisseau inconnu : unknown")]
+	[InlineData("3 Explorer", true, "Explorer", 3, "")]
+	public void ParseQuantityAndStarship_TestCases(
+		String input,
+		Boolean expectedIsValid,
+		String expectedName,
+		Int32 expectedQuantity,
+		String expectedErrorMessage
+	)
+	{
+		// Act
+		var result = HandlerHelper.ParseQuantityAndStarship(input);
+
+		// Assert
+		Assert.Equal(expectedIsValid, result.isValid);
+		Assert.Equal(expectedName, result.name);
+		Assert.Equal(expectedQuantity, result.quantity);
+		Assert.Equal(expectedErrorMessage, result.errorMessage);
 	}
 
 	[Fact]

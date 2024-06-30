@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using core.Components;
 using core.In_memories.Items;
 using core.UI;
@@ -8,7 +7,6 @@ namespace core.InputHandlers;
 
 public class VerifyHandler : IInputHandler
 {
-	private const String QuantityWithStarshipPattern = @"(\d+)\s+(\w+)";
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
 	public void HandleInput(String input)
@@ -19,37 +17,25 @@ public class VerifyHandler : IInputHandler
 			return;
 		}
 
-		var splittedBySpaceInput = input.Split(new[] { ' ' }, 2);
-		if (!HandlerHelper.IsCommandNameSeparatedByOneSpace(splittedBySpaceInput))
+		var splitBySpaceInput = input.Split(new[] { ' ' }, 2);
+		if (!HandlerHelper.IsCommandNameSeparatedByOneSpace(splitBySpaceInput))
 		{
 			this.PrintInvalidCommand(InvalidCommandMessage);
 			return;
 		}
 
-		var instructionBody = splittedBySpaceInput[1];
-		foreach (var quantityAndStarship in instructionBody.Split(", "))
+		var inputContent = splitBySpaceInput[1];
+		var starshipCounts = this.GetStarshipSumsFromInput(inputContent);
+		if (!HandlerHelper.IsDictionaryEmpty(starshipCounts))
 		{
-			var match = Regex.Match(quantityAndStarship.Trim(), QuantityWithStarshipPattern);
-			if (!HandlerHelper.IsMatch(match))
-			{
-				this.PrintInvalidCommand(InvalidCommandMessage);
-				break;
-			}
+			VerifyStockAvailability(starshipCounts);
+		}
+	}
 
-			if (!int.TryParse(match.Groups[1].Value, out var quantity))
-			{
-				this.PrintInvalidCommand(InvalidCommandMessage);
-				break;
-			}
-
-			var starshipNameInput = match.Groups[2].Value;
-			var starshipName = HandlerHelper.GetStarshipName(starshipNameInput);
-			if (HandlerHelper.IsUnknownStarship(starshipName))
-			{
-				this.PrintUnknownStarship($"❌ Vaisseau '{starshipNameInput}' inconnu.");
-				break;
-			}
-
+	private void VerifyStockAvailability(Dictionary<String, Int32> starshipCounts)
+	{
+		foreach (var (starshipName, quantity) in starshipCounts)
+		{
 			var (hullCount, engineCount, wingCount, thrusterCount) =
 				this.GetStarshipComponentsCountFromInventories();
 
@@ -72,14 +58,36 @@ public class VerifyHandler : IInputHandler
 		this.PrintSufficientStock();
 	}
 
+	private Dictionary<String, Int32> GetStarshipSumsFromInput(String input)
+	{
+		var starshipCounts = new Dictionary<String, Int32>();
+
+		foreach (var quantityAndStarship in input.Split(", "))
+		{
+			var (isValid, starshipName, quantity, errorMessage) =
+				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
+			if (!isValid)
+			{
+				this.PrintInvalidCommand(errorMessage);
+				return new Dictionary<String, Int32>();
+			}
+
+			if (!starshipCounts.ContainsKey(starshipName))
+			{
+				starshipCounts.Add(starshipName, quantity);
+			}
+			else
+			{
+				starshipCounts[starshipName] += quantity;
+			}
+		}
+
+		return starshipCounts;
+	}
+
 	private void PrintInvalidCommand(String message)
 	{
 		VerifyDisplayHandler.PrintInvalidCommand(message);
-	}
-
-	private void PrintUnknownStarship(String message)
-	{
-		Terminal.PrintMessageWithLinebreak(message);
 	}
 
 	private (Int32, Int32, Int32, Int32) GetStarshipComponentsCountFromInventories()

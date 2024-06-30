@@ -5,6 +5,9 @@ namespace core.Utils;
 
 public static class HandlerHelper
 {
+	private const String InvalidCommandMessage = "La commande est invalide.";
+	private const String QuantityWithStarshipPattern = @"(\d+)\s+(\w+)";
+
 	public static Boolean IsCommandInputValid(String[] input)
 	{
 		Boolean hasAtLeastThreeArguments = input.Length >= 3;
@@ -16,6 +19,13 @@ public static class HandlerHelper
 	public static Boolean IsCommandNameSeparatedByOneSpace(String[] parts)
 	{
 		return parts.Length == 2;
+	}
+
+	public static Boolean IsDictionaryEmpty<TKey, TValue>(
+		Dictionary<TKey, TValue> dictionary
+	)
+	{
+		return dictionary.Count == 0;
 	}
 
 	public static Boolean IsMatch(Match match)
@@ -66,5 +76,32 @@ public static class HandlerHelper
 	public static Boolean IsUnknownStarship(String name)
 	{
 		return name.Equals(StarshipName.Unknown, StringComparison.OrdinalIgnoreCase);
+	}
+
+	public static (
+		Boolean isValid,
+		String name,
+		Int32 quantity,
+		String errorMessage
+	) ParseQuantityAndStarship(String input)
+	{
+		var match = Regex.Match(input.Trim(), QuantityWithStarshipPattern);
+		if (!IsMatch(match))
+		{
+			return (false, String.Empty, 0, InvalidCommandMessage);
+		}
+
+		// seems to be useless:
+		if (!Int32.TryParse(match.Groups[1].Value, out var quantity))
+		{
+			return (false, String.Empty, quantity, InvalidCommandMessage);
+		}
+
+		var starshipNameInput = match.Groups[2].Value;
+		var starshipName = GetStarshipName(starshipNameInput);
+
+		return IsUnknownStarship(starshipName)
+			? (false, StarshipName.Unknown, quantity, $"Vaisseau inconnu : {starshipNameInput}")
+			: (true, starshipName, quantity, String.Empty);
 	}
 }

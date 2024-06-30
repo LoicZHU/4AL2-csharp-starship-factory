@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using core.Assemblies;
 using core.Components;
 using core.In_memories;
@@ -10,9 +9,7 @@ namespace core.InputHandlers;
 
 public class InstructionsHandler : IInputHandler
 {
-	private const String QuantityWithStarshipPattern = @"(\d+)\s+(\w+)";
-	private const String InvalidCommandMessage =
-		"❌ La commande doit respecter ce format : INSTRUCTIONS <quantité> <nom_de_l'élément> [<quantité> <nom_de_l'élément> ...]";
+	private const String InvalidCommandMessage = "La commande est invalide.";
 
 	public void HandleInput(String input)
 	{
@@ -29,67 +26,77 @@ public class InstructionsHandler : IInputHandler
 			return;
 		}
 
-		var instructionsBody = splitBySpaceInput[1];
-		foreach (var quantityAndStarship in instructionsBody.Split(", "))
+		var inputContent = splitBySpaceInput[1];
+		var starshipCounts = this.GetStarshipSumsFromInput(inputContent);
+		if (!HandlerHelper.IsDictionaryEmpty(starshipCounts))
 		{
-			var match = Regex.Match(quantityAndStarship.Trim(), QuantityWithStarshipPattern);
-			if (!HandlerHelper.IsMatch(match))
-			{
-				this.PrintInvalidCommand(InvalidCommandMessage);
-				break;
-			}
-
-			if (!int.TryParse(match.Groups[1].Value, out var quantity))
-			{
-				this.PrintInvalidCommand(InvalidCommandMessage);
-				break;
-			}
-
-			var starshipNameInput = match.Groups[2].Value;
-			var starshipName = HandlerHelper.GetStarshipName(starshipNameInput);
-			if (HandlerHelper.IsUnknownStarship(starshipName))
-			{
-				this.PrintUnknownStarship($"❌ Vaisseau '{starshipNameInput}' inconnu.");
-				break;
-			}
-
-			var (hullCount, engineCount, wingCount, thrusterCount) =
-				this.GetStarshipComponentsCountFromInventories();
-
-			if (
-				this.IsMoreInventoryRequired(
-					starshipName,
-					quantity,
-					hullCount,
-					engineCount,
-					wingCount,
-					thrusterCount
-				)
-			)
-			{
-				this.PrintInsufficientStock();
-				return;
-			}
-
-			try
-			{
-				this.HandleStarshipAssembly(starshipName, quantity);
-			}
-			catch (Exception e)
-			{
-				Terminal.PrintMessageWithLinebreak(e.Message);
-			}
+			this.AssembleStarships(starshipCounts);
 		}
-	}
-
-	private void PrintUnknownStarship(String message)
-	{
-		InstructionsDisplayHandler.PrintUnknownStarship(message);
 	}
 
 	private void PrintInvalidCommand(String message)
 	{
 		InstructionsDisplayHandler.PrintInvalidCommand(message);
+	}
+
+	private Dictionary<String, Int32> GetStarshipSumsFromInput(String input)
+	{
+		var starshipCounts = new Dictionary<String, Int32>();
+
+		foreach (var quantityAndStarship in input.Split(", "))
+		{
+			var (isValid, starshipName, quantity, errorMessage) =
+				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
+			if (!isValid)
+			{
+				this.PrintInvalidCommand(errorMessage);
+				return new Dictionary<String, Int32>();
+			}
+
+			if (!starshipCounts.ContainsKey(starshipName))
+			{
+				starshipCounts.Add(starshipName, quantity);
+			}
+			else
+			{
+				starshipCounts[starshipName] += quantity;
+			}
+		}
+
+		return starshipCounts;
+	}
+
+	private void AssembleStarships(Dictionary<String, Int32> starshipCounts)
+	{
+		try
+		{
+			foreach (var (starshipName, quantity) in starshipCounts)
+			{
+				var (hullCount, engineCount, wingCount, thrusterCount) =
+					this.GetStarshipComponentsCountFromInventories();
+
+				if (
+					this.IsMoreInventoryRequired(
+						starshipName,
+						quantity,
+						hullCount,
+						engineCount,
+						wingCount,
+						thrusterCount
+					)
+				)
+				{
+					this.PrintInsufficientStock();
+					return;
+				}
+
+				this.HandleStarshipAssembly(starshipName, quantity);
+			}
+		}
+		catch (Exception e)
+		{
+			Terminal.PrintMessageWithLinebreak(e.Message);
+		}
 	}
 
 	private (Int32, Int32, Int32, Int32) GetStarshipComponentsCountFromInventories()
