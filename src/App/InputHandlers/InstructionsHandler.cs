@@ -258,16 +258,6 @@ public class InstructionsHandler : IInputHandler
 		this.GetComponentsOutFromStock(ThrusterComponent.ThrusterTc1, 1);
 	}
 
-	private void GetComponentsOutFromStock(String componentName, Int32 quantity)
-	{
-		InstructionsDisplayHandler.PrintGetOutStock(quantity, componentName);
-
-		for (var i = 1; i <= quantity; i++)
-		{
-			InMemoryComponent.Instance.Remove(componentName);
-		}
-	}
-
 	private void GetExplorerComponentsOutFromStock()
 	{
 		this.GetComponentsOutFromStock(HullComponent.HullHe1, 1);
@@ -282,5 +272,15 @@ public class InstructionsHandler : IInputHandler
 		this.GetComponentsOutFromStock(EngineComponent.EngineEs1, 1);
 		this.GetComponentsOutFromStock(WingComponent.WingsWs1, 1);
 		this.GetComponentsOutFromStock(ThrusterComponent.ThrusterTs1, 2);
+	}
+
+	private void GetComponentsOutFromStock(String componentName, Int32 quantity)
+	{
+		InstructionsDisplayHandler.PrintGetOutStock(quantity, componentName);
+
+		for (var i = 1; i <= quantity; i++)
+		{
+			InMemoryComponent.Instance.Remove(componentName);
+		}
 	}
 }
