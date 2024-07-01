@@ -41,18 +41,6 @@ public class CommandTests
 	}
 
 	[Fact]
-	public void UserInstructionConstant_ShouldHaveExpectedValue()
-	{
-		Assert.Equal("[USER_INSTRUCTION]", Command.UserInstruction);
-	}
-
-	[Fact]
-	public void UserInstructionsConstant_ShouldHaveExpectedValue()
-	{
-		Assert.Equal("USER_INSTRUCTIONS", Command.UserInstructions);
-	}
-
-	[Fact]
 	public void VerifyConstant_ShouldHaveExpectedValue()
 	{
 		Assert.Equal("VERIFY", Command.Verify);

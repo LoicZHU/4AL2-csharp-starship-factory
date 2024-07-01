@@ -21,25 +21,20 @@ public static class MenuTerminal
 	{
 		PrintCommandMessage(Command.Exit, " : quitter l'application.");
 		PrintCommandMessage(Command.Help, " : afficher les commandes utilisables.");
-		PrintCommandMessage(Command.Instructions, " : assembler des vaisseaux.");
+		PrintCommandMessage($"{Command.Instructions} ARGS", " : assembler des vaisseaux.");
 		PrintCommandMessage(
-			Command.NeededStocks,
+			$"{Command.NeededStocks} ARGS",
 			" : afficher les stocks nécessaires pour assembler des vaisseaux."
 		);
-		PrintCommandMessage(Command.Produce, " : produire des vaisseaux.");
+		PrintCommandMessage($"{Command.Produce} ARGS", " : produire des vaisseaux.");
 		PrintCommandMessage(
-			Command.Stocks,
+			$"{Command.Stocks} ARGS",
 			" : afficher les stocks de vaisseaux et de composants."
 		);
 		PrintCommandMessage(
-			Command.UserInstruction,
-			" : enregistrer une commande de vaisseaux."
+			$"{Command.Verify} ARGS",
+			" : vérifier la disponibilité de vaisseaux."
 		);
-		PrintCommandMessage(
-			Command.UserInstructions,
-			" : lister les commandes de vaisseaux en attente."
-		);
-		PrintCommandMessage(Command.Verify, " : vérifier la disponibilité de vaisseaux.");
 	}
 
 	private static void PrintCommandMessage(String command, String message)

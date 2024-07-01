@@ -21,13 +21,12 @@ public class Menu : AbstractSingleton<Menu>, IUserInterface
 			{ Command.NeededStocks, new NeededStocksHandler() },
 			{ Command.Produce, new ProduceHandler() },
 			{ Command.Verify, new VerifyHandler() },
-			{ Command.UserInstruction, new UserInstructionHandler() }
 		};
 
 		while (true)
 		{
 			var input = Console.ReadLine()?.ToUpper();
-			if (Utils.UtilsFunction.IsNullOrWhiteSpace(input))
+			if (UtilsFunction.IsNullOrWhiteSpace(input))
 			{
 				this.PrintEmptyInstructionMessage();
 				continue;
@@ -52,9 +51,6 @@ public class Menu : AbstractSingleton<Menu>, IUserInterface
 					break;
 				case Command.Stocks:
 					this.PrintStarshipAndComponentStocks();
-					break;
-				case Command.UserInstructions:
-					this.PrintStarshipCountsForEachInstruction();
 					break;
 				default:
 					this.PrintUnknownInstruction(input);

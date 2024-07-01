@@ -8,7 +8,5 @@ public static class Command
 	public const String NeededStocks = "NEEDED_STOCKS";
 	public const String Produce = "PRODUCE";
 	public const String Stocks = "STOCKS";
-	public const String UserInstruction = "[USER_INSTRUCTION]";
-	public const String UserInstructions = "USER_INSTRUCTIONS";
 	public const String Verify = "VERIFY";
 }
