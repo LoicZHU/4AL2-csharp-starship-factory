@@ -2,5 +2,5 @@ namespace core.InputHandlers;
 
 public interface IInputHandler
 {
-	void HandleInput(String input);
+	void Handle(String input);
 }

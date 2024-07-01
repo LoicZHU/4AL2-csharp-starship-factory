@@ -7,7 +7,7 @@ public class NeededStocksHandler : IInputHandler
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
-	public void HandleInput(String input)
+	public void Handle(String input)
 	{
 		if (!HandlerHelper.IsCommandInputValid(input.Split()))
 		{

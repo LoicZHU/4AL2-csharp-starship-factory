@@ -1,12 +1,30 @@
 using core.App.UI;
 using core.InputHandlers;
+using core.Repositories.ComponentAssemblyRepository;
+using core.Repositories.ComponentRepository;
+using core.Repositories.StarshipRepository;
 using core.UI.constants;
 using core.Utils;
 
 namespace core.UI;
 
-public class Menu : AbstractSingleton<Menu>, IUserInterface
+public class Menu : IUserInterface
 {
+	private readonly IComponentAssemblyRepository _componentAssemblyRepository;
+	private readonly IComponentRepository _componentRepository;
+	private readonly IStarshipRepository _starshipRepository;
+
+	public Menu(
+		IComponentAssemblyRepository componentAssemblyRepository,
+		IComponentRepository componentRepository,
+		IStarshipRepository starshipRepository
+	)
+	{
+		this._componentAssemblyRepository = componentAssemblyRepository;
+		this._componentRepository = componentRepository;
+		this._starshipRepository = starshipRepository;
+	}
+
 	public void Start()
 	{
 		MenuDisplayHandler.Start();
@@ -17,10 +35,16 @@ public class Menu : AbstractSingleton<Menu>, IUserInterface
 	{
 		var inputHandlers = new Dictionary<String, IInputHandler>
 		{
-			{ Command.Instructions, new InstructionsHandler() },
+			{
+				Command.Instructions,
+				new InstructionsHandler(_componentAssemblyRepository, _componentRepository)
+			},
 			{ Command.NeededStocks, new NeededStocksHandler() },
-			{ Command.Produce, new ProduceHandler() },
-			{ Command.Verify, new VerifyHandler() },
+			{
+				Command.Produce,
+				new ProduceHandler(_componentAssemblyRepository, _componentRepository)
+			},
+			{ Command.Verify, new VerifyHandler(_componentRepository) },
 		};
 
 		while (true)
@@ -37,7 +61,7 @@ public class Menu : AbstractSingleton<Menu>, IUserInterface
 			);
 			if (!UtilsFunction.IsNull(inputHandler.Value))
 			{
-				this.HandleCommand(inputHandler.Value, input);
+				this.HandleInput(inputHandler.Value, input);
 				continue;
 			}
 
@@ -84,18 +108,16 @@ public class Menu : AbstractSingleton<Menu>, IUserInterface
 
 	private void PrintStarshipAndComponentStocks()
 	{
-		StockDisplayHandler.PrintStarshipStock();
-		StockDisplayHandler.PrintComponentStock();
+		var starshipCounts = this._starshipRepository.GetStock();
+		StockDisplayHandler.PrintStarshipStock(starshipCounts);
+
+		var componentCounts = this._componentRepository.GetStockOfEachComponent();
+		StockDisplayHandler.PrintComponentStock(componentCounts);
 	}
 
-	private void PrintStarshipCountsForEachInstruction()
+	private void HandleInput(IInputHandler inputHandler, String input)
 	{
-		UserInstructionsDisplayHandler.PrintStarshipCountsForEachInstruction();
-	}
-
-	private void HandleCommand(IInputHandler inputHandler, String input)
-	{
-		inputHandler.HandleInput(input);
+		inputHandler.Handle(input);
 	}
 
 	private void PrintUnknownInstruction(String input)

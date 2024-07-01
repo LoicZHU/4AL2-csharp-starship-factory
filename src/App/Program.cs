@@ -1,4 +1,9 @@
 ﻿using core.App.UI;
+using core.In_memories;
+using core.In_memories.Items;
+using core.Repositories.ComponentAssemblyRepository;
+using core.Repositories.ComponentRepository;
+using core.Repositories.StarshipRepository;
 using core.UI;
 
 namespace core;
@@ -9,13 +14,26 @@ public static class Program
 
 	public static void Main(string[] args)
 	{
-		ConfigureDependencies(Menu.Instance);
+		ConfigureDependencies();
 		StartUserInterface();
 	}
 
-	private static void ConfigureDependencies(IUserInterface userInterface)
+	private static void ConfigureDependencies()
 	{
-		_userInterface = userInterface;
+		IComponentAssemblyRepository componentAssemblyRepository =
+			new ComponentAssemblyRepository(new InMemoryComponentAssembly());
+		IComponentRepository componentRepository = new ComponentRepository(
+			new InMemoryComponent()
+		);
+		IStarshipRepository starshipRepository = new StarshipRepository(
+			new InMemoryStarship()
+		);
+
+		_userInterface = new Menu(
+			componentAssemblyRepository,
+			componentRepository,
+			starshipRepository
+		);
 	}
 
 	private static void StartUserInterface()

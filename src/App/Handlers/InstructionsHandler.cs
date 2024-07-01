@@ -1,17 +1,29 @@
 using core.Assemblies;
 using core.Components;
-using core.In_memories;
-using core.In_memories.Items;
+using core.Repositories.ComponentAssemblyRepository;
+using core.Repositories.ComponentRepository;
 using core.UI;
 using core.Utils;
 
 namespace core.InputHandlers;
 
-public class ProduceHandler : IInputHandler
+public class InstructionsHandler : IInputHandler
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
-	public void HandleInput(String input)
+	private readonly IComponentAssemblyRepository _componentAssemblyRepository;
+	private readonly IComponentRepository _componentRepository;
+
+	public InstructionsHandler(
+		IComponentAssemblyRepository componentAssemblyRepository,
+		IComponentRepository componentRepository
+	)
+	{
+		this._componentAssemblyRepository = componentAssemblyRepository;
+		this._componentRepository = componentRepository;
+	}
+
+	public void Handle(String input)
 	{
 		if (!HandlerHelper.IsCommandInputValid(input.Split()))
 		{
@@ -36,7 +48,7 @@ public class ProduceHandler : IInputHandler
 
 	private void PrintInvalidCommand(String message)
 	{
-		ProduceDisplayHandler.PrintInvalidCommand(message);
+		InstructionsDisplayHandler.PrintInvalidCommand(message);
 	}
 
 	private Dictionary<String, Int32> GetStarshipSumsFromInput(String input)
@@ -92,8 +104,6 @@ public class ProduceHandler : IInputHandler
 
 				this.HandleStarshipAssembly(starshipName, quantity);
 			}
-
-			this.PrintStockUpdatedMessage();
 		}
 		catch (Exception e)
 		{
@@ -103,15 +113,13 @@ public class ProduceHandler : IInputHandler
 
 	private (Int32, Int32, Int32, Int32) GetStarshipComponentsCountFromInventories()
 	{
-		var inMemoryComponent = InMemoryComponent.Instance;
-
 		try
 		{
 			return (
-				inMemoryComponent.CountByName(EngineComponent.EngineEc1),
-				inMemoryComponent.CountByName(HullComponent.HullHc1),
-				inMemoryComponent.CountByName(ThrusterComponent.ThrusterTc1),
-				inMemoryComponent.CountByName(WingComponent.WingsWc1)
+				this._componentRepository.GetCount(EngineComponent.EngineEc1),
+				this._componentRepository.GetCount(HullComponent.HullHc1),
+				this._componentRepository.GetCount(ThrusterComponent.ThrusterTc1),
+				this._componentRepository.GetCount(WingComponent.WingsWc1)
 			);
 		}
 		catch (Exception e)
@@ -185,8 +193,7 @@ public class ProduceHandler : IInputHandler
 
 	private void PrintInsufficientStock()
 	{
-		VerifyTerminal.PrintUnavailableMessage();
-		Terminal.PrintLinebreak();
+		Terminal.PrintMessageWithLinebreak("Stock insuffisant.");
 	}
 
 	private void HandleStarshipAssembly(String starshipName, Int32 quantity)
@@ -201,10 +208,11 @@ public class ProduceHandler : IInputHandler
 
 		for (var i = 1; i <= quantity; i++)
 		{
+			InstructionsDisplayHandler.PrintStarshipProductionStarting(starshipName, i);
 			getComponentsOutFromStock();
 
 			var componentAssembly = ComponentAssembly.Create(String.Empty, new List<String>());
-			InMemoryComponentAssembly.Instance.Add(componentAssembly);
+			this._componentAssemblyRepository.Add(componentAssembly);
 
 			foreach (var (componentName, count) in StarshipAssembly.Components[starshipName])
 			{
@@ -213,7 +221,11 @@ public class ProduceHandler : IInputHandler
 					this.AddComponentAssemblyToItsInventory(componentAssembly, componentName);
 				}
 			}
+
+			InstructionsDisplayHandler.PrintStarshipProductionFinishing(starshipName, i);
 		}
+
+		Terminal.PrintLinebreak();
 	}
 
 	private Action? GetComponentsOutFromStockDelegate(String starshipName)
@@ -241,43 +253,44 @@ public class ProduceHandler : IInputHandler
 		String componentName
 	)
 	{
-		InMemoryComponentAssembly.Instance.AddComponent(componentAssembly.Id, componentName);
+		InstructionsDisplayHandler.PrintAssemblingComponents(
+			componentAssembly,
+			componentName
+		);
+		this._componentAssemblyRepository.AddComponent(componentAssembly.Id, componentName);
 	}
 
 	private void GetCargoComponentsOutFromStock()
 	{
-		GetComponentsOutFromStock(HullComponent.HullHc1, 1);
-		GetComponentsOutFromStock(EngineComponent.EngineEc1, 1);
-		GetComponentsOutFromStock(WingComponent.WingsWc1, 1);
-		GetComponentsOutFromStock(ThrusterComponent.ThrusterTc1, 1);
+		this.GetComponentsOutFromStock(HullComponent.HullHc1, 1);
+		this.GetComponentsOutFromStock(EngineComponent.EngineEc1, 1);
+		this.GetComponentsOutFromStock(WingComponent.WingsWc1, 1);
+		this.GetComponentsOutFromStock(ThrusterComponent.ThrusterTc1, 1);
 	}
 
 	private void GetExplorerComponentsOutFromStock()
 	{
-		GetComponentsOutFromStock(HullComponent.HullHe1, 1);
-		GetComponentsOutFromStock(EngineComponent.EngineEe1, 1);
-		GetComponentsOutFromStock(WingComponent.WingsWe1, 1);
-		GetComponentsOutFromStock(ThrusterComponent.ThrusterTe1, 1);
+		this.GetComponentsOutFromStock(HullComponent.HullHe1, 1);
+		this.GetComponentsOutFromStock(EngineComponent.EngineEe1, 1);
+		this.GetComponentsOutFromStock(WingComponent.WingsWe1, 1);
+		this.GetComponentsOutFromStock(ThrusterComponent.ThrusterTe1, 1);
 	}
 
 	private void GetSpeederComponentsOutFromStock()
 	{
-		GetComponentsOutFromStock(HullComponent.HullHs1, 1);
-		GetComponentsOutFromStock(EngineComponent.EngineEs1, 1);
-		GetComponentsOutFromStock(WingComponent.WingsWs1, 1);
-		GetComponentsOutFromStock(ThrusterComponent.ThrusterTs1, 2);
+		this.GetComponentsOutFromStock(HullComponent.HullHs1, 1);
+		this.GetComponentsOutFromStock(EngineComponent.EngineEs1, 1);
+		this.GetComponentsOutFromStock(WingComponent.WingsWs1, 1);
+		this.GetComponentsOutFromStock(ThrusterComponent.ThrusterTs1, 2);
 	}
 
 	private void GetComponentsOutFromStock(String componentName, Int32 quantity)
 	{
+		InstructionsDisplayHandler.PrintGetOutStock(quantity, componentName);
+
 		for (var i = 1; i <= quantity; i++)
 		{
-			InMemoryComponent.Instance.Remove(componentName);
+			this._componentRepository.Remove(componentName);
 		}
-	}
-
-	private void PrintStockUpdatedMessage()
-	{
-		ProduceDisplayHandler.PrintStockUpdated();
 	}
 }

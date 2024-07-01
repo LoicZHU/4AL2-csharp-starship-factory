@@ -1,5 +1,5 @@
 using core.Components;
-using core.In_memories.Items;
+using core.Repositories.ComponentRepository;
 using core.UI;
 using core.Utils;
 
@@ -8,8 +8,14 @@ namespace core.InputHandlers;
 public class VerifyHandler : IInputHandler
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
+	private IComponentRepository ComponentRepository { get; }
 
-	public void HandleInput(String input)
+	public VerifyHandler(IComponentRepository componentRepository)
+	{
+		this.ComponentRepository = componentRepository;
+	}
+
+	public void Handle(String input)
 	{
 		if (!HandlerHelper.IsCommandInputValid(input.Split()))
 		{
@@ -92,15 +98,13 @@ public class VerifyHandler : IInputHandler
 
 	private (Int32, Int32, Int32, Int32) GetStarshipComponentsCountFromInventories()
 	{
-		var inMemoryComponent = InMemoryComponent.Instance;
-
 		try
 		{
 			return (
-				inMemoryComponent.CountByName(EngineComponent.EngineEc1),
-				inMemoryComponent.CountByName(HullComponent.HullHc1),
-				inMemoryComponent.CountByName(ThrusterComponent.ThrusterTc1),
-				inMemoryComponent.CountByName(WingComponent.WingsWc1)
+				this.ComponentRepository.GetCount(EngineComponent.EngineEc1),
+				this.ComponentRepository.GetCount(HullComponent.HullHc1),
+				this.ComponentRepository.GetCount(ThrusterComponent.ThrusterTc1),
+				this.ComponentRepository.GetCount(WingComponent.WingsWc1)
 			);
 		}
 		catch (Exception e)

@@ -1,18 +1,9 @@
-using core.In_memories.Items;
-
 namespace core.UI;
 
 public static class StockDisplayHandler
 {
-	public static void PrintStarshipStock()
+	public static void PrintStarshipStock(Dictionary<String, Int32> starshipCounts)
 	{
-		var inMemoryStarship = InMemoryStarship.Instance;
-		var starshipCounts = inMemoryStarship.GetStock();
-		if (Utils.UtilsFunction.IsNull(starshipCounts))
-		{
-			return;
-		}
-
 		foreach (var (starshipKey, value) in starshipCounts)
 		{
 			StockTerminal.PrintCurrentStocks(starshipKey, value);
@@ -21,15 +12,8 @@ public static class StockDisplayHandler
 		Terminal.PrintLinebreak();
 	}
 
-	public static void PrintComponentStock()
+	public static void PrintComponentStock(List<Dictionary<String, Int32>> counts)
 	{
-		var inMemoryComponent = InMemoryComponent.Instance;
-		var counts = inMemoryComponent.GetStockOfEachComponent();
-		if (Utils.UtilsFunction.IsNull(counts))
-		{
-			return;
-		}
-
 		foreach (var componentCounts in counts)
 		{
 			foreach (var (componentKey, value) in componentCounts)
