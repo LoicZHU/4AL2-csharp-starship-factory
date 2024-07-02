@@ -2,6 +2,7 @@ using core.App.UI;
 using core.InputHandlers;
 using core.Repositories.ComponentAssemblyRepository;
 using core.Repositories.ComponentRepository;
+using core.Repositories.OrderRepository;
 using core.Repositories.StarshipRepository;
 using core.UI.constants;
 using core.Utils;
@@ -12,16 +13,19 @@ public class Menu : IUserInterface
 {
 	private readonly IComponentAssemblyRepository _componentAssemblyRepository;
 	private readonly IComponentRepository _componentRepository;
+	private readonly IOrderRepository _orderRepository;
 	private readonly IStarshipRepository _starshipRepository;
 
 	public Menu(
 		IComponentAssemblyRepository componentAssemblyRepository,
 		IComponentRepository componentRepository,
+		IOrderRepository orderRepository,
 		IStarshipRepository starshipRepository
 	)
 	{
 		this._componentAssemblyRepository = componentAssemblyRepository;
 		this._componentRepository = componentRepository;
+		this._orderRepository = orderRepository;
 		this._starshipRepository = starshipRepository;
 	}
 
@@ -40,10 +44,12 @@ public class Menu : IUserInterface
 				new InstructionsHandler(_componentAssemblyRepository, _componentRepository)
 			},
 			{ Command.NeededStocks, new NeededStocksHandler() },
+			{ Command.Order, new OrderHandler(_orderRepository) },
 			{
 				Command.Produce,
 				new ProduceHandler(_componentAssemblyRepository, _componentRepository)
 			},
+			{ Command.Send, new SendHandler(_orderRepository) },
 			{ Command.Verify, new VerifyHandler(_componentRepository) },
 		};
 
@@ -75,6 +81,9 @@ public class Menu : IUserInterface
 					break;
 				case Command.Stocks:
 					this.PrintStarshipAndComponentStocks();
+					break;
+				case Command.ListOrder:
+					this.PrintStarshipCountsForEachInstruction();
 					break;
 				default:
 					this.PrintUnknownInstruction(input);
@@ -113,6 +122,12 @@ public class Menu : IUserInterface
 
 		var componentCounts = this._componentRepository.GetStockOfEachComponent();
 		StockDisplayHandler.PrintComponentStock(componentCounts);
+	}
+
+	private void PrintStarshipCountsForEachInstruction()
+	{
+		var orders = this._orderRepository.GetOrders();
+		ListOrderDisplayHandler.PrintStarshipCountsForEachInstruction(orders);
 	}
 
 	private void HandleInput(IInputHandler inputHandler, String input)

@@ -3,6 +3,7 @@ using core.In_memories;
 using core.In_memories.Items;
 using core.Repositories.ComponentAssemblyRepository;
 using core.Repositories.ComponentRepository;
+using core.Repositories.OrderRepository;
 using core.Repositories.StarshipRepository;
 using core.UI;
 
@@ -25,6 +26,7 @@ public static class Program
 		IComponentRepository componentRepository = new ComponentRepository(
 			new InMemoryComponent()
 		);
+		IOrderRepository orderRepository = new OrderRepository(new InMemoryOrder());
 		IStarshipRepository starshipRepository = new StarshipRepository(
 			new InMemoryStarship()
 		);
@@ -32,6 +34,7 @@ public static class Program
 		_userInterface = new Menu(
 			componentAssemblyRepository,
 			componentRepository,
+			orderRepository,
 			starshipRepository
 		);
 	}

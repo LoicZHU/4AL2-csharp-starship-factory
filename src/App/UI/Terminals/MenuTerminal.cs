@@ -22,10 +22,12 @@ public static class MenuTerminal
 		PrintCommandMessage(Command.Exit, " : quitter l'application.");
 		PrintCommandMessage(Command.Help, " : afficher les commandes utilisables.");
 		PrintCommandMessage($"{Command.Instructions} ARGS", " : assembler des vaisseaux.");
+		PrintCommandMessage(Command.ListOrder, " : afficher les commandes en attente.");
 		PrintCommandMessage(
 			$"{Command.NeededStocks} ARGS",
 			" : afficher les stocks nécessaires pour assembler des vaisseaux."
 		);
+		PrintCommandMessage($"{Command.Order} ARGS", " : passer une commande.");
 		PrintCommandMessage($"{Command.Produce} ARGS", " : produire des vaisseaux.");
 		PrintCommandMessage(
 			$"{Command.Stocks} ARGS",
