@@ -49,7 +49,7 @@ public class Menu : IUserInterface
 				Command.Produce,
 				new ProduceHandler(_componentAssemblyRepository, _componentRepository)
 			},
-			{ Command.Send, new SendHandler(_orderRepository) },
+			{ Command.Send, new SendHandler(_orderRepository, _starshipRepository) },
 			{ Command.Verify, new VerifyHandler(_componentRepository) },
 		};
 

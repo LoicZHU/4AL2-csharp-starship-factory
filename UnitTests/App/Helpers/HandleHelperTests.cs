@@ -40,32 +40,6 @@ public class HandleHelperTests
 		Assert.Equal(expected, result);
 	}
 
-	[Fact]
-	public void IsDictionaryEmpty_WithEmptyDictionary_ReturnsTrue()
-	{
-		// Arrange
-		var dictionary = new Dictionary<String, String>();
-
-		// Act
-		var result = HandlerHelper.IsDictionaryEmpty(dictionary);
-
-		// Assert
-		Assert.True(result);
-	}
-
-	[Fact]
-	public void IsDictionaryEmpty_WithNonEmptyDictionary_ReturnsFalse()
-	{
-		// Arrange
-		var dictionary = new Dictionary<String, String> { { "key", "value" } };
-
-		// Act
-		var result = HandlerHelper.IsDictionaryEmpty(dictionary);
-
-		// Assert
-		Assert.False(result);
-	}
-
 	[Theory]
 	[InlineData("two", false, "", 0, "La commande est invalide.")]
 	[InlineData("Invalid input", false, "", 0, "La commande est invalide.")]

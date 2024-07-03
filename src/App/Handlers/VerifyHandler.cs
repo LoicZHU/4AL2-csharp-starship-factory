@@ -32,7 +32,7 @@ public class VerifyHandler : IInputHandler
 
 		var inputContent = splitBySpaceInput[1];
 		var starshipCounts = this.GetStarshipSumsFromInput(inputContent);
-		if (!HandlerHelper.IsDictionaryEmpty(starshipCounts))
+		if (!UtilsFunction.IsDictionaryEmpty(starshipCounts))
 		{
 			VerifyStockAvailability(starshipCounts);
 		}

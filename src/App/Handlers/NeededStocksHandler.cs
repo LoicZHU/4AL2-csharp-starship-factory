@@ -24,7 +24,7 @@ public class NeededStocksHandler : IInputHandler
 
 		var inputBody = splitBySpaceInput[1];
 		var starshipCounts = this.GetStarshipSumsFromInput(inputBody);
-		if (!HandlerHelper.IsDictionaryEmpty(starshipCounts))
+		if (!UtilsFunction.IsDictionaryEmpty(starshipCounts))
 		{
 			NeededStocksDisplayHandler.PrintNeededStocks(starshipCounts);
 		}

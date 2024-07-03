@@ -1,4 +1,5 @@
 using core.Repositories.OrderRepository;
+using core.Repositories.StarshipRepository;
 using core.UI;
 using core.Utils;
 
@@ -8,71 +9,71 @@ public class SendHandler : IInputHandler
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
 	private readonly IOrderRepository _orderRepository;
+	private readonly IStarshipRepository _starshipRepository;
 
-	public SendHandler(IOrderRepository orderRepository)
+	public SendHandler(
+		IOrderRepository orderRepository,
+		IStarshipRepository starshipRepository
+	)
 	{
-		_orderRepository = orderRepository;
+		this._orderRepository = orderRepository;
+		this._starshipRepository = starshipRepository;
+	}
+
+	private Boolean IsCommandInputValid(String[] input)
+	{
+		return input.Length != 2;
 	}
 
 	public void Handle(String input)
 	{
-		// if (!HandlerHelper.IsCommandInputValid(input.Split()))
-		// {
-		// 	this.PrintInvalidCommand(InvalidCommandMessage);
-		// 	return;
-		// }
-
-		// var splitBySpaceInput = input.Split(new[] { ' ' }, 2);
-		// if (!HandlerHelper.IsCommandNameSeparatedByOneSpace(splitBySpaceInput))
-		// {
-		// 	this.PrintInvalidCommand(InvalidCommandMessage);
-		// 	return;
-		// }
-
-		var splitBySpaceInput = input.Split(
-			new[] { ' ' },
-			StringSplitOptions.RemoveEmptyEntries
-		);
-		var orderId = !Guid.TryParse(splitBySpaceInput[1].TrimEnd(','), out var guid)
-			? Guid.Empty
-			: guid;
-		var order = this._orderRepository.GetOrder(orderId);
-		if (UtilsFunction.IsNull(order))
-		{
-			Console.WriteLine($"Order {orderId} not found.");
-			return;
-		}
-
-		var splitByCommaInput = input.Split(new[] { ',' }, 2);
-		var inputContent = splitByCommaInput[1].Trim();
-
-		// TODO: check if inputContent is empty then remove this if statement
-		if (String.IsNullOrEmpty(inputContent))
+		var splitBySpaceInput = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+		if (this.IsCommandInputValid(splitBySpaceInput))
 		{
 			this.PrintInvalidCommand(InvalidCommandMessage);
 			return;
 		}
 
-		var starshipCounts = this.GetStarshipSumsFromInput(inputContent);
-		if (HandlerHelper.IsDictionaryEmpty(starshipCounts))
+		if (!Guid.TryParse(splitBySpaceInput[1].TrimEnd(','), out var orderId))
 		{
+			this.PrintInvalidCommand("Commande ID incorrect.");
 			return;
 		}
 
-		this._orderRepository.SendStarshipsOut(orderId, starshipCounts);
-
-		Console.Write($"Remaining for {orderId}: ");
-
-		for (var i = 0; i < starshipCounts.Count; i++)
+		var order = this._orderRepository.GetOrder(orderId);
+		if (UtilsFunction.IsNull(order))
 		{
-			var count = starshipCounts.Values.ElementAt(i);
-			var starshipName = starshipCounts.Keys.ElementAt(i);
-			var message = $"{count} {starshipName}";
-
-			Terminal.PrintMessageWithLinebreak($"{message}");
+			this.PrintInvalidCommand("Commande inexistante.");
+			return;
 		}
 
-		Console.WriteLine($"COMPLETED {orderId}");
+		// remove starship from stock using starshipCounts
+		foreach (var (starshipName, count) in order)
+		{
+			for (var i = 0; i < count; i++)
+			{
+				if (!this._starshipRepository.Exists(starshipName))
+				{
+					break;
+				}
+
+				this._starshipRepository.Remove(starshipName);
+				this._orderRepository.RemoveStarshipByOrderIdAndByName(orderId, starshipName);
+			}
+		}
+
+		order = this._orderRepository.GetOrder(orderId);
+		if (order.All(starshipAndCount => starshipAndCount.Value == 0))
+		{
+			this._orderRepository.Remove(orderId);
+			Console.WriteLine($"COMPLETED {orderId}");
+		}
+		else
+		{
+			Console.WriteLine($"Remaining for {orderId}:");
+			// TODO
+		}
+
 		Terminal.PrintLinebreak();
 	}
 

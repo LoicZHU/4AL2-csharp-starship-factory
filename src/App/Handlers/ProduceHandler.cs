@@ -40,7 +40,7 @@ public class ProduceHandler : IInputHandler
 
 		var inputContent = splitBySpaceInput[1];
 		var starshipCounts = this.GetStarshipSumsFromInput(inputContent);
-		if (!HandlerHelper.IsDictionaryEmpty(starshipCounts))
+		if (!UtilsFunction.IsDictionaryEmpty(starshipCounts))
 		{
 			this.AssembleStarships(starshipCounts);
 		}

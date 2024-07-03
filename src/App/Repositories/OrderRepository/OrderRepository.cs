@@ -26,8 +26,13 @@ public class OrderRepository : IOrderRepository
 		return this._inMemoryOrder.GetOrders();
 	}
 
-	public void SendStarshipsOut(Guid id, Dictionary<String, Int32> starshipCounts)
+	public void Remove(Guid id)
 	{
-		this._inMemoryOrder.SendStarshipOut(id, starshipCounts);
+		this._inMemoryOrder.Remove(id);
+	}
+
+	public void RemoveStarshipByOrderIdAndByName(Guid id, String starshipName)
+	{
+		this._inMemoryOrder.RemoveStarshipByOrderId(id, starshipName);
 	}
 }

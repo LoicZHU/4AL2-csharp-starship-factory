@@ -21,19 +21,19 @@ public class InMemoryOrder : AbstractSingleton<InMemoryOrder>
 		return this._cache;
 	}
 
-	public void SendStarshipOut(Guid id, Dictionary<String, Int32> starshipCounts)
+	public void Remove(Guid id)
 	{
-		if (UtilsFunction.IsNull(this.GetOrder(id)))
+		this._cache.Remove(id);
+	}
+
+	public void RemoveStarshipByOrderId(Guid id, String starshipName)
+	{
+		if (!this._cache.ContainsKey(id) || !this._cache[id].ContainsKey(starshipName))
 		{
 			return;
 		}
 
-		foreach (var (starshipName, quantity) in starshipCounts)
-		{
-			if (this._cache[id].ContainsKey(starshipName))
-			{
-				this._cache[id][starshipName] -= quantity;
-			}
-		}
+		var starshipCount = this._cache[id][starshipName];
+		this._cache[id][starshipName] = starshipCount == 0 ? 0 : starshipCount - 1;
 	}
 }
