@@ -1,11 +1,18 @@
+using core.Repositories.OrderRepository;
 using core.UI;
 using core.Utils;
 
 namespace core.InputHandlers;
 
-public class NeededStocksHandler : IInputHandler
+public class OrderHandler : IInputHandler
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
+	private readonly IOrderRepository _orderRepository;
+
+	public OrderHandler(IOrderRepository orderRepository)
+	{
+		_orderRepository = orderRepository;
+	}
 
 	public void Handle(String input)
 	{
@@ -22,43 +29,37 @@ public class NeededStocksHandler : IInputHandler
 			return;
 		}
 
-		var inputBody = splitBySpaceInput[1];
-		var starshipCounts = this.GetStarshipSumsFromInput(inputBody);
-		if (!UtilsFunction.IsDictionaryEmpty(starshipCounts))
+		var inputContent = splitBySpaceInput[1];
+		var order = this.GetCompleteOrderFrom(inputContent);
+		if (!UtilsFunction.IsNull(order))
 		{
-			NeededStocksDisplayHandler.PrintNeededStocks(starshipCounts);
+			this._orderRepository.Add(order);
+			OrderDisplayHandler.PrintAddedOrderConfirmation(order.Id);
 		}
 	}
 
 	private void PrintInvalidCommand(String message)
 	{
-		NeededStocksDisplayHandler.PrintInvalidCommand(message);
+		ListOrderDisplayHandler.PrintInvalidCommand(message);
 	}
 
-	private Dictionary<String, Int32> GetStarshipSumsFromInput(String input)
+	private Order? GetCompleteOrderFrom(String starshipsPart)
 	{
-		var starshipCounts = new Dictionary<String, Int32>();
+		var order = Order.Create(new Dictionary<String, Int32>());
 
-		foreach (var quantityAndStarship in input.Split(", "))
+		foreach (var quantityAndStarship in starshipsPart.Split(", "))
 		{
 			var (isValid, starshipName, quantity, errorMessage) =
 				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
 			if (!isValid)
 			{
 				this.PrintInvalidCommand(errorMessage);
-				return new Dictionary<String, Int32>();
+				return null;
 			}
 
-			if (!starshipCounts.ContainsKey(starshipName))
-			{
-				starshipCounts.Add(starshipName, quantity);
-			}
-			else
-			{
-				starshipCounts[starshipName] += quantity;
-			}
+			order.Add(starshipName, quantity);
 		}
 
-		return starshipCounts;
+		return order;
 	}
 }

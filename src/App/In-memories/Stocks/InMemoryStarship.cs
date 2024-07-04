@@ -88,13 +88,20 @@ public class InMemoryStarship : AbstractSingleton<InMemoryStarship>
 		return _cache.Values.ToList();
 	}
 
+	public Boolean Exists(String name)
+	{
+		return _cache.Values.Any(starship =>
+			starship.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
+		);
+	}
+
 	public void Remove(String name)
 	{
 		var starship = _cache.Values.FirstOrDefault(starship =>
 			starship.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
 		);
 
-		if (starship is not null)
+		if (!UtilsFunction.IsNull(starship))
 		{
 			_cache.Remove(starship.Id);
 		}

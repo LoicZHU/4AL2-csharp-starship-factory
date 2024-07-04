@@ -23,15 +23,33 @@ public class CommandTests
 	}
 
 	[Fact]
+	public void ListOrderConstant_ShouldHaveExpectedValue()
+	{
+		Assert.Equal("LIST_ORDER", Command.ListOrder);
+	}
+
+	[Fact]
 	public void NeededStocksConstant_ShouldHaveExpectedValue()
 	{
 		Assert.Equal("NEEDED_STOCKS", Command.NeededStocks);
 	}
 
 	[Fact]
+	public void OrderConstant_ShouldHaveExpectedValue()
+	{
+		Assert.Equal("ORDER", Command.Order);
+	}
+
+	[Fact]
 	public void ProduceConstant_ShouldHaveExpectedValue()
 	{
 		Assert.Equal("PRODUCE", Command.Produce);
+	}
+
+	[Fact]
+	public void SendConstant_ShouldHaveExpectedValue()
+	{
+		Assert.Equal("SEND", Command.Send);
 	}
 
 	[Fact]

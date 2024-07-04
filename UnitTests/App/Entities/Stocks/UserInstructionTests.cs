@@ -15,12 +15,12 @@ public class UserInstructionTests
 		};
 
 		// Act
-		var userInstruction = UserInstruction.Create(instructions);
+		var userInstruction = Order.Create(instructions);
 
 		// Assert
 		Assert.NotNull(userInstruction);
 		Assert.NotEqual(Guid.Empty, userInstruction.Id);
-		Assert.Equal(instructions, userInstruction.Instructions);
+		Assert.Equal(instructions, userInstruction.Orders);
 	}
 
 	[Fact]
@@ -28,7 +28,7 @@ public class UserInstructionTests
 	{
 		// Arrange
 		var instructions = new Dictionary<String, Int32>();
-		var userInstruction = UserInstruction.Create(instructions);
+		var userInstruction = Order.Create(instructions);
 		var newInstruction = "NewInstruction";
 		var quantity = 5;
 
@@ -36,8 +36,8 @@ public class UserInstructionTests
 		userInstruction.Add(newInstruction, quantity);
 
 		// Assert
-		Assert.True(userInstruction.Instructions.ContainsKey(newInstruction));
-		Assert.Equal(quantity, userInstruction.Instructions[newInstruction]);
+		Assert.True(userInstruction.Orders.ContainsKey(newInstruction));
+		Assert.Equal(quantity, userInstruction.Orders[newInstruction]);
 	}
 
 	[Fact]
@@ -45,7 +45,7 @@ public class UserInstructionTests
 	{
 		// Arrange
 		var instructions = new Dictionary<String, Int32> { { "Instruction1", 1 } };
-		var userInstruction = UserInstruction.Create(instructions);
+		var userInstruction = Order.Create(instructions);
 		var existingInstruction = "Instruction1";
 		var quantity = 5;
 
@@ -53,7 +53,7 @@ public class UserInstructionTests
 		userInstruction.Add(existingInstruction, quantity);
 
 		// Assert
-		Assert.True(userInstruction.Instructions.ContainsKey(existingInstruction));
-		Assert.Equal(6, userInstruction.Instructions[existingInstruction]);
+		Assert.True(userInstruction.Orders.ContainsKey(existingInstruction));
+		Assert.Equal(6, userInstruction.Orders[existingInstruction]);
 	}
 }

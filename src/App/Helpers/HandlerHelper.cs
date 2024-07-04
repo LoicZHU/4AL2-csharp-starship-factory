@@ -21,13 +21,6 @@ public static class HandlerHelper
 		return parts.Length == 2;
 	}
 
-	public static Boolean IsDictionaryEmpty<TKey, TValue>(
-		Dictionary<TKey, TValue> dictionary
-	)
-	{
-		return dictionary.Count == 0;
-	}
-
 	public static Boolean IsMatch(Match match)
 	{
 		return match.Success;

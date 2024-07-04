@@ -20,6 +20,5 @@ public static class Terminal
 	public static void PrintInvalidCommand(String message)
 	{
 		PrintMessageWithLinebreak(message);
-		PrintLinebreak();
 	}
 }

@@ -1,7 +1,5 @@
 using core.Assemblies;
 using core.Components;
-using core.In_memories;
-using core.In_memories.Items;
 using core.Repositories.ComponentAssemblyRepository;
 using core.Repositories.ComponentRepository;
 using core.UI;
@@ -42,7 +40,7 @@ public class ProduceHandler : IInputHandler
 
 		var inputContent = splitBySpaceInput[1];
 		var starshipCounts = this.GetStarshipSumsFromInput(inputContent);
-		if (!HandlerHelper.IsDictionaryEmpty(starshipCounts))
+		if (!UtilsFunction.IsDictionaryEmpty(starshipCounts))
 		{
 			this.AssembleStarships(starshipCounts);
 		}

@@ -1,7 +1,9 @@
+using core.App.Handlers;
 using core.App.UI;
 using core.InputHandlers;
 using core.Repositories.ComponentAssemblyRepository;
 using core.Repositories.ComponentRepository;
+using core.Repositories.OrderRepository;
 using core.Repositories.StarshipRepository;
 using core.UI.constants;
 using core.Utils;
@@ -12,16 +14,19 @@ public class Menu : IUserInterface
 {
 	private readonly IComponentAssemblyRepository _componentAssemblyRepository;
 	private readonly IComponentRepository _componentRepository;
+	private readonly IOrderRepository _orderRepository;
 	private readonly IStarshipRepository _starshipRepository;
 
 	public Menu(
 		IComponentAssemblyRepository componentAssemblyRepository,
 		IComponentRepository componentRepository,
+		IOrderRepository orderRepository,
 		IStarshipRepository starshipRepository
 	)
 	{
 		this._componentAssemblyRepository = componentAssemblyRepository;
 		this._componentRepository = componentRepository;
+		this._orderRepository = orderRepository;
 		this._starshipRepository = starshipRepository;
 	}
 
@@ -40,11 +45,18 @@ public class Menu : IUserInterface
 				new InstructionsHandler(_componentAssemblyRepository, _componentRepository)
 			},
 			{ Command.NeededStocks, new NeededStocksHandler() },
+			{ Command.Order, new OrderHandler(_orderRepository) },
 			{
 				Command.Produce,
 				new ProduceHandler(_componentAssemblyRepository, _componentRepository)
 			},
+			{ Command.Send, new SendHandler(_orderRepository, _starshipRepository) },
 			{ Command.Verify, new VerifyHandler(_componentRepository) },
+		};
+
+		var handlers = new Dictionary<String, IHandler>
+		{
+			{ Command.ListOrder, new ListOrderHandler(_orderRepository) }
 		};
 
 		while (true)
@@ -62,6 +74,15 @@ public class Menu : IUserInterface
 			if (!UtilsFunction.IsNull(inputHandler.Value))
 			{
 				this.HandleInput(inputHandler.Value, input);
+				continue;
+			}
+
+			var handler = handlers.FirstOrDefault(handler =>
+				this.IsInputStartingWithCommand(input, handler.Key)
+			);
+			if (!UtilsFunction.IsNull(handler.Value))
+			{
+				handler.Value.Handle();
 				continue;
 			}
 
