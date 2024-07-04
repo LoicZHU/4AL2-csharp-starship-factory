@@ -33,6 +33,6 @@ public class OrderRepository : IOrderRepository
 
 	public void RemoveStarshipByOrderIdAndByName(Guid id, String starshipName)
 	{
-		this._inMemoryOrder.RemoveStarshipByOrderId(id, starshipName);
+		this._inMemoryOrder.RemoveStarshipByOrderIdAndByName(id, starshipName);
 	}
 }

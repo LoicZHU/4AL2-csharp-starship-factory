@@ -1,4 +1,5 @@
 using core.Components;
+using core.Utils;
 
 namespace core.Starships;
 
@@ -103,7 +104,7 @@ public sealed class StarshipBuilder : IStarshipBuilder
 
 	private void CheckThrusters(List<Thruster> thrusters)
 	{
-		if (thrusters.Count == 0)
+		if (UtilsFunction.IsEqualToZero(thrusters.Count))
 		{
 			throw new ArgumentException("Invalid thruster count");
 		}

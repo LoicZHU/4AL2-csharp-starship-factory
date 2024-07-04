@@ -1,3 +1,4 @@
+using core.App.Handlers;
 using core.App.UI;
 using core.InputHandlers;
 using core.Repositories.ComponentAssemblyRepository;
@@ -53,6 +54,11 @@ public class Menu : IUserInterface
 			{ Command.Verify, new VerifyHandler(_componentRepository) },
 		};
 
+		var handlers = new Dictionary<String, IHandler>
+		{
+			{ Command.ListOrder, new ListOrderHandler(_orderRepository) }
+		};
+
 		while (true)
 		{
 			var input = Console.ReadLine()?.ToUpper();
@@ -71,6 +77,15 @@ public class Menu : IUserInterface
 				continue;
 			}
 
+			var handler = handlers.FirstOrDefault(handler =>
+				this.IsInputStartingWithCommand(input, handler.Key)
+			);
+			if (!UtilsFunction.IsNull(handler.Value))
+			{
+				handler.Value.Handle();
+				continue;
+			}
+
 			switch (input)
 			{
 				case Command.Exit:
@@ -81,9 +96,6 @@ public class Menu : IUserInterface
 					break;
 				case Command.Stocks:
 					this.PrintStarshipAndComponentStocks();
-					break;
-				case Command.ListOrder:
-					this.PrintStarshipCountsForEachInstruction();
 					break;
 				default:
 					this.PrintUnknownInstruction(input);
@@ -122,12 +134,6 @@ public class Menu : IUserInterface
 
 		var componentCounts = this._componentRepository.GetStockOfEachComponent();
 		StockDisplayHandler.PrintComponentStock(componentCounts);
-	}
-
-	private void PrintStarshipCountsForEachInstruction()
-	{
-		var orders = this._orderRepository.GetOrders();
-		ListOrderDisplayHandler.PrintStarshipCountsForEachInstruction(orders);
 	}
 
 	private void HandleInput(IInputHandler inputHandler, String input)

@@ -1,3 +1,4 @@
+using System.Text;
 using core.Repositories.OrderRepository;
 using core.Repositories.StarshipRepository;
 using core.UI;
@@ -20,11 +21,6 @@ public class SendHandler : IInputHandler
 		this._starshipRepository = starshipRepository;
 	}
 
-	private Boolean IsCommandInputValid(String[] input)
-	{
-		return input.Length != 2;
-	}
-
 	public void Handle(String input)
 	{
 		var splitBySpaceInput = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -36,7 +32,7 @@ public class SendHandler : IInputHandler
 
 		if (!Guid.TryParse(splitBySpaceInput[1].TrimEnd(','), out var orderId))
 		{
-			this.PrintInvalidCommand("Commande ID incorrect.");
+			this.PrintInvalidCommand("Commande ID incorrecte.");
 			return;
 		}
 
@@ -47,7 +43,37 @@ public class SendHandler : IInputHandler
 			return;
 		}
 
-		// remove starship from stock using starshipCounts
+		this.RemoveStarshipsFromStock(order, orderId);
+
+		order = this._orderRepository.GetOrder(orderId);
+		if (this.IsOrderCompleted(order))
+		{
+			this._orderRepository.Remove(orderId);
+			SendDisplayHandler.PrintCompletedMessage(orderId.ToString());
+			return;
+		}
+
+		var message = this.GetOrderRemainingStarshipsMessage(order, orderId);
+		SendDisplayHandler.PrintOrderRemainingStarships(message);
+	}
+
+	private Boolean IsOrderCompleted(Dictionary<String, Int32> order)
+	{
+		return order.All(starshipAndCount => starshipAndCount.Value == 0);
+	}
+
+	private Boolean IsCommandInputValid(String[] input)
+	{
+		return input.Length != 2;
+	}
+
+	private void PrintInvalidCommand(String message)
+	{
+		SendDisplayHandler.PrintInvalidCommand(message);
+	}
+
+	private void RemoveStarshipsFromStock(Dictionary<String, Int32>? order, Guid orderId)
+	{
 		foreach (var (starshipName, count) in order)
 		{
 			for (var i = 0; i < count; i++)
@@ -57,57 +83,46 @@ public class SendHandler : IInputHandler
 					break;
 				}
 
-				this._starshipRepository.Remove(starshipName);
-				this._orderRepository.RemoveStarshipByOrderIdAndByName(orderId, starshipName);
+				try
+				{
+					this._starshipRepository.Remove(starshipName);
+					this._orderRepository.RemoveStarshipByOrderIdAndByName(orderId, starshipName);
+				}
+				catch (Exception e)
+				{
+					Terminal.PrintMessageWithLinebreak(e.Message);
+				}
 			}
 		}
-
-		order = this._orderRepository.GetOrder(orderId);
-		if (order.All(starshipAndCount => starshipAndCount.Value == 0))
-		{
-			this._orderRepository.Remove(orderId);
-			Console.WriteLine($"COMPLETED {orderId}");
-		}
-		else
-		{
-			Console.WriteLine($"Remaining for {orderId}:");
-			// TODO
-		}
-
-		Terminal.PrintLinebreak();
 	}
 
-	// TODO
-	private void PrintInvalidCommand(String message)
+	private String GetOrderRemainingStarshipsMessage(
+		Dictionary<String, Int32> order,
+		Guid orderId
+	)
 	{
-		// SendDisplayHandler.PrintInvalidCommand(message);
-		Console.WriteLine(message);
-	}
+		var stringBuilder = new StringBuilder();
 
-	private Dictionary<String, Int32> GetStarshipSumsFromInput(String input)
-	{
-		var starshipCounts = new Dictionary<String, Int32>();
-
-		foreach (var quantityAndStarship in input.Split(", "))
+		foreach (var (starshipName, count) in order)
 		{
-			var (isValid, starshipName, quantity, errorMessage) =
-				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
-			if (!isValid)
+			if (UtilsFunction.IsEqualToZero(count))
 			{
-				this.PrintInvalidCommand(errorMessage);
-				return new Dictionary<String, Int32>();
+				continue;
 			}
 
-			if (!starshipCounts.ContainsKey(starshipName))
+			if (!this.IsStringBuilderEmpty(stringBuilder))
 			{
-				starshipCounts.Add(starshipName, quantity);
+				stringBuilder.Append(", ");
 			}
-			else
-			{
-				starshipCounts[starshipName] += quantity;
-			}
+
+			stringBuilder.Append($"{starshipName} {count}");
 		}
 
-		return starshipCounts;
+		return $"Remaining for {orderId}: {stringBuilder}";
+	}
+
+	private Boolean IsStringBuilderEmpty(StringBuilder stringBuilder)
+	{
+		return stringBuilder.Length == 0;
 	}
 }

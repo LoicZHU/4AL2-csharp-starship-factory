@@ -4,27 +4,19 @@ public static class ListOrderDisplayHandler
 {
 	public static void PrintInvalidCommand(String message)
 	{
-		Terminal.PrintInvalidCommand(message);
+		ListOrderTerminal.PrintInvalidCommand(message);
+		TerminalHelper.PrintLineBreak();
 	}
 
-	public static void PrintStarshipCountsForEachInstruction(
-		Dictionary<Guid, Dictionary<String, Int32>> orders
-	)
+	public static void PrintNoOrders(String message)
 	{
-		foreach (var (guidKey, instructions) in orders)
-		{
-			Terminal.PrintMessageWithoutLinebreak($"Commande {guidKey} : ");
+		ListOrderTerminal.PrintMessage(message);
+		TerminalHelper.PrintLineBreak();
+	}
 
-			for (var i = 0; i < instructions.Count; i++)
-			{
-				var starshipName = instructions.Keys.ElementAt(i);
-				var count = instructions.Values.ElementAt(i);
-				var message = $"{count} {starshipName}";
-
-				Terminal.PrintMessageWithLinebreak(message);
-			}
-		}
-
-		Terminal.PrintLinebreak();
+	public static void PrintListOrder(String message)
+	{
+		ListOrderTerminal.PrintMessage(message);
+		TerminalHelper.PrintLineBreak();
 	}
 }

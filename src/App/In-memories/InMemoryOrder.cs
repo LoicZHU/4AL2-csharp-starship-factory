@@ -26,7 +26,7 @@ public class InMemoryOrder : AbstractSingleton<InMemoryOrder>
 		this._cache.Remove(id);
 	}
 
-	public void RemoveStarshipByOrderId(Guid id, String starshipName)
+	public void RemoveStarshipByOrderIdAndByName(Guid id, String starshipName)
 	{
 		if (!this._cache.ContainsKey(id) || !this._cache[id].ContainsKey(starshipName))
 		{
