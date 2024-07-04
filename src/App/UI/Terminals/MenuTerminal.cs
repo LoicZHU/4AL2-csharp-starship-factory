@@ -7,14 +7,12 @@ public static class MenuTerminal
 {
 	public static void PrintWelcome(String message)
 	{
-		Terminal.PrintLinebreak();
-		Terminal.PrintMessageWithLinebreak(message);
-		Terminal.PrintLinebreak();
+		Terminal.PrintMessageWithoutLinebreak(message);
 	}
 
 	public static void PrintUserInteractionInvitation(String message)
 	{
-		Terminal.PrintMessageWithLinebreak(message);
+		Terminal.PrintMessageWithoutLinebreak(message);
 	}
 
 	public static void PrintHelp()
@@ -43,5 +41,15 @@ public static class MenuTerminal
 	{
 		TerminalHelper.ColorizeMessageWithoutLinebreak(command, Magenta);
 		Terminal.PrintMessageWithLinebreak(message);
+	}
+
+	public static void PrintAvailableCommandsMessage(String message)
+	{
+		Terminal.PrintMessageWithoutLinebreak(message);
+	}
+
+	public static void PrintEmptyInstructionMessage(String message)
+	{
+		Terminal.PrintMessageWithoutLinebreak(message);
 	}
 }

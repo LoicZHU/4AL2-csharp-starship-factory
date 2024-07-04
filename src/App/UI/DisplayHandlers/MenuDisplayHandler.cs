@@ -4,28 +4,25 @@ namespace core.UI;
 
 public static class MenuDisplayHandler
 {
-	public static void Start()
+	public static void PrintWelcome()
 	{
-		PrintStartingMessages();
+		Terminal.PrintLinebreak();
+		MenuTerminal.PrintWelcome("🚀 Bienvenue chez Capsule Corp ! 🚀");
+		Terminal.PrintLinebreak();
+		Terminal.PrintLinebreak();
 	}
 
-	private static void PrintStartingMessages()
+	public static void PrintUserInteractionInvitation()
 	{
-		MenuTerminal.PrintWelcome("Bienvenue chez Capsule Corp ! 🚀");
 		MenuTerminal.PrintUserInteractionInvitation(
 			$"🕹 Entrez une instruction ({Command.Help} pour de l'aide) :"
 		);
-	}
-
-	public static void PrintAvailableCommandsMessage(String message)
-	{
 		Terminal.PrintLinebreak();
-		Terminal.PrintMessageWithLinebreak(message);
 	}
 
-	public static void PrintHelp()
+	public static void PrintEmptyInstructionMessage(String message)
 	{
-		MenuTerminal.PrintHelp();
+		MenuTerminal.PrintEmptyInstructionMessage(message);
 		Terminal.PrintLinebreak();
 	}
 }
