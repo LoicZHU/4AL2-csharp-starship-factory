@@ -12,6 +12,9 @@ namespace core.UI;
 
 public class Menu : IUserInterface
 {
+	private readonly Dictionary<String, IHandler> _handlers;
+	private readonly Dictionary<String, IInputHandler> _inputHandlers;
+
 	private readonly IComponentAssemblyRepository _componentAssemblyRepository;
 	private readonly IComponentRepository _componentRepository;
 	private readonly IOrderRepository _orderRepository;
@@ -24,21 +27,29 @@ public class Menu : IUserInterface
 		IStarshipRepository starshipRepository
 	)
 	{
+		this._handlers = this.GetHandlers();
+		this._inputHandlers = this.GetInputHandlers();
+
 		this._componentAssemblyRepository = componentAssemblyRepository;
 		this._componentRepository = componentRepository;
 		this._orderRepository = orderRepository;
 		this._starshipRepository = starshipRepository;
 	}
 
-	public void Start()
+	private Dictionary<String, IHandler> GetHandlers()
 	{
-		MenuDisplayHandler.Start();
-		this.HandleUserInteractionsWithTerminal();
+		return new Dictionary<String, IHandler>
+		{
+			{ Command.Exit, new ExitHandler() },
+			{ Command.Help, new HelpDisplayHandler() },
+			{ Command.ListOrder, new ListOrderHandler(_orderRepository) },
+			{ Command.Stocks, new StockHandler(_starshipRepository, _componentRepository) },
+		};
 	}
 
-	private void HandleUserInteractionsWithTerminal()
+	private Dictionary<String, IInputHandler> GetInputHandlers()
 	{
-		var inputHandlers = new Dictionary<String, IInputHandler>
+		return new Dictionary<String, IInputHandler>
 		{
 			{
 				Command.Instructions,
@@ -53,55 +64,71 @@ public class Menu : IUserInterface
 			{ Command.Send, new SendHandler(_orderRepository, _starshipRepository) },
 			{ Command.Verify, new VerifyHandler(_componentRepository) },
 		};
+	}
 
-		var handlers = new Dictionary<String, IHandler>
-		{
-			{ Command.ListOrder, new ListOrderHandler(_orderRepository) }
-		};
+	public void Start()
+	{
+		this.PrintStartingMessages();
+		this.HandleTerminalUserInteractions();
+	}
 
+	private void PrintStartingMessages()
+	{
+		MenuDisplayHandler.PrintWelcome();
+		MenuDisplayHandler.PrintUserInteractionInvitation();
+	}
+
+	private void HandleTerminalUserInteractions()
+	{
 		while (true)
 		{
-			var input = Console.ReadLine()?.ToUpper();
+			var input = GetUserInput()?.ToUpper();
 			if (UtilsFunction.IsNullOrWhiteSpace(input))
 			{
-				this.PrintEmptyInstructionMessage();
+				this.PrintEmptyInstructionMessage("🚫 Instruction vide. ('HELP' pour de l'aide)");
 				continue;
 			}
 
-			var inputHandler = inputHandlers.FirstOrDefault(inputHandler =>
-				this.IsInputStartingWithCommand(input, inputHandler.Key)
-			);
-			if (!UtilsFunction.IsNull(inputHandler.Value))
-			{
-				this.HandleInput(inputHandler.Value, input);
-				continue;
-			}
-
-			var handler = handlers.FirstOrDefault(handler =>
+			var handler = this._handlers.FirstOrDefault(handler =>
 				this.IsInputStartingWithCommand(input, handler.Key)
 			);
 			if (!UtilsFunction.IsNull(handler.Value))
 			{
-				handler.Value.Handle();
+				this.Handle(handler.Value);
+
+				if (IsInputEqualsToCommand(input, Command.Exit))
+				{
+					return;
+				}
 				continue;
 			}
 
-			switch (input)
+			var inputHandler = this._inputHandlers.FirstOrDefault(inputHandler =>
+				this.IsInputStartingWithCommand(input, inputHandler.Key)
+			);
+			if (!UtilsFunction.IsNull(inputHandler.Value))
 			{
-				case Command.Exit:
-					this.PrintExitMessage();
-					return;
-				case Command.Help:
-					this.PrintHelpMenu();
-					break;
-				case Command.Stocks:
-					this.PrintStarshipAndComponentStocks();
-					break;
-				default:
-					this.PrintUnknownInstruction(input);
-					break;
+				this.Handle(inputHandler.Value, input);
+				continue;
 			}
+
+			this.Handle(new UnknownInstructionHandler(), input);
 		}
+	}
+
+	private String? GetUserInput()
+	{
+		return Console.ReadLine();
+	}
+
+	private Boolean IsInputEqualsToCommand(String input, String command)
+	{
+		return String.Equals(input, command, StringComparison.OrdinalIgnoreCase);
+	}
+
+	private void PrintEmptyInstructionMessage(String message)
+	{
+		MenuDisplayHandler.PrintEmptyInstructionMessage(message);
 	}
 
 	private Boolean IsInputStartingWithCommand(String input, String command)
@@ -109,42 +136,13 @@ public class Menu : IUserInterface
 		return input.StartsWith(command, StringComparison.OrdinalIgnoreCase);
 	}
 
-	private void PrintEmptyInstructionMessage()
+	private void Handle(IHandler handler)
 	{
-		Terminal.PrintMessageWithLinebreak(
-			"🚫 Instruction vide, veuillez réessayer. (Tapez HELP pour de l'aide)"
-		);
+		handler.Handle();
 	}
 
-	private void PrintExitMessage()
-	{
-		Terminal.PrintMessageWithLinebreak("👋 Merci d'avoir utilisé Capsule Corp !");
-	}
-
-	private void PrintHelpMenu()
-	{
-		MenuDisplayHandler.PrintAvailableCommandsMessage("Commandes disponibles :");
-		MenuDisplayHandler.PrintHelp();
-	}
-
-	private void PrintStarshipAndComponentStocks()
-	{
-		var starshipCounts = this._starshipRepository.GetStock();
-		StockDisplayHandler.PrintStarshipStock(starshipCounts);
-
-		var componentCounts = this._componentRepository.GetStockOfEachComponent();
-		StockDisplayHandler.PrintComponentStock(componentCounts);
-	}
-
-	private void HandleInput(IInputHandler inputHandler, String input)
+	private void Handle(IInputHandler inputHandler, String input)
 	{
 		inputHandler.Handle(input);
-	}
-
-	private void PrintUnknownInstruction(String input)
-	{
-		Terminal.PrintMessageWithLinebreak(
-			$"🚫 Instruction inconnue : {input} ({Command.Help} pour de l'aide) :"
-		);
 	}
 }

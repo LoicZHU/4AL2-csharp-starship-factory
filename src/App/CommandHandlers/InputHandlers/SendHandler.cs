@@ -48,18 +48,22 @@ public class SendHandler : IInputHandler
 		order = this._orderRepository.GetOrder(orderId);
 		if (this.IsOrderCompleted(order))
 		{
-			this._orderRepository.Remove(orderId);
-			SendDisplayHandler.PrintCompletedMessage(orderId.ToString());
+			this.RemoveOrderAndPrintCompleted(orderId);
 			return;
 		}
 
-		var message = this.GetOrderRemainingStarshipsMessage(order, orderId);
-		SendDisplayHandler.PrintOrderRemainingStarships(message);
+		this.GetOrderRemainingStarshipsAndPrintIt(order, orderId);
 	}
 
 	private Boolean IsOrderCompleted(Dictionary<String, Int32> order)
 	{
 		return order.All(starshipAndCount => starshipAndCount.Value == 0);
+	}
+
+	private void RemoveOrderAndPrintCompleted(Guid orderId)
+	{
+		this._orderRepository.Remove(orderId);
+		SendDisplayHandler.PrintCompletedMessage(orderId.ToString());
 	}
 
 	private Boolean IsCommandInputValid(String[] input)
@@ -96,6 +100,15 @@ public class SendHandler : IInputHandler
 		}
 	}
 
+	private void GetOrderRemainingStarshipsAndPrintIt(
+		Dictionary<String, Int32> order,
+		Guid orderId
+	)
+	{
+		var message = this.GetOrderRemainingStarshipsMessage(order, orderId);
+		SendDisplayHandler.PrintOrderRemainingStarships(message);
+	}
+
 	private String GetOrderRemainingStarshipsMessage(
 		Dictionary<String, Int32> order,
 		Guid orderId
@@ -110,7 +123,7 @@ public class SendHandler : IInputHandler
 				continue;
 			}
 
-			if (!this.IsStringBuilderEmpty(stringBuilder))
+			if (!UtilsFunction.IsStringBuilderEmpty(stringBuilder))
 			{
 				stringBuilder.Append(", ");
 			}
@@ -119,10 +132,5 @@ public class SendHandler : IInputHandler
 		}
 
 		return $"Remaining for {orderId}: {stringBuilder}";
-	}
-
-	private Boolean IsStringBuilderEmpty(StringBuilder stringBuilder)
-	{
-		return stringBuilder.Length == 0;
 	}
 }
