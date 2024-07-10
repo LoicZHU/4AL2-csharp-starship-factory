@@ -4,7 +4,8 @@ namespace core.Repositories.StarshipRepository;
 
 public class StarshipRepository : IStarshipRepository
 {
-	private readonly InMemoryStarship _inMemoryStarship;
+	// private readonly InMemoryStarship _inMemoryStarship;
+	public InMemoryStarship _inMemoryStarship;
 
 	public StarshipRepository(InMemoryStarship inMemoryStarship)
 	{

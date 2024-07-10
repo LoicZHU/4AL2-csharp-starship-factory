@@ -1,3 +1,4 @@
+using System.Text;
 using core.Utils;
 
 namespace UnitTests.App.Utils;
@@ -59,5 +60,31 @@ public class UtilsFunctionTests
 
 		// Assert
 		Assert.Equal(expected, result);
+	}
+
+	[Fact]
+	public void IsStringBuilderEmpty_ShouldReturnTrue_WhenStringBuilderIsEmpty()
+	{
+		// Arrange
+		var stringBuilder = new StringBuilder();
+
+		// Act
+		var result = UtilsFunction.IsStringBuilderEmpty(stringBuilder);
+
+		// Assert
+		Assert.True(result);
+	}
+
+	[Fact]
+	public void IsStringBuilderEmpty_ShouldReturnFalse_WhenStringBuilderIsNotEmpty()
+	{
+		// Arrange
+		var stringBuilder = new StringBuilder("Hello");
+
+		// Act
+		var result = UtilsFunction.IsStringBuilderEmpty(stringBuilder);
+
+		// Assert
+		Assert.False(result);
 	}
 }

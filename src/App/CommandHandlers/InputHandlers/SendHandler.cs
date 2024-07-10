@@ -36,23 +36,30 @@ public class SendHandler : IInputHandler
 			return;
 		}
 
-		var order = this._orderRepository.GetOrder(orderId);
-		if (UtilsFunction.IsNull(order))
+		try
 		{
-			this.PrintInvalidCommand("Commande inexistante.");
-			return;
+			var order = this._orderRepository.GetOrder(orderId);
+			if (UtilsFunction.IsNull(order))
+			{
+				this.PrintInvalidCommand("Commande inexistante.");
+				return;
+			}
+
+			this.RemoveStarshipsFromStock(order, orderId);
+
+			order = this._orderRepository.GetOrder(orderId);
+			if (this.IsOrderCompleted(order))
+			{
+				this.RemoveOrderAndPrintCompleted(orderId);
+				return;
+			}
+
+			this.GetOrderRemainingStarshipsAndPrintIt(order, orderId);
 		}
-
-		this.RemoveStarshipsFromStock(order, orderId);
-
-		order = this._orderRepository.GetOrder(orderId);
-		if (this.IsOrderCompleted(order))
+		catch (Exception e)
 		{
-			this.RemoveOrderAndPrintCompleted(orderId);
-			return;
+			Terminal.PrintMessageWithLinebreak(e.Message);
 		}
-
-		this.GetOrderRemainingStarshipsAndPrintIt(order, orderId);
 	}
 
 	private Boolean IsOrderCompleted(Dictionary<String, Int32> order)

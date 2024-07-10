@@ -120,9 +120,4 @@ public class InMemoryStarship : AbstractSingleton<InMemoryStarship>
 
 		return stock;
 	}
-
-	public Int32 CountByName(String name)
-	{
-		return _cache.Values.Count(starship => starship.Name == name);
-	}
 }

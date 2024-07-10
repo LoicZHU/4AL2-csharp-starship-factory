@@ -1,6 +1,7 @@
 using core.App.Handlers;
 using core.App.UI;
 using core.InputHandlers;
+using core.In_memories.Items;
 using core.Repositories.ComponentAssemblyRepository;
 using core.Repositories.ComponentRepository;
 using core.Repositories.OrderRepository;
@@ -27,42 +28,32 @@ public class Menu : IUserInterface
 		IStarshipRepository starshipRepository
 	)
 	{
-		this._handlers = this.GetHandlers();
-		this._inputHandlers = this.GetInputHandlers();
-
 		this._componentAssemblyRepository = componentAssemblyRepository;
 		this._componentRepository = componentRepository;
 		this._orderRepository = orderRepository;
 		this._starshipRepository = starshipRepository;
-	}
 
-	private Dictionary<String, IHandler> GetHandlers()
-	{
-		return new Dictionary<String, IHandler>
+		this._handlers = new Dictionary<String, IHandler>
 		{
 			{ Command.Exit, new ExitHandler() },
 			{ Command.Help, new HelpDisplayHandler() },
-			{ Command.ListOrder, new ListOrderHandler(_orderRepository) },
-			{ Command.Stocks, new StockHandler(_starshipRepository, _componentRepository) },
+			{ Command.ListOrder, new ListOrderHandler(orderRepository) },
+			{ Command.Stocks, new StockHandler(starshipRepository, componentRepository) },
 		};
-	}
-
-	private Dictionary<String, IInputHandler> GetInputHandlers()
-	{
-		return new Dictionary<String, IInputHandler>
+		this._inputHandlers = new Dictionary<String, IInputHandler>
 		{
 			{
 				Command.Instructions,
-				new InstructionsHandler(_componentAssemblyRepository, _componentRepository)
+				new InstructionsHandler(componentAssemblyRepository, componentRepository)
 			},
 			{ Command.NeededStocks, new NeededStocksHandler() },
-			{ Command.Order, new OrderHandler(_orderRepository) },
+			{ Command.Order, new OrderHandler(orderRepository) },
 			{
 				Command.Produce,
-				new ProduceHandler(_componentAssemblyRepository, _componentRepository)
+				new ProduceHandler(componentAssemblyRepository, componentRepository)
 			},
-			{ Command.Send, new SendHandler(_orderRepository, _starshipRepository) },
-			{ Command.Verify, new VerifyHandler(_componentRepository) },
+			{ Command.Send, new SendHandler(orderRepository, starshipRepository) },
+			{ Command.Verify, new VerifyHandler(componentRepository) },
 		};
 	}
 
