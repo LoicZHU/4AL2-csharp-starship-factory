@@ -29,12 +29,21 @@ public class OrderHandler : IInputHandler
 			return;
 		}
 
-		var inputContent = splitBySpaceInput[1];
-		var order = this.GetCompleteOrderFrom(inputContent);
-		if (!UtilsFunction.IsNull(order))
+		try
 		{
+			var inputContent = splitBySpaceInput[1];
+			var order = this.GetCompleteOrderFrom(inputContent);
+			if (UtilsFunction.IsNull(order))
+			{
+				return;
+			}
+
 			this._orderRepository.Add(order);
 			OrderDisplayHandler.PrintAddedOrderConfirmation(order.Id);
+		}
+		catch (Exception e)
+		{
+			Terminal.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 

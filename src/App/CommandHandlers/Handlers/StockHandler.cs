@@ -24,15 +24,29 @@ public class StockHandler : IHandler
 		this.PrintComponentStock();
 	}
 
-	private void PrintComponentStock()
-	{
-		var componentCounts = this._componentRepository.GetStockOfEachComponent();
-		StockDisplayHandler.PrintComponentStock(componentCounts);
-	}
-
 	private void PrintStarshipStock()
 	{
-		var starshipCounts = this._starshipRepository.GetStock();
-		StockDisplayHandler.PrintStarshipStock(starshipCounts);
+		try
+		{
+			var starshipCounts = this._starshipRepository.GetStock();
+			StockDisplayHandler.PrintStarshipStock(starshipCounts);
+		}
+		catch (Exception e)
+		{
+			Terminal.PrintMessageWithLinebreak(e.Message);
+		}
+	}
+
+	private void PrintComponentStock()
+	{
+		try
+		{
+			var componentCounts = this._componentRepository.GetStockOfEachComponent();
+			StockDisplayHandler.PrintComponentStock(componentCounts);
+		}
+		catch (Exception e)
+		{
+			Terminal.PrintMessageWithLinebreak(e.Message);
+		}
 	}
 }

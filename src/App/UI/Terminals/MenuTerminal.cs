@@ -28,7 +28,7 @@ public static class MenuTerminal
 		PrintCommandMessage($"{Command.Order} ARGS", " : passer une commande.");
 		PrintCommandMessage($"{Command.Produce} ARGS", " : produire des vaisseaux.");
 		PrintCommandMessage(
-			$"{Command.Stocks} ARGS",
+			Command.Stocks,
 			" : afficher les stocks de vaisseaux et de composants."
 		);
 		PrintCommandMessage(

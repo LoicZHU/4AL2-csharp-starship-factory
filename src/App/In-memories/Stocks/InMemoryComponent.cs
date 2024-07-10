@@ -95,13 +95,7 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 	}
 	#endregion set caches
 
-	/// <summary>
-	/// 👉 TODO: refactor
-	/// </summary>
-	/// <param name="item"></param>
-	/// <typeparam name="TItem"></typeparam>
-	/// <exception cref="ArgumentException"></exception>
-	public void Add<TItem>(TItem item)
+	private void Add<TItem>(TItem item)
 	{
 		switch (item)
 		{

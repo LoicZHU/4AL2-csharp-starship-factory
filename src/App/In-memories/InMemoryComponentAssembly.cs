@@ -55,14 +55,4 @@ public class InMemoryComponentAssembly : AbstractSingleton<InMemoryComponentAsse
 
 		componentAssembly.Components.Add(component);
 	}
-
-	public ComponentAssembly GetComponentAssembly(Guid id)
-	{
-		return _cache[id];
-	}
-
-	public void Remove(Guid id)
-	{
-		this._cache.Remove(id);
-	}
 }

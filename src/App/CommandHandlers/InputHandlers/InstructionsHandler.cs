@@ -209,20 +209,28 @@ public class InstructionsHandler : IInputHandler
 		for (var i = 1; i <= quantity; i++)
 		{
 			InstructionsDisplayHandler.PrintStarshipProductionStarting(starshipName, i);
-			getComponentsOutFromStock();
 
-			var componentAssembly = ComponentAssembly.Create(String.Empty, new List<String>());
-			this._componentAssemblyRepository.Add(componentAssembly);
-
-			foreach (var (componentName, count) in StarshipAssembly.Components[starshipName])
+			try
 			{
-				for (var j = 1; j <= count; j++)
-				{
-					this.AddComponentAssemblyToItsInventory(componentAssembly, componentName);
-				}
-			}
+				getComponentsOutFromStock();
 
-			InstructionsDisplayHandler.PrintStarshipProductionFinishing(starshipName, i);
+				var componentAssembly = ComponentAssembly.Create(String.Empty, new());
+				this._componentAssemblyRepository.Add(componentAssembly);
+
+				foreach (var (componentName, count) in StarshipAssembly.Components[starshipName])
+				{
+					for (var j = 1; j <= count; j++)
+					{
+						this.AddComponentAssemblyToItsInventory(componentAssembly, componentName);
+					}
+				}
+
+				InstructionsDisplayHandler.PrintStarshipProductionFinishing(starshipName, i);
+			}
+			catch (Exception e)
+			{
+				Terminal.PrintMessageWithLinebreak(e.Message);
+			}
 		}
 
 		Terminal.PrintLinebreak();

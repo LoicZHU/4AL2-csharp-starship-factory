@@ -16,15 +16,22 @@ public class ListOrderHandler : IHandler
 
 	public void Handle()
 	{
-		var orders = this._orderRepository.GetOrders();
-		if (UtilsFunction.IsDictionaryEmpty(orders))
+		try
 		{
-			ListOrderDisplayHandler.PrintNoOrders("Il n'y a pas de commande en cours.");
-			return;
-		}
+			var orders = this._orderRepository.GetOrders();
+			if (UtilsFunction.IsDictionaryEmpty(orders))
+			{
+				ListOrderDisplayHandler.PrintNoOrders("Il n'y a pas de commande en cours.");
+				return;
+			}
 
-		var listOrderMessage = this.GetListOrderMessage(orders);
-		ListOrderDisplayHandler.PrintListOrder(listOrderMessage);
+			var listOrderMessage = this.GetListOrderMessage(orders);
+			ListOrderDisplayHandler.PrintListOrder(listOrderMessage);
+		}
+		catch (Exception e)
+		{
+			Terminal.PrintMessageWithLinebreak(e.Message);
+		}
 	}
 
 	private String GetListOrderMessage(Dictionary<Guid, Dictionary<String, Int32>> orders)
