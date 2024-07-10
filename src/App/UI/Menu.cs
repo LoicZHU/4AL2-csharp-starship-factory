@@ -16,11 +16,6 @@ public class Menu : IUserInterface
 	private readonly Dictionary<String, IHandler> _handlers;
 	private readonly Dictionary<String, IInputHandler> _inputHandlers;
 
-	private readonly IComponentAssemblyRepository _componentAssemblyRepository;
-	private readonly IComponentRepository _componentRepository;
-	private readonly IOrderRepository _orderRepository;
-	private readonly IStarshipRepository _starshipRepository;
-
 	public Menu(
 		IComponentAssemblyRepository componentAssemblyRepository,
 		IComponentRepository componentRepository,
@@ -28,11 +23,6 @@ public class Menu : IUserInterface
 		IStarshipRepository starshipRepository
 	)
 	{
-		this._componentAssemblyRepository = componentAssemblyRepository;
-		this._componentRepository = componentRepository;
-		this._orderRepository = orderRepository;
-		this._starshipRepository = starshipRepository;
-
 		this._handlers = new Dictionary<String, IHandler>
 		{
 			{ Command.Exit, new ExitHandler() },
