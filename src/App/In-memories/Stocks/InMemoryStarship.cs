@@ -33,24 +33,50 @@ public class InMemoryStarship : AbstractSingleton<InMemoryStarship>
 
 	private Starship BuildExplorer()
 	{
+		// return StarshipBuilder
+		// 	.create()
+		// 	.WithName(StarshipName.Explorer)
+		// 	.WithEngines(Engine.Create(EngineComponent.EngineEe1))
+		// 	.WithHull(Hull.Create(HullComponent.HullHe1))
+		// 	.WithWingPair(Wing.Create(WingComponent.WingsWe1))
+		// 	.WithThrusters(new() { Thruster.Create(ThrusterComponent.ThrusterTe1), })
+		// 	.Build();
 		return StarshipBuilder
 			.create()
 			.WithName(StarshipName.Explorer)
-			.WithEngine(Engine.Create(EngineComponent.EngineEe1))
+			.WithEngines(new() { Engine.Create(EngineComponent.EngineEe1) })
 			.WithHull(Hull.Create(HullComponent.HullHe1))
-			.WithWing(Wing.Create(WingComponent.WingsWe1))
+			.WithWingPair(
+				(Wing.Create(WingComponent.WingWe1), Wing.Create(WingComponent.WingWe1))
+			)
 			.WithThrusters(new() { Thruster.Create(ThrusterComponent.ThrusterTe1), })
 			.Build();
 	}
 
 	private Starship BuildSpeeder()
 	{
+		// return StarshipBuilder
+		// 	.create()
+		// 	.WithName(StarshipName.Speeder)
+		// 	.WithEngines(Engine.Create(EngineComponent.EngineEs1))
+		// 	.WithHull(Hull.Create(HullComponent.HullHs1))
+		// 	.WithWingPair(Wing.Create(WingComponent.WingsWs1))
+		// 	.WithThrusters(
+		// 		new()
+		// 		{
+		// 			Thruster.Create(ThrusterComponent.ThrusterTs1),
+		// 			Thruster.Create(ThrusterComponent.ThrusterTs1)
+		// 		}
+		// 	)
+		// 	.Build();
 		return StarshipBuilder
 			.create()
 			.WithName(StarshipName.Speeder)
-			.WithEngine(Engine.Create(EngineComponent.EngineEs1))
+			.WithEngines(new() { Engine.Create(EngineComponent.EngineEs1) })
 			.WithHull(Hull.Create(HullComponent.HullHs1))
-			.WithWing(Wing.Create(WingComponent.WingsWs1))
+			.WithWingPair(
+				(Wing.Create(WingComponent.WingWs1), Wing.Create(WingComponent.WingWs1))
+			)
 			.WithThrusters(
 				new()
 				{
@@ -66,9 +92,11 @@ public class InMemoryStarship : AbstractSingleton<InMemoryStarship>
 		return StarshipBuilder
 			.create()
 			.WithName(StarshipName.Cargo)
-			.WithEngine(Engine.Create(EngineComponent.EngineEc1))
+			.WithEngines(new() { Engine.Create(EngineComponent.EngineEc1) })
 			.WithHull(Hull.Create(HullComponent.HullHc1))
-			.WithWing(Wing.Create(WingComponent.WingsWc1))
+			.WithWingPair(
+				(Wing.Create(WingComponent.WingWc1), Wing.Create(WingComponent.WingWc1))
+			)
 			.WithThrusters(new() { Thruster.Create(ThrusterComponent.ThrusterTc1), })
 			.Build();
 	}

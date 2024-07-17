@@ -61,9 +61,9 @@ public static class HandlerHelper
 		return name.Equals(StarshipName.Speeder, StringComparison.OrdinalIgnoreCase);
 	}
 
-	public static Boolean IsExplorerOrSpeederStarship(String name)
+	public static Boolean IsCargoOrExplorerStarship(String name)
 	{
-		return IsExplorerStarship(name) || IsSpeederStarship(name);
+		return IsCargoStarship(name) || IsExplorerStarship(name);
 	}
 
 	public static Boolean IsUnknownStarship(String name)

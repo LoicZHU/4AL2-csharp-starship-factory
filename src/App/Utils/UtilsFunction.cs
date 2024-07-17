@@ -16,6 +16,11 @@ public static class UtilsFunction
 		return count == 0;
 	}
 
+	public static Boolean IsListCountBetweenOneAndMax<TItem>(List<TItem> list, Int32 max)
+	{
+		return list.Count >= 1 && list.Count <= max;
+	}
+
 	public static Boolean IsNull<TInput>(TInput input)
 	{
 		return input is null;

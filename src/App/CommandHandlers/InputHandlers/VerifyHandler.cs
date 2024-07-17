@@ -1,5 +1,7 @@
+using core.Assemblies;
 using core.Components;
 using core.Repositories.ComponentRepository;
+using core.Starships;
 using core.UI;
 using core.Utils;
 
@@ -8,11 +10,11 @@ namespace core.InputHandlers;
 public class VerifyHandler : IInputHandler
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
-	private IComponentRepository ComponentRepository { get; }
+	private readonly IComponentRepository _componentRepository;
 
 	public VerifyHandler(IComponentRepository componentRepository)
 	{
-		this.ComponentRepository = componentRepository;
+		this._componentRepository = componentRepository;
 	}
 
 	public void Handle(String input)
@@ -110,10 +112,10 @@ public class VerifyHandler : IInputHandler
 		try
 		{
 			return (
-				this.ComponentRepository.GetCount(EngineComponent.EngineEc1),
-				this.ComponentRepository.GetCount(HullComponent.HullHc1),
-				this.ComponentRepository.GetCount(ThrusterComponent.ThrusterTc1),
-				this.ComponentRepository.GetCount(WingComponent.WingsWc1)
+				this._componentRepository.GetCount(EngineComponent.EngineEc1),
+				this._componentRepository.GetCount(HullComponent.HullHc1),
+				this._componentRepository.GetCount(WingComponent.WingWc1),
+				this._componentRepository.GetCount(ThrusterComponent.ThrusterTc1)
 			);
 		}
 		catch (Exception e)
@@ -132,9 +134,9 @@ public class VerifyHandler : IInputHandler
 		Int32 thrusterCount
 	)
 	{
-		if (HandlerHelper.IsCargoStarship(starshipName))
+		if (HandlerHelper.IsSpeederStarship(starshipName))
 		{
-			return this.IsMoreInventoryRequiredForCargoStarship(
+			return this.IsMoreInventoryRequiredForSpeederStarship(
 				quantity,
 				hullCount,
 				engineCount,
@@ -143,9 +145,9 @@ public class VerifyHandler : IInputHandler
 			);
 		}
 
-		if (HandlerHelper.IsExplorerOrSpeederStarship(starshipName))
+		if (HandlerHelper.IsCargoOrExplorerStarship(starshipName))
 		{
-			return this.IsMoreInventoryRequiredForExplorerOrSpeederStarship(
+			return this.IsMoreInventoryRequiredForCargoOrExplorerStarship(
 				quantity,
 				hullCount,
 				engineCount,
@@ -157,7 +159,7 @@ public class VerifyHandler : IInputHandler
 		return false;
 	}
 
-	private Boolean IsMoreInventoryRequiredForCargoStarship(
+	private Boolean IsMoreInventoryRequiredForSpeederStarship(
 		Int32 quantity,
 		Int32 hullCount,
 		Int32 engineCount,
@@ -165,13 +167,19 @@ public class VerifyHandler : IInputHandler
 		Int32 thrusterCount
 	)
 	{
-		return hullCount < 1 * quantity
-			&& engineCount < 1 * quantity
-			&& wingCount < 1 * quantity
-			&& thrusterCount < 1 * quantity;
+		var components = StarshipAssembly.Components[StarshipName.Speeder];
+		Console.WriteLine($" {hullCount} {engineCount} {wingCount} {thrusterCount}");
+		Console.WriteLine($"{quantity}");
+		Console.WriteLine(
+			$" {components[HullComponent.HullHs1]} {components[EngineComponent.EngineEs1]} {components[WingComponent.WingWs1]} {components[ThrusterComponent.ThrusterTs1]}"
+		);
+		return hullCount < components[HullComponent.HullHs1] * quantity
+			|| engineCount < components[EngineComponent.EngineEs1] * quantity
+			|| wingCount < components[WingComponent.WingWs1] * quantity
+			|| thrusterCount < components[ThrusterComponent.ThrusterTs1] * quantity;
 	}
 
-	private Boolean IsMoreInventoryRequiredForExplorerOrSpeederStarship(
+	private Boolean IsMoreInventoryRequiredForCargoOrExplorerStarship(
 		Int32 quantity,
 		Int32 hullCount,
 		Int32 engineCount,
@@ -179,10 +187,16 @@ public class VerifyHandler : IInputHandler
 		Int32 thrusterCount
 	)
 	{
-		return hullCount < 1 * quantity
-			&& engineCount < 1 * quantity
-			&& wingCount < 1 * quantity
-			&& thrusterCount < 2 * quantity;
+		var components = StarshipAssembly.Components[StarshipName.Cargo];
+		Console.WriteLine($" {hullCount} {engineCount} {wingCount} {thrusterCount}");
+		Console.WriteLine($"{quantity}");
+		Console.WriteLine(
+			$" {components[HullComponent.HullHc1]} {components[EngineComponent.EngineEc1]} {components[WingComponent.WingWc1]} {components[ThrusterComponent.ThrusterTc1]}"
+		);
+		return hullCount < components[HullComponent.HullHc1] * quantity
+			|| engineCount < components[EngineComponent.EngineEc1] * quantity
+			|| wingCount < components[WingComponent.WingWc1] * quantity
+			|| thrusterCount < components[ThrusterComponent.ThrusterTc1] * quantity;
 	}
 
 	private void PrintSufficientStock()

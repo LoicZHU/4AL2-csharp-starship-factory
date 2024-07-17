@@ -7,8 +7,8 @@ public sealed class StarshipBuilder : IStarshipBuilder
 {
 	public String Name { get; set; }
 	public Hull Hull { get; set; }
-	public Engine Engine { get; set; }
-	public Wing Wing { get; set; }
+	public List<Engine> Engines { get; set; }
+	public (Wing, Wing) WingPair { get; set; }
 	public List<Thruster> Thrusters { get; set; }
 
 	public static IStarshipBuilder create()
@@ -25,9 +25,9 @@ public sealed class StarshipBuilder : IStarshipBuilder
 
 		var starshipBuilder = new StarshipBuilder();
 		starshipBuilder.Name = name;
-		starshipBuilder.Engine = this.Engine;
+		starshipBuilder.Engines = this.Engines;
 		starshipBuilder.Hull = this.Hull;
-		starshipBuilder.Wing = this.Wing;
+		starshipBuilder.WingPair = this.WingPair;
 		starshipBuilder.Thrusters = this.Thrusters;
 
 		return starshipBuilder;
@@ -40,21 +40,48 @@ public sealed class StarshipBuilder : IStarshipBuilder
 			|| name.Equals(StarshipName.Speeder, StringComparison.OrdinalIgnoreCase);
 	}
 
-	public IStarshipBuilder WithEngine(Engine engine)
+	// public IStarshipBuilder WithEngine(Engine engine)
+	// {
+	// 	if (!IsValidEngineComponent(engine.Name))
+	// 	{
+	// 		throw new ArgumentException("Invalid engine name");
+	// 	}
+	//
+	// 	var starshipBuilder = new StarshipBuilder();
+	// 	starshipBuilder.Name = this.Name;
+	// 	starshipBuilder.Engines = engine;
+	// 	starshipBuilder.Hull = this.Hull;
+	// 	starshipBuilder.WingPair = this.WingPair;
+	// 	starshipBuilder.Thrusters = this.Thrusters;
+	//
+	// 	return starshipBuilder;
+	// }
+
+	public IStarshipBuilder WithEngines(List<Engine> engines)
 	{
-		if (!IsValidEngineComponent(engine.Name))
-		{
-			throw new ArgumentException("Invalid engine name");
-		}
+		this.CheckEngines(engines);
 
 		var starshipBuilder = new StarshipBuilder();
 		starshipBuilder.Name = this.Name;
-		starshipBuilder.Engine = engine;
+		starshipBuilder.Engines = engines;
 		starshipBuilder.Hull = this.Hull;
-		starshipBuilder.Wing = this.Wing;
+		starshipBuilder.WingPair = this.WingPair;
 		starshipBuilder.Thrusters = this.Thrusters;
 
 		return starshipBuilder;
+	}
+
+	private void CheckEngines(List<Engine> engines)
+	{
+		if (!UtilsFunction.IsListCountBetweenOneAndMax(engines, 2))
+		{
+			throw new ArgumentException("Invalid engine count");
+		}
+
+		if (!engines.TrueForAll(engine => IsValidEngineComponent(engine.Name)))
+		{
+			throw new ArgumentException("Invalid engine name");
+		}
 	}
 
 	private Boolean IsValidEngineComponent(String name)
@@ -73,9 +100,9 @@ public sealed class StarshipBuilder : IStarshipBuilder
 
 		var starshipBuilder = new StarshipBuilder();
 		starshipBuilder.Name = this.Name;
-		starshipBuilder.Engine = this.Engine;
+		starshipBuilder.Engines = this.Engines;
 		starshipBuilder.Hull = hull;
-		starshipBuilder.Wing = this.Wing;
+		starshipBuilder.WingPair = this.WingPair;
 		starshipBuilder.Thrusters = this.Thrusters;
 
 		return starshipBuilder;
@@ -90,13 +117,13 @@ public sealed class StarshipBuilder : IStarshipBuilder
 
 	public IStarshipBuilder WithThrusters(List<Thruster> thrusters)
 	{
-		CheckThrusters(thrusters);
+		this.CheckThrusters(thrusters);
 
 		var starshipBuilder = new StarshipBuilder();
 		starshipBuilder.Name = this.Name;
-		starshipBuilder.Engine = this.Engine;
+		starshipBuilder.Engines = this.Engines;
 		starshipBuilder.Hull = this.Hull;
-		starshipBuilder.Wing = this.Wing;
+		starshipBuilder.WingPair = this.WingPair;
 		starshipBuilder.Thrusters = thrusters;
 
 		return starshipBuilder;
@@ -104,7 +131,7 @@ public sealed class StarshipBuilder : IStarshipBuilder
 
 	private void CheckThrusters(List<Thruster> thrusters)
 	{
-		if (UtilsFunction.IsEqualToZero(thrusters.Count))
+		if (!UtilsFunction.IsListCountBetweenOneAndMax(thrusters, 3))
 		{
 			throw new ArgumentException("Invalid thruster count");
 		}
@@ -122,32 +149,63 @@ public sealed class StarshipBuilder : IStarshipBuilder
 			|| name.Equals(ThrusterComponent.ThrusterTs1, StringComparison.OrdinalIgnoreCase);
 	}
 
-	public IStarshipBuilder WithWing(Wing wing)
+	// public IStarshipBuilder WithWing(Wing wing)
+	// {
+	// 	if (!IsValidWingComponent(wing.Name))
+	// 	{
+	// 		throw new ArgumentException("Invalid wing name");
+	// 	}
+	//
+	// 	var starshipBuilder = new StarshipBuilder();
+	// 	starshipBuilder.Name = this.Name;
+	// 	starshipBuilder.Engines = this.Engines;
+	// 	starshipBuilder.Hull = this.Hull;
+	// 	starshipBuilder.WingPair = wing;
+	// 	starshipBuilder.Thrusters = this.Thrusters;
+	//
+	// 	return starshipBuilder;
+	// }
+
+	public IStarshipBuilder WithWingPair((Wing, Wing) wingPair)
 	{
-		if (!IsValidWingComponent(wing.Name))
-		{
-			throw new ArgumentException("Invalid wing name");
-		}
+		this.CheckWingPair(wingPair);
 
 		var starshipBuilder = new StarshipBuilder();
 		starshipBuilder.Name = this.Name;
-		starshipBuilder.Engine = this.Engine;
+		starshipBuilder.Engines = this.Engines;
 		starshipBuilder.Hull = this.Hull;
-		starshipBuilder.Wing = wing;
+		starshipBuilder.WingPair = wingPair;
 		starshipBuilder.Thrusters = this.Thrusters;
 
 		return starshipBuilder;
 	}
 
-	private static Boolean IsValidWingComponent(String name)
+	private void CheckWingPair((Wing, Wing) wingPair)
 	{
-		return name.Equals(WingComponent.WingsWc1, StringComparison.OrdinalIgnoreCase)
-			|| name.Equals(WingComponent.WingsWe1, StringComparison.OrdinalIgnoreCase)
-			|| name.Equals(WingComponent.WingsWs1, StringComparison.OrdinalIgnoreCase);
+		if (
+			!this.IsValidWingComponent(wingPair.Item1.Name)
+			|| !this.IsValidWingComponent(wingPair.Item2.Name)
+		)
+		{
+			throw new ArgumentException("Invalid wing name");
+		}
+	}
+
+	private Boolean IsValidWingComponent(String name)
+	{
+		return name.Equals(WingComponent.WingWc1, StringComparison.OrdinalIgnoreCase)
+			|| name.Equals(WingComponent.WingWe1, StringComparison.OrdinalIgnoreCase)
+			|| name.Equals(WingComponent.WingWs1, StringComparison.OrdinalIgnoreCase);
 	}
 
 	public Starship Build()
 	{
-		return Starship.Create(this.Name, this.Hull, this.Engine, this.Wing, this.Thrusters);
+		return Starship.Create(
+			this.Name,
+			this.Hull,
+			this.Engines,
+			this.WingPair,
+			this.Thrusters
+		);
 	}
 }

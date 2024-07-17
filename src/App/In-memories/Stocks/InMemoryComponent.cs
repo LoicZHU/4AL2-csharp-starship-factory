@@ -64,7 +64,7 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 	{
 		try
 		{
-			for (var i = 1; i <= 4; i++)
+			for (var i = 1; i <= 6; i++)
 			{
 				this.Add(Thruster.Create(ThrusterComponent.ThrusterTc1));
 				this.Add(Thruster.Create(ThrusterComponent.ThrusterTe1));
@@ -81,11 +81,11 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 	{
 		try
 		{
-			for (var i = 1; i <= 3; i++)
+			for (var i = 1; i <= 6; i++)
 			{
-				this.Add(Wing.Create(WingComponent.WingsWc1));
-				this.Add(Wing.Create(WingComponent.WingsWe1));
-				this.Add(Wing.Create(WingComponent.WingsWs1));
+				this.Add(Wing.Create(WingComponent.WingWc1));
+				this.Add(Wing.Create(WingComponent.WingWe1));
+				this.Add(Wing.Create(WingComponent.WingWs1));
 			}
 		}
 		catch (Exception e)
