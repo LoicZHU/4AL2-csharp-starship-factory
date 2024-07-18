@@ -6,6 +6,7 @@ using core.Repositories.ComponentRepository;
 using core.Repositories.OrderRepository;
 using core.Repositories.StarshipRepository;
 using core.UI;
+using core.Utils;
 
 namespace core;
 
@@ -22,14 +23,11 @@ public static class Program
 	private static void ConfigureDependencies()
 	{
 		IComponentAssemblyRepository componentAssemblyRepository =
-			new ComponentAssemblyRepository(new InMemoryComponentAssembly());
-		IComponentRepository componentRepository = new ComponentRepository(
-			new InMemoryComponent()
-		);
-		IOrderRepository orderRepository = new OrderRepository(new InMemoryOrder());
-		IStarshipRepository starshipRepository = new StarshipRepository(
-			new InMemoryStarship()
-		);
+			AbstractSingleton<InMemoryComponentAssembly>.Instance;
+		IComponentRepository componentRepository =
+			AbstractSingleton<InMemoryComponent>.Instance;
+		IOrderRepository orderRepository = AbstractSingleton<InMemoryOrder>.Instance;
+		IStarshipRepository starshipRepository = AbstractSingleton<InMemoryStarship>.Instance;
 
 		_userInterface = new Menu(
 			componentAssemblyRepository,

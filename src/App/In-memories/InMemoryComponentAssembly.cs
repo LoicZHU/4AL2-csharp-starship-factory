@@ -1,11 +1,11 @@
 using core.Assemblies;
 using core.Components;
+using core.Repositories.ComponentAssemblyRepository;
 using core.UI;
-using core.Utils;
 
 namespace core.In_memories;
 
-public class InMemoryComponentAssembly : AbstractSingleton<InMemoryComponentAssembly>
+public class InMemoryComponentAssembly : IComponentAssemblyRepository
 {
 	private readonly Dictionary<Guid, ComponentAssembly> _cache;
 

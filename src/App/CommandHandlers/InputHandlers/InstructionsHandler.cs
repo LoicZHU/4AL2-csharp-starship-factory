@@ -128,30 +128,30 @@ public class InstructionsHandler : IInputHandler
 			if (HandlerHelper.IsCargoStarship(starshipName))
 			{
 				return (
-					this._componentRepository.GetCount(EngineComponent.EngineEc1),
-					this._componentRepository.GetCount(HullComponent.HullHc1),
-					this._componentRepository.GetCount(WingComponent.WingWc1),
-					this._componentRepository.GetCount(ThrusterComponent.ThrusterTc1)
+					this._componentRepository.GetCountByName(EngineComponent.EngineEc1),
+					this._componentRepository.GetCountByName(HullComponent.HullHc1),
+					this._componentRepository.GetCountByName(WingComponent.WingWc1),
+					this._componentRepository.GetCountByName(ThrusterComponent.ThrusterTc1)
 				);
 			}
 
 			if (HandlerHelper.IsExplorerStarship(starshipName))
 			{
 				return (
-					this._componentRepository.GetCount(EngineComponent.EngineEe1),
-					this._componentRepository.GetCount(HullComponent.HullHe1),
-					this._componentRepository.GetCount(WingComponent.WingWe1),
-					this._componentRepository.GetCount(ThrusterComponent.ThrusterTe1)
+					this._componentRepository.GetCountByName(EngineComponent.EngineEe1),
+					this._componentRepository.GetCountByName(HullComponent.HullHe1),
+					this._componentRepository.GetCountByName(WingComponent.WingWe1),
+					this._componentRepository.GetCountByName(ThrusterComponent.ThrusterTe1)
 				);
 			}
 
 			if (HandlerHelper.IsSpeederStarship(starshipName))
 			{
 				return (
-					this._componentRepository.GetCount(EngineComponent.EngineEs1),
-					this._componentRepository.GetCount(HullComponent.HullHs1),
-					this._componentRepository.GetCount(WingComponent.WingWs1),
-					this._componentRepository.GetCount(ThrusterComponent.ThrusterTs1)
+					this._componentRepository.GetCountByName(EngineComponent.EngineEs1),
+					this._componentRepository.GetCountByName(HullComponent.HullHs1),
+					this._componentRepository.GetCountByName(WingComponent.WingWs1),
+					this._componentRepository.GetCountByName(ThrusterComponent.ThrusterTs1)
 				);
 			}
 
