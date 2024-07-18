@@ -14,7 +14,7 @@ public static class StarshipAssembly
 				{
 					{ HullComponent.HullHc1, 1 },
 					{ EngineComponent.EngineEc1, 1 },
-					{ WingComponent.WingsWc1, 1 },
+					{ WingComponent.WingWc1, 2 },
 					{ ThrusterComponent.ThrusterTc1, 1 }
 				}
 			},
@@ -24,7 +24,7 @@ public static class StarshipAssembly
 				{
 					{ HullComponent.HullHe1, 1 },
 					{ EngineComponent.EngineEe1, 1 },
-					{ WingComponent.WingsWe1, 1 },
+					{ WingComponent.WingWe1, 2 },
 					{ ThrusterComponent.ThrusterTe1, 1 }
 				}
 			},
@@ -34,7 +34,7 @@ public static class StarshipAssembly
 				{
 					{ HullComponent.HullHs1, 1 },
 					{ EngineComponent.EngineEs1, 1 },
-					{ WingComponent.WingsWs1, 1 },
+					{ WingComponent.WingWs1, 2 },
 					{ ThrusterComponent.ThrusterTs1, 2 },
 				}
 			}

@@ -64,7 +64,7 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 	{
 		try
 		{
-			for (var i = 1; i <= 4; i++)
+			for (var i = 1; i <= 6; i++)
 			{
 				this.Add(Thruster.Create(ThrusterComponent.ThrusterTc1));
 				this.Add(Thruster.Create(ThrusterComponent.ThrusterTe1));
@@ -81,11 +81,11 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 	{
 		try
 		{
-			for (var i = 1; i <= 3; i++)
+			for (var i = 1; i <= 6; i++)
 			{
-				this.Add(Wing.Create(WingComponent.WingsWc1));
-				this.Add(Wing.Create(WingComponent.WingsWe1));
-				this.Add(Wing.Create(WingComponent.WingsWs1));
+				this.Add(Wing.Create(WingComponent.WingWc1));
+				this.Add(Wing.Create(WingComponent.WingWe1));
+				this.Add(Wing.Create(WingComponent.WingWs1));
 			}
 		}
 		catch (Exception e)
@@ -102,7 +102,7 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 			case Engine engine:
 				if (_engineCache.ContainsKey(engine.Id))
 				{
-					throw new ArgumentException($"Engine with id {engine.Id} already exists");
+					throw new ArgumentException($"Moteur ID {engine.Id} déjà existant");
 				}
 
 				_engineCache.Add(engine.Id, engine);
@@ -110,7 +110,7 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 			case Hull hull:
 				if (_hullCache.ContainsKey(hull.Id))
 				{
-					throw new ArgumentException($"Hull with id {hull.Id} already exists");
+					throw new ArgumentException($"Coque ID {hull.Id} déjà existante");
 				}
 
 				_hullCache.Add(hull.Id, hull);
@@ -118,7 +118,7 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 			case Thruster thruster:
 				if (_thrusterCache.ContainsKey(thruster.Id))
 				{
-					throw new ArgumentException($"Thruster with id {thruster.Id} already exists");
+					throw new ArgumentException($"Propulseur ID {thruster.Id} déjà existant");
 				}
 
 				_thrusterCache.Add(thruster.Id, thruster);
@@ -126,14 +126,14 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 			case Wing wing:
 				if (_wingCache.ContainsKey(wing.Id))
 				{
-					throw new ArgumentException($"Wing with id {wing.Id} already exists");
+					throw new ArgumentException($"Aile ID {wing.Id} déjà existante");
 				}
 
 				_wingCache.Add(wing.Id, wing);
 				break;
 			default:
 				throw new ArgumentException(
-					$"Invalid component: with type {typeof(TItem).Name} | with name {nameof(item)}"
+					$"Composant invalide : avec type {typeof(TItem).Name} | avec nom {nameof(item)}"
 				);
 		}
 	}
@@ -143,7 +143,7 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 		if (String.IsNullOrWhiteSpace(name))
 		{
 			throw new ArgumentException(
-				$"Component name cannot be null or empty: {nameof(name)}"
+				$"Composant ne peut pas être null ou vide: {nameof(name)}"
 			);
 		}
 
@@ -206,7 +206,7 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 		if (String.IsNullOrWhiteSpace(name))
 		{
 			throw new ArgumentException(
-				$"Component name cannot be null or empty: {nameof(name)}"
+				$"Composant ne peut pas être null ou vide : {nameof(name)}"
 			);
 		}
 

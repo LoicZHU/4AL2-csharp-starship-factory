@@ -5,9 +5,9 @@ namespace core.Starships;
 public interface IStarshipBuilder
 {
 	IStarshipBuilder WithName(String name);
-	IStarshipBuilder WithEngine(Engine engine);
+	IStarshipBuilder WithEngines(List<Engine> engines);
 	IStarshipBuilder WithHull(Hull hull);
 	IStarshipBuilder WithThrusters(List<Thruster> thrusters);
-	IStarshipBuilder WithWing(Wing wing);
+	IStarshipBuilder WithWingPair((Wing, Wing) wingPair);
 	Starship Build();
 }

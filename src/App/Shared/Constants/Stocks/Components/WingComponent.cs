@@ -2,7 +2,7 @@ namespace core.Components;
 
 public static class WingComponent
 {
-	public const String WingsWe1 = "Wings_WE1";
-	public const String WingsWs1 = "Wings_WS1";
-	public const String WingsWc1 = "Wings_WC1";
+	public const String WingWe1 = "Wing_WE1";
+	public const String WingWs1 = "Wing_WS1";
+	public const String WingWc1 = "Wing_WC1";
 }
