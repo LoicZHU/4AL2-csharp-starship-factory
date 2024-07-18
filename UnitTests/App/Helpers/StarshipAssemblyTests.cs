@@ -10,11 +10,11 @@ public class StarshipAssemblyTests
 	public void Components_ShouldContainCargoStarshipComponents()
 	{
 		// Arrange
-		var expectedComponents = new Dictionary<string, int>
+		var expectedComponents = new Dictionary<String, Int32>
 		{
 			{ HullComponent.HullHc1, 1 },
 			{ EngineComponent.EngineEc1, 1 },
-			{ WingComponent.WingWc1, 1 },
+			{ WingComponent.WingWc1, 2 },
 			{ ThrusterComponent.ThrusterTc1, 1 }
 		};
 
@@ -29,11 +29,11 @@ public class StarshipAssemblyTests
 	public void Components_ShouldContainExplorerStarshipComponents()
 	{
 		// Arrange
-		var expectedComponents = new Dictionary<string, int>
+		var expectedComponents = new Dictionary<String, Int32>
 		{
 			{ HullComponent.HullHe1, 1 },
 			{ EngineComponent.EngineEe1, 1 },
-			{ WingComponent.WingWe1, 1 },
+			{ WingComponent.WingWe1, 2 },
 			{ ThrusterComponent.ThrusterTe1, 1 }
 		};
 
@@ -48,11 +48,11 @@ public class StarshipAssemblyTests
 	public void Components_ShouldContainSpeederStarshipComponents()
 	{
 		// Arrange
-		var expectedComponents = new Dictionary<string, int>
+		var expectedComponents = new Dictionary<String, Int32>
 		{
 			{ HullComponent.HullHs1, 1 },
 			{ EngineComponent.EngineEs1, 1 },
-			{ WingComponent.WingWs1, 1 },
+			{ WingComponent.WingWs1, 2 },
 			{ ThrusterComponent.ThrusterTs1, 2 }
 		};
 

@@ -44,7 +44,7 @@ public class HandleHelperTests
 	[InlineData("two", false, "", 0, "La commande est invalide.")]
 	[InlineData("Invalid input", false, "", 0, "La commande est invalide.")]
 	[InlineData("12abc Explorer", false, "", 0, "La commande est invalide.")]
-	[InlineData("3 unknown", false, StarshipName.Unknown, 3, "Vaisseau inconnu : unknown")]
+	[InlineData("3 unknown", false, StarshipName.Unknown, 3, "Vaisseau inconnu : Unknown")]
 	[InlineData("3 Explorer", true, "Explorer", 3, "")]
 	public void ParseQuantityAndStarship_TestCases(
 		String input,
@@ -149,12 +149,13 @@ public class HandleHelperTests
 	[Theory]
 	[InlineData("Explorer", true)]
 	[InlineData("explorer", true)]
-	[InlineData("Speeder", true)]
-	[InlineData("speeder", true)]
-	[InlineData("Cargo", false)]
+	[InlineData("Speeder", false)]
+	[InlineData("speeder", false)]
+	[InlineData("cargo", true)]
+	[InlineData("Cargo", true)]
 	[InlineData("Unknown", false)]
 	[InlineData("other", false)]
-	public void IsExplorerOrSpeederStarship_ShouldReturnExpectedResult(
+	public void IsCargoOrExplorerStarship_ShouldReturnExpectedResult(
 		String name,
 		Boolean expected
 	)

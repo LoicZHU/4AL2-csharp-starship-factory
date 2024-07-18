@@ -83,7 +83,7 @@ public class InMemoryStarship : AbstractSingleton<InMemoryStarship>
 	{
 		if (_cache.ContainsKey(starship.Id))
 		{
-			throw new ArgumentException($"Starship with id {starship.Id} already exists.");
+			throw new ArgumentException($"Vaisseau ID {starship.Id} déjà existant");
 		}
 
 		_cache.Add(starship.Id, starship);
