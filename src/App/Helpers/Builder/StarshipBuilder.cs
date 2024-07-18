@@ -149,23 +149,6 @@ public sealed class StarshipBuilder : IStarshipBuilder
 			|| name.Equals(ThrusterComponent.ThrusterTs1, StringComparison.OrdinalIgnoreCase);
 	}
 
-	// public IStarshipBuilder WithWing(Wing wing)
-	// {
-	// 	if (!IsValidWingComponent(wing.Name))
-	// 	{
-	// 		throw new ArgumentException("Invalid wing name");
-	// 	}
-	//
-	// 	var starshipBuilder = new StarshipBuilder();
-	// 	starshipBuilder.Name = this.Name;
-	// 	starshipBuilder.Engines = this.Engines;
-	// 	starshipBuilder.Hull = this.Hull;
-	// 	starshipBuilder.WingPair = wing;
-	// 	starshipBuilder.Thrusters = this.Thrusters;
-	//
-	// 	return starshipBuilder;
-	// }
-
 	public IStarshipBuilder WithWingPair((Wing, Wing) wingPair)
 	{
 		this.CheckWingPair(wingPair);

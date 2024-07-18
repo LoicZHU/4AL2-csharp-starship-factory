@@ -38,10 +38,10 @@ public class StarshipBuilderTests
 		var engine = Engine.Create(EngineComponent.EngineEc1);
 
 		// Act
-		var starship = builder.WithEngine(engine).Build();
+		var starship = builder.WithEngines(engine).Build();
 
 		// Assert
-		Assert.Equal(engine, starship.Engine);
+		Assert.Equal(engine, starship.Engines);
 	}
 
 	[Fact]
@@ -52,7 +52,7 @@ public class StarshipBuilderTests
 		var invalidEngine = Engine.Create("InvalidEngine");
 
 		// Act & Assert
-		Assert.Throws<ArgumentException>(() => builder.WithEngine(invalidEngine));
+		Assert.Throws<ArgumentException>(() => builder.WithEngines(invalidEngine));
 	}
 
 	[Fact]
@@ -124,13 +124,13 @@ public class StarshipBuilderTests
 	{
 		// Arrange
 		var builder = StarshipBuilder.create();
-		var wing = Wing.Create(WingComponent.WingsWe1);
+		var wing = Wing.Create(WingComponent.WingWe1);
 
 		// Act
-		var starship = builder.WithWing(wing).Build();
+		var starship = builder.WithWingPair(wing).Build();
 
 		// Assert
-		Assert.Equal(wing, starship.Wing);
+		Assert.Equal(wing, starship.WingPair);
 	}
 
 	[Fact]
@@ -141,7 +141,7 @@ public class StarshipBuilderTests
 		var invalidWing = Wing.Create("InvalidWing");
 
 		// Act & Assert
-		Assert.Throws<ArgumentException>(() => builder.WithWing(invalidWing));
+		Assert.Throws<ArgumentException>(() => builder.WithWingPair(invalidWing));
 	}
 
 	[Fact]
@@ -152,8 +152,8 @@ public class StarshipBuilderTests
 			.create()
 			.WithName(StarshipName.Cargo)
 			.WithHull(Hull.Create(HullComponent.HullHc1))
-			.WithEngine(Engine.Create(EngineComponent.EngineEc1))
-			.WithWing(Wing.Create(WingComponent.WingsWc1))
+			.WithEngines(Engine.Create(EngineComponent.EngineEc1))
+			.WithWingPair(Wing.Create(WingComponent.WingWc1))
 			.WithThrusters(
 				new List<Thruster> { Thruster.Create(ThrusterComponent.ThrusterTc1) }
 			);
@@ -165,8 +165,8 @@ public class StarshipBuilderTests
 		Assert.NotNull(starship);
 		Assert.Equal(StarshipName.Cargo, starship.Name);
 		Assert.Equal(HullComponent.HullHc1, starship.Hull.Name);
-		Assert.Equal(EngineComponent.EngineEc1, starship.Engine.Name);
-		Assert.Equal(WingComponent.WingsWc1, starship.Wing.Name);
+		Assert.Equal(EngineComponent.EngineEc1, starship.Engines.Name);
+		Assert.Equal(WingComponent.WingWc1, starship.WingPair.Name);
 		Assert.Single(starship.Thrusters);
 		Assert.Equal(ThrusterComponent.ThrusterTc1, starship.Thrusters[0].Name);
 	}

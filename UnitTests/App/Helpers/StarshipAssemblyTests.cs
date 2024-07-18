@@ -14,7 +14,7 @@ public class StarshipAssemblyTests
 		{
 			{ HullComponent.HullHc1, 1 },
 			{ EngineComponent.EngineEc1, 1 },
-			{ WingComponent.WingsWc1, 1 },
+			{ WingComponent.WingWc1, 1 },
 			{ ThrusterComponent.ThrusterTc1, 1 }
 		};
 
@@ -33,7 +33,7 @@ public class StarshipAssemblyTests
 		{
 			{ HullComponent.HullHe1, 1 },
 			{ EngineComponent.EngineEe1, 1 },
-			{ WingComponent.WingsWe1, 1 },
+			{ WingComponent.WingWe1, 1 },
 			{ ThrusterComponent.ThrusterTe1, 1 }
 		};
 
@@ -52,7 +52,7 @@ public class StarshipAssemblyTests
 		{
 			{ HullComponent.HullHs1, 1 },
 			{ EngineComponent.EngineEs1, 1 },
-			{ WingComponent.WingsWs1, 1 },
+			{ WingComponent.WingWs1, 1 },
 			{ ThrusterComponent.ThrusterTs1, 2 }
 		};
 

@@ -84,17 +84,28 @@ public static class HandlerHelper
 			return (false, String.Empty, 0, InvalidCommandMessage);
 		}
 
-		// seems to be useless:
-		if (!Int32.TryParse(match.Groups[1].Value, out var quantity))
+		var parts = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+		if (!Int32.TryParse(parts[0], out var quantity))
 		{
 			return (false, String.Empty, quantity, InvalidCommandMessage);
 		}
+		if (quantity <= 0)
+		{
+			return (false, String.Empty, quantity, "La quantité doit être >= 1.");
+		}
 
-		var starshipNameInput = match.Groups[2].Value;
-		var starshipName = GetStarshipName(starshipNameInput);
+		var starshipNameInput = parts[1];
+		var officialStarshipName = GetStarshipName(starshipNameInput);
+		var starshipNameInputInTitleCase =
+			$"{starshipNameInput.First().ToString().ToUpper()}{starshipNameInput.Substring(1).ToLower()}";
 
-		return IsUnknownStarship(starshipName)
-			? (false, StarshipName.Unknown, quantity, $"Vaisseau inconnu : {starshipNameInput}")
-			: (true, starshipName, quantity, String.Empty);
+		return !IsUnknownStarship(officialStarshipName)
+			? (true, starshipName: officialStarshipName, quantity, String.Empty)
+			: (
+				false,
+				StarshipName.Unknown,
+				quantity,
+				$"Vaisseau inconnu : {starshipNameInputInTitleCase}"
+			);
 	}
 }

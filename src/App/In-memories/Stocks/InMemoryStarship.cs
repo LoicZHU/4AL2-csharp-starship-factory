@@ -33,14 +33,6 @@ public class InMemoryStarship : AbstractSingleton<InMemoryStarship>
 
 	private Starship BuildExplorer()
 	{
-		// return StarshipBuilder
-		// 	.create()
-		// 	.WithName(StarshipName.Explorer)
-		// 	.WithEngines(Engine.Create(EngineComponent.EngineEe1))
-		// 	.WithHull(Hull.Create(HullComponent.HullHe1))
-		// 	.WithWingPair(Wing.Create(WingComponent.WingsWe1))
-		// 	.WithThrusters(new() { Thruster.Create(ThrusterComponent.ThrusterTe1), })
-		// 	.Build();
 		return StarshipBuilder
 			.create()
 			.WithName(StarshipName.Explorer)
@@ -55,20 +47,6 @@ public class InMemoryStarship : AbstractSingleton<InMemoryStarship>
 
 	private Starship BuildSpeeder()
 	{
-		// return StarshipBuilder
-		// 	.create()
-		// 	.WithName(StarshipName.Speeder)
-		// 	.WithEngines(Engine.Create(EngineComponent.EngineEs1))
-		// 	.WithHull(Hull.Create(HullComponent.HullHs1))
-		// 	.WithWingPair(Wing.Create(WingComponent.WingsWs1))
-		// 	.WithThrusters(
-		// 		new()
-		// 		{
-		// 			Thruster.Create(ThrusterComponent.ThrusterTs1),
-		// 			Thruster.Create(ThrusterComponent.ThrusterTs1)
-		// 		}
-		// 	)
-		// 	.Build();
 		return StarshipBuilder
 			.create()
 			.WithName(StarshipName.Speeder)

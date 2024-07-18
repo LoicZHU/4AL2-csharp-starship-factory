@@ -32,15 +32,15 @@ public class VerifyHandler : IInputHandler
 			return;
 		}
 
-		var inputContent = splitBySpaceInput[1];
-		var starshipCounts = this.GetStarshipSumsFromInput(inputContent);
-		if (UtilsFunction.IsDictionaryEmpty(starshipCounts))
-		{
-			return;
-		}
-
 		try
 		{
+			var inputContent = splitBySpaceInput[1];
+			var starshipCounts = this.GetStarshipSumsFromInput(inputContent);
+			if (UtilsFunction.IsDictionaryEmpty(starshipCounts))
+			{
+				return;
+			}
+
 			VerifyStockAvailability(starshipCounts);
 		}
 		catch (Exception e)
@@ -53,8 +53,8 @@ public class VerifyHandler : IInputHandler
 	{
 		foreach (var (starshipName, quantity) in starshipCounts)
 		{
-			var (hullCount, engineCount, wingCount, thrusterCount) =
-				this.GetStarshipComponentsCountFromInventories();
+			var (engineCount, hullCount, wingCount, thrusterCount) =
+				this.GetStarshipComponentsCountFromInventories(starshipName);
 
 			if (
 				this.IsMoreInventoryRequired(
@@ -107,16 +107,43 @@ public class VerifyHandler : IInputHandler
 		VerifyDisplayHandler.PrintInvalidCommand(message);
 	}
 
-	private (Int32, Int32, Int32, Int32) GetStarshipComponentsCountFromInventories()
+	private (Int32, Int32, Int32, Int32) GetStarshipComponentsCountFromInventories(
+		String starshipName
+	)
 	{
 		try
 		{
-			return (
-				this._componentRepository.GetCount(EngineComponent.EngineEc1),
-				this._componentRepository.GetCount(HullComponent.HullHc1),
-				this._componentRepository.GetCount(WingComponent.WingWc1),
-				this._componentRepository.GetCount(ThrusterComponent.ThrusterTc1)
-			);
+			if (HandlerHelper.IsCargoStarship(starshipName))
+			{
+				return (
+					this._componentRepository.GetCount(EngineComponent.EngineEc1),
+					this._componentRepository.GetCount(HullComponent.HullHc1),
+					this._componentRepository.GetCount(WingComponent.WingWc1),
+					this._componentRepository.GetCount(ThrusterComponent.ThrusterTc1)
+				);
+			}
+
+			if (HandlerHelper.IsExplorerStarship(starshipName))
+			{
+				return (
+					this._componentRepository.GetCount(EngineComponent.EngineEe1),
+					this._componentRepository.GetCount(HullComponent.HullHe1),
+					this._componentRepository.GetCount(WingComponent.WingWe1),
+					this._componentRepository.GetCount(ThrusterComponent.ThrusterTe1)
+				);
+			}
+
+			if (HandlerHelper.IsSpeederStarship(starshipName))
+			{
+				return (
+					this._componentRepository.GetCount(EngineComponent.EngineEs1),
+					this._componentRepository.GetCount(HullComponent.HullHs1),
+					this._componentRepository.GetCount(WingComponent.WingWs1),
+					this._componentRepository.GetCount(ThrusterComponent.ThrusterTs1)
+				);
+			}
+
+			return (0, 0, 0, 0);
 		}
 		catch (Exception e)
 		{
@@ -168,11 +195,7 @@ public class VerifyHandler : IInputHandler
 	)
 	{
 		var components = StarshipAssembly.Components[StarshipName.Speeder];
-		Console.WriteLine($" {hullCount} {engineCount} {wingCount} {thrusterCount}");
-		Console.WriteLine($"{quantity}");
-		Console.WriteLine(
-			$" {components[HullComponent.HullHs1]} {components[EngineComponent.EngineEs1]} {components[WingComponent.WingWs1]} {components[ThrusterComponent.ThrusterTs1]}"
-		);
+
 		return hullCount < components[HullComponent.HullHs1] * quantity
 			|| engineCount < components[EngineComponent.EngineEs1] * quantity
 			|| wingCount < components[WingComponent.WingWs1] * quantity
@@ -188,11 +211,7 @@ public class VerifyHandler : IInputHandler
 	)
 	{
 		var components = StarshipAssembly.Components[StarshipName.Cargo];
-		Console.WriteLine($" {hullCount} {engineCount} {wingCount} {thrusterCount}");
-		Console.WriteLine($"{quantity}");
-		Console.WriteLine(
-			$" {components[HullComponent.HullHc1]} {components[EngineComponent.EngineEc1]} {components[WingComponent.WingWc1]} {components[ThrusterComponent.ThrusterTc1]}"
-		);
+
 		return hullCount < components[HullComponent.HullHc1] * quantity
 			|| engineCount < components[EngineComponent.EngineEc1] * quantity
 			|| wingCount < components[WingComponent.WingWc1] * quantity

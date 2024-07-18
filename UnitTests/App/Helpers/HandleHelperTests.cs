@@ -160,7 +160,7 @@ public class HandleHelperTests
 	)
 	{
 		// Act
-		var result = HandlerHelper.IsExplorerOrSpeederStarship(name);
+		var result = HandlerHelper.IsCargoOrExplorerStarship(name);
 
 		// Assert
 		Assert.Equal(expected, result);

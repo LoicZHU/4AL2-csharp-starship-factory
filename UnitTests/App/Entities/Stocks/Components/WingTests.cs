@@ -9,7 +9,7 @@ public class WingTests
 	public void Wing_ShouldImplementIComponent()
 	{
 		// Arrange
-		var name = WingComponent.WingsWe1;
+		var name = WingComponent.WingWe1;
 
 		// Act
 		var wing = Wing.Create(name);
@@ -22,7 +22,7 @@ public class WingTests
 	public void Create_ShouldReturnWingWithValidIdAndName()
 	{
 		// Arrange
-		var name = WingComponent.WingsWe1;
+		var name = WingComponent.WingWe1;
 
 		// Act
 		var wing = Wing.Create(name);
@@ -37,8 +37,8 @@ public class WingTests
 	public void Create_ShouldReturnDifferentIdsForDifferentWings()
 	{
 		// Arrange
-		var name1 = WingComponent.WingsWe1;
-		var name2 = WingComponent.WingsWs1;
+		var name1 = WingComponent.WingWe1;
+		var name2 = WingComponent.WingWs1;
 
 		// Act
 		var wing1 = Wing.Create(name1);

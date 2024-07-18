@@ -1,7 +1,6 @@
 using core.App.Handlers;
 using core.App.UI;
 using core.InputHandlers;
-using core.In_memories.Items;
 using core.Repositories.ComponentAssemblyRepository;
 using core.Repositories.ComponentRepository;
 using core.Repositories.OrderRepository;
@@ -30,6 +29,7 @@ public class Menu : IUserInterface
 			{ Command.ListOrder, new ListOrderHandler(orderRepository) },
 			{ Command.Stocks, new StockHandler(starshipRepository, componentRepository) },
 		};
+
 		this._inputHandlers = new Dictionary<String, IInputHandler>
 		{
 			{
@@ -63,7 +63,7 @@ public class Menu : IUserInterface
 	{
 		while (true)
 		{
-			var input = GetUserInput()?.ToUpper();
+			var input = GetUserInput()?.Trim().ToUpper();
 			if (UtilsFunction.IsNullOrWhiteSpace(input))
 			{
 				this.PrintEmptyInstructionMessage("🚫 Instruction vide. ('HELP' pour de l'aide)");
