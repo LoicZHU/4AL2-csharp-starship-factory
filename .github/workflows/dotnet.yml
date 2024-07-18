@@ -28,3 +28,8 @@ jobs:
           dotnet csharpier --check .
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Run Stryker Mutator
+      run: |
+          cd UnitTests/
+          dotnet tool restore
+          dotnet stryker
