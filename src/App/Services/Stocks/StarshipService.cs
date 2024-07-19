@@ -1,5 +1,7 @@
 using core.Components;
 using core.Repositories.ComponentRepository;
+using core.Repositories.StarshipRepository;
+using core.Starships;
 using core.UI;
 using core.Utils;
 
@@ -8,9 +10,14 @@ namespace core.Services;
 public class StarshipService
 {
 	private readonly IComponentRepository _componentRepository;
+	private readonly IStarshipRepository _starshipRepository;
 
-	public StarshipService(IComponentRepository componentRepository)
+	public StarshipService(
+		IStarshipRepository starshipRepository,
+		IComponentRepository componentRepository
+	)
 	{
+		_starshipRepository = starshipRepository;
 		this._componentRepository = componentRepository;
 	}
 
@@ -87,5 +94,11 @@ public class StarshipService
 			Terminal.PrintMessageWithLinebreak(e.Message);
 			return (0, 0, 0, 0);
 		}
+	}
+
+	// Other methods
+	public void AddStarship(Starship starship)
+	{
+		this._starshipRepository.Add(starship);
 	}
 }
