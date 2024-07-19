@@ -1,5 +1,6 @@
 using core.Assemblies;
 using core.Repositories.ComponentRepository;
+using core.UI;
 
 namespace core.Services;
 
@@ -16,6 +17,8 @@ public class ComponentService
 	{
 		foreach (var (componentName, quantity) in StarshipAssembly.Components[starshipName])
 		{
+			InstructionsDisplayHandler.PrintGetOutStock(quantity, componentName);
+
 			for (var i = 1; i <= quantity; i++)
 			{
 				this._componentRepository.Remove(componentName);
