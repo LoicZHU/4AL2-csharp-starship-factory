@@ -27,7 +27,8 @@ public class StarshipBuilderTests
 		var invalidName = "InvalidName";
 
 		// Act & Assert
-		Assert.Throws<ArgumentException>(() => builder.WithName(invalidName));
+		var exception = Assert.Throws<ArgumentException>(() => builder.WithName(invalidName));
+		Assert.Equal("Nom de vaisseau invalide", exception.Message);
 	}
 
 	[Fact]
@@ -194,12 +195,18 @@ public class StarshipBuilderTests
 		Assert.Equal(wingPair, starship.WingPair);
 	}
 
-	[Fact]
-	public void WithWingPair_InvalidWingPair_ThrowsArgumentException()
+	[Theory]
+	[InlineData("InvalidWing", "InvalidWing")]
+	[InlineData("InvalidWing", WingComponent.WingWe1)]
+	[InlineData(WingComponent.WingWe1, "InvalidWing")]
+	public void WithWingPair_InvalidWingPair_ThrowsArgumentException(
+		String wing1,
+		String wing2
+	)
 	{
 		// Arrange
 		var builder = StarshipBuilder.create();
-		var invalidWingPair = (Wing.Create("InvalidWing"), Wing.Create("InvalidWing"));
+		var invalidWingPair = (Wing.Create(wing1), Wing.Create(wing2));
 
 		// Act & Assert
 		var exception = Assert.Throws<ArgumentException>(

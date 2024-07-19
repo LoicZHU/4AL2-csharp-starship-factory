@@ -46,6 +46,14 @@ public class HandleHelperTests
 	[InlineData("12abc Explorer", false, "", 0, "La commande est invalide.")]
 	[InlineData("3 unknown", false, StarshipName.Unknown, 3, "Vaisseau inconnu : Unknown")]
 	[InlineData("3 Explorer", true, "Explorer", 3, "")]
+	[InlineData("-3 Explorer", false, "", -3, "La quantité doit être >= 1.")]
+	[InlineData("0 Explorer", false, "", 0, "La quantité doit être >= 1.")]
+	[InlineData("3Explorer", false, "", 0, "La commande est invalide.")]
+	[InlineData("  3  Explorer  ", true, "Explorer", 3, "")]
+	[InlineData("5 Speeder", true, "Speeder", 5, "")]
+	[InlineData("1 Cargo", true, "Cargo", 1, "")]
+	[InlineData("abc Explorer", false, "", 0, "La commande est invalide.")] // Invalid integer
+	[InlineData("3 ", false, "", 0, "La commande est invalide.")]
 	public void ParseQuantityAndStarship_TestCases(
 		String input,
 		Boolean expectedIsValid,

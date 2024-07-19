@@ -85,6 +85,7 @@ public static class HandlerHelper
 		}
 
 		var parts = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+		// seems to be useless:
 		if (!Int32.TryParse(parts[0], out var quantity))
 		{
 			return (false, String.Empty, quantity, InvalidCommandMessage);
