@@ -1,11 +1,12 @@
 using core.Components;
 using core.Items.Components;
+using core.Repositories.ComponentRepository;
 using core.UI;
 using core.Utils;
 
 namespace core.In_memories.Items;
 
-public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
+public class InMemoryComponent : IComponentRepository
 {
 	private readonly Dictionary<Guid, IComponent> _engineCache = new();
 	private readonly Dictionary<Guid, IComponent> _hullCache = new();
@@ -201,7 +202,7 @@ public class InMemoryComponent : AbstractSingleton<InMemoryComponent>
 		return counts;
 	}
 
-	public Int32 CountByName(String name)
+	public Int32 GetCountByName(String name)
 	{
 		if (String.IsNullOrWhiteSpace(name))
 		{

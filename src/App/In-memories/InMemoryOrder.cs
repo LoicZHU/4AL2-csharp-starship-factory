@@ -1,8 +1,9 @@
+using core.Repositories.OrderRepository;
 using core.Utils;
 
 namespace core.In_memories;
 
-public class InMemoryOrder : AbstractSingleton<InMemoryOrder>
+public class InMemoryOrder : IOrderRepository
 {
 	private readonly Dictionary<Guid, Dictionary<String, Int32>> _cache = new();
 

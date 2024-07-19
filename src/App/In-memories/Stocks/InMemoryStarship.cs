@@ -1,11 +1,12 @@
 using core.Components;
+using core.Repositories.StarshipRepository;
 using core.Starships;
 using core.UI;
 using core.Utils;
 
 namespace core.In_memories.Items;
 
-public class InMemoryStarship : AbstractSingleton<InMemoryStarship>
+public class InMemoryStarship : IStarshipRepository
 {
 	private readonly Dictionary<Guid, Starship> _cache;
 

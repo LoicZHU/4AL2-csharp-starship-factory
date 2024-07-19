@@ -31,6 +31,73 @@ public class UtilsFunctionTests
 		Assert.False(result);
 	}
 
+	[Fact]
+	public void IsEqualToZero_WithZero_ReturnsTrue()
+	{
+		// Arrange
+		var count = 0;
+
+		// Act
+		var result = UtilsFunction.IsEqualToZero(count);
+
+		// Assert
+		Assert.True(result);
+	}
+
+	[Theory]
+	[InlineData(-1, false)]
+	[InlineData(1, false)]
+	public void IsEqualToZero_WithNonZero_ReturnsFalse(Int32 count, Boolean expected)
+	{
+		// Act
+		var result = UtilsFunction.IsEqualToZero(count);
+
+		// Assert
+		Assert.False(result);
+	}
+
+	[Fact]
+	public void IsListCountBetweenOneAndMax_WithEmptyList_ReturnsFalse()
+	{
+		// Arrange
+		var list = new List<String>();
+		var max = 1;
+
+		// Act
+		var result = UtilsFunction.IsListCountBetweenOneAndMax(list, max);
+
+		// Assert
+		Assert.False(result);
+	}
+
+	[Fact]
+	public void IsListCountBetweenOneAndMax_WithListCountEqualToMax_ReturnsTrue()
+	{
+		// Arrange
+		var list = new List<String> { "item" };
+		var max = 1;
+
+		// Act
+		var result = UtilsFunction.IsListCountBetweenOneAndMax(list, max);
+
+		// Assert
+		Assert.True(result);
+	}
+
+	[Fact]
+	public void IsListCountBetweenOneAndMax_WithListCountGreaterThanMax_ReturnsFalse()
+	{
+		// Arrange
+		var list = new List<String> { "item1", "item2" };
+		var max = 1;
+
+		// Act
+		var result = UtilsFunction.IsListCountBetweenOneAndMax(list, max);
+
+		// Assert
+		Assert.False(result);
+	}
+
 	[Theory]
 	[InlineData(null, true)]
 	[InlineData("", false)]
