@@ -1,10 +1,6 @@
 using core.App.Handlers;
 using core.App.UI;
 using core.InputHandlers;
-using core.Repositories.ComponentAssemblyRepository;
-using core.Repositories.ComponentRepository;
-using core.Repositories.OrderRepository;
-using core.Repositories.StarshipRepository;
 using core.UI.constants;
 using core.Utils;
 
@@ -16,35 +12,12 @@ public class Menu : IUserInterface
 	private readonly Dictionary<String, IInputHandler> _inputHandlers;
 
 	public Menu(
-		IComponentAssemblyRepository componentAssemblyRepository,
-		IComponentRepository componentRepository,
-		IOrderRepository orderRepository,
-		IStarshipRepository starshipRepository
+		Dictionary<String, IHandler> handlers,
+		Dictionary<String, IInputHandler> inputHandlers
 	)
 	{
-		this._handlers = new Dictionary<String, IHandler>
-		{
-			{ Command.Exit, new ExitHandler() },
-			{ Command.Help, new HelpDisplayHandler() },
-			{ Command.ListOrder, new ListOrderHandler(orderRepository) },
-			{ Command.Stocks, new StockHandler(starshipRepository, componentRepository) },
-		};
-
-		this._inputHandlers = new Dictionary<String, IInputHandler>
-		{
-			{
-				Command.Instructions,
-				new InstructionsHandler(componentAssemblyRepository, componentRepository)
-			},
-			{ Command.NeededStocks, new NeededStocksHandler() },
-			{ Command.Order, new OrderHandler(orderRepository) },
-			{
-				Command.Produce,
-				new ProduceHandler(componentAssemblyRepository, componentRepository)
-			},
-			{ Command.Send, new SendHandler(orderRepository, starshipRepository) },
-			{ Command.Verify, new VerifyHandler(componentRepository) },
-		};
+		this._handlers = handlers;
+		this._inputHandlers = inputHandlers;
 	}
 
 	public void Start()

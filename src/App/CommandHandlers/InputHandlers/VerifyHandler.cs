@@ -1,7 +1,4 @@
-using core.Assemblies;
-using core.Components;
-using core.Repositories.ComponentRepository;
-using core.Starships;
+using core.Services;
 using core.UI;
 using core.Utils;
 
@@ -10,11 +7,14 @@ namespace core.InputHandlers;
 public class VerifyHandler : IInputHandler
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
-	private readonly IComponentRepository _componentRepository;
 
-	public VerifyHandler(IComponentRepository componentRepository)
+	private readonly InventoryService _inventoryService;
+	private readonly StarshipService _starshipService;
+
+	public VerifyHandler(InventoryService inventoryService, StarshipService starshipService)
 	{
-		this._componentRepository = componentRepository;
+		_inventoryService = inventoryService;
+		_starshipService = starshipService;
 	}
 
 	public void Handle(String input)
@@ -35,7 +35,10 @@ public class VerifyHandler : IInputHandler
 		try
 		{
 			var inputContent = splitBySpaceInput[1];
-			var starshipCounts = this.GetStarshipSumsFromInput(inputContent);
+			var starshipCounts = _starshipService.GetStarshipSumsFromInput(
+				inputContent,
+				this.PrintInvalidCommand
+			);
 			if (UtilsFunction.IsDictionaryEmpty(starshipCounts))
 			{
 				return;
@@ -49,15 +52,20 @@ public class VerifyHandler : IInputHandler
 		}
 	}
 
+	private void PrintInvalidCommand(String message)
+	{
+		VerifyDisplayHandler.PrintInvalidCommand(message);
+	}
+
 	private void VerifyStockAvailability(Dictionary<String, Int32> starshipCounts)
 	{
 		foreach (var (starshipName, quantity) in starshipCounts)
 		{
 			var (engineCount, hullCount, wingCount, thrusterCount) =
-				this.GetStarshipComponentsCountFromInventories(starshipName);
+				this._starshipService.GetStarshipComponentsCountFromInventories(starshipName);
 
 			if (
-				this.IsMoreInventoryRequired(
+				this._inventoryService.IsMoreInventoryRequired(
 					starshipName,
 					quantity,
 					hullCount,
@@ -73,149 +81,6 @@ public class VerifyHandler : IInputHandler
 		}
 
 		this.PrintSufficientStock();
-	}
-
-	private Dictionary<String, Int32> GetStarshipSumsFromInput(String input)
-	{
-		var starshipCounts = new Dictionary<String, Int32>();
-
-		foreach (var quantityAndStarship in input.Split(", "))
-		{
-			var (isValid, starshipName, quantity, errorMessage) =
-				HandlerHelper.ParseQuantityAndStarship(quantityAndStarship);
-			if (!isValid)
-			{
-				this.PrintInvalidCommand(errorMessage);
-				return new Dictionary<String, Int32>();
-			}
-
-			if (!starshipCounts.ContainsKey(starshipName))
-			{
-				starshipCounts.Add(starshipName, quantity);
-			}
-			else
-			{
-				starshipCounts[starshipName] += quantity;
-			}
-		}
-
-		return starshipCounts;
-	}
-
-	private void PrintInvalidCommand(String message)
-	{
-		VerifyDisplayHandler.PrintInvalidCommand(message);
-	}
-
-	private (Int32, Int32, Int32, Int32) GetStarshipComponentsCountFromInventories(
-		String starshipName
-	)
-	{
-		try
-		{
-			if (HandlerHelper.IsCargoStarship(starshipName))
-			{
-				return (
-					this._componentRepository.GetCountByName(EngineComponent.EngineEc1),
-					this._componentRepository.GetCountByName(HullComponent.HullHc1),
-					this._componentRepository.GetCountByName(WingComponent.WingWc1),
-					this._componentRepository.GetCountByName(ThrusterComponent.ThrusterTc1)
-				);
-			}
-
-			if (HandlerHelper.IsExplorerStarship(starshipName))
-			{
-				return (
-					this._componentRepository.GetCountByName(EngineComponent.EngineEe1),
-					this._componentRepository.GetCountByName(HullComponent.HullHe1),
-					this._componentRepository.GetCountByName(WingComponent.WingWe1),
-					this._componentRepository.GetCountByName(ThrusterComponent.ThrusterTe1)
-				);
-			}
-
-			if (HandlerHelper.IsSpeederStarship(starshipName))
-			{
-				return (
-					this._componentRepository.GetCountByName(EngineComponent.EngineEs1),
-					this._componentRepository.GetCountByName(HullComponent.HullHs1),
-					this._componentRepository.GetCountByName(WingComponent.WingWs1),
-					this._componentRepository.GetCountByName(ThrusterComponent.ThrusterTs1)
-				);
-			}
-
-			return (0, 0, 0, 0);
-		}
-		catch (Exception e)
-		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
-			return (0, 0, 0, 0);
-		}
-	}
-
-	private Boolean IsMoreInventoryRequired(
-		String starshipName,
-		Int32 quantity,
-		Int32 hullCount,
-		Int32 engineCount,
-		Int32 wingCount,
-		Int32 thrusterCount
-	)
-	{
-		if (HandlerHelper.IsSpeederStarship(starshipName))
-		{
-			return this.IsMoreInventoryRequiredForSpeederStarship(
-				quantity,
-				hullCount,
-				engineCount,
-				wingCount,
-				thrusterCount
-			);
-		}
-
-		if (HandlerHelper.IsCargoOrExplorerStarship(starshipName))
-		{
-			return this.IsMoreInventoryRequiredForCargoOrExplorerStarship(
-				quantity,
-				hullCount,
-				engineCount,
-				wingCount,
-				thrusterCount
-			);
-		}
-
-		return false;
-	}
-
-	private Boolean IsMoreInventoryRequiredForSpeederStarship(
-		Int32 quantity,
-		Int32 hullCount,
-		Int32 engineCount,
-		Int32 wingCount,
-		Int32 thrusterCount
-	)
-	{
-		var components = StarshipAssembly.Components[StarshipName.Speeder];
-
-		return hullCount < components[HullComponent.HullHs1] * quantity
-			|| engineCount < components[EngineComponent.EngineEs1] * quantity
-			|| wingCount < components[WingComponent.WingWs1] * quantity
-			|| thrusterCount < components[ThrusterComponent.ThrusterTs1] * quantity;
-	}
-
-	private Boolean IsMoreInventoryRequiredForCargoOrExplorerStarship(
-		Int32 quantity,
-		Int32 hullCount,
-		Int32 engineCount,
-		Int32 wingCount,
-		Int32 thrusterCount
-	)
-	{
-		var components = StarshipAssembly.Components[StarshipName.Cargo];
-
-		return hullCount < components[HullComponent.HullHc1] * quantity
-			|| engineCount < components[EngineComponent.EngineEc1] * quantity
-			|| wingCount < components[WingComponent.WingWc1] * quantity
-			|| thrusterCount < components[ThrusterComponent.ThrusterTc1] * quantity;
 	}
 
 	private void PrintSufficientStock()

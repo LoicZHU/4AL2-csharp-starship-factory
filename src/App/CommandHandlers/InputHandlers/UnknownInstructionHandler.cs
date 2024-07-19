@@ -7,8 +7,9 @@ public class UnknownInstructionHandler : IInputHandler
 {
 	public void Handle(String input)
 	{
-		var message = $"🚫 Instruction inconnue : {input} ({Command.Help} pour de l'aide) :";
-		this.PrintUnknownInstruction(message);
+		this.PrintUnknownInstruction(
+			$"🚫 Instruction inconnue : {input} ({Command.Help} pour de l'aide) :"
+		);
 	}
 
 	private void PrintUnknownInstruction(String message)

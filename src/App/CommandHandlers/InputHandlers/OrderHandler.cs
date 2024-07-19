@@ -11,7 +11,7 @@ public class OrderHandler : IInputHandler
 
 	public OrderHandler(IOrderRepository orderRepository)
 	{
-		_orderRepository = orderRepository;
+		this._orderRepository = orderRepository;
 	}
 
 	public void Handle(String input)
