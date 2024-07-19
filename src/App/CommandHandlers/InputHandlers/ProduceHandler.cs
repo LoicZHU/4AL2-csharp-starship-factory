@@ -10,19 +10,16 @@ public class ProduceHandler : IInputHandler
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
-	private readonly ComponentAssemblyService _componentAssemblyService;
 	private readonly ComponentService _componentService;
 	private readonly InventoryService _inventoryService;
 	private readonly StarshipService _starshipService;
 
 	public ProduceHandler(
-		ComponentAssemblyService componentAssemblyService,
 		ComponentService componentService,
 		InventoryService inventoryService,
 		StarshipService starshipService
 	)
 	{
-		this._componentAssemblyService = componentAssemblyService;
 		this._componentService = componentService;
 		this._inventoryService = inventoryService;
 		this._starshipService = starshipService;
@@ -118,19 +115,6 @@ public class ProduceHandler : IInputHandler
 				this._componentService.GetComponentsOutFromStock(componentName, componentCount);
 			}
 
-			// var componentAssembly = ComponentAssembly.Create(String.Empty, new List<String>());
-			// this._componentAssemblyService.Add(componentAssembly);
-			//
-			// foreach (var (componentName, componentCount) in starshipComponents)
-			// {
-			// 	for (var j = 1; j <= componentCount; j++)
-			// 	{
-			// 		this._componentAssemblyService.AddComponentAssemblyToItsInventory(
-			// 			componentAssembly,
-			// 			componentName
-			// 		);
-			// 	}
-			// }
 			this._starshipService.AddStarship(StarshipFactory.Create(starshipName));
 		}
 	}

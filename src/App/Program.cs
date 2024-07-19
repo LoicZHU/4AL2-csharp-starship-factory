@@ -57,7 +57,6 @@ public static class Program
 			{
 				Command.Produce,
 				new ProduceHandler(
-					new ComponentAssemblyService(componentAssemblyRepository),
 					new ComponentService(componentRepository),
 					new InventoryService(),
 					new StarshipService(starshipRepository, componentRepository)
