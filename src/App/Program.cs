@@ -49,7 +49,7 @@ public static class Program
 					new ComponentAssemblyService(componentAssemblyRepository),
 					new ComponentService(componentRepository),
 					new InventoryService(),
-					new StarshipService(componentRepository)
+					new StarshipService(starshipRepository, componentRepository)
 				)
 			},
 			{ Command.NeededStocks, new NeededStocksHandler() },
@@ -60,7 +60,7 @@ public static class Program
 					new ComponentAssemblyService(componentAssemblyRepository),
 					new ComponentService(componentRepository),
 					new InventoryService(),
-					new StarshipService(componentRepository)
+					new StarshipService(starshipRepository, componentRepository)
 				)
 			},
 			{ Command.Send, new SendHandler(orderRepository, starshipRepository) },
@@ -68,7 +68,7 @@ public static class Program
 				Command.Verify,
 				new VerifyHandler(
 					new InventoryService(),
-					new StarshipService(componentRepository)
+					new StarshipService(starshipRepository, componentRepository)
 				)
 			},
 		};

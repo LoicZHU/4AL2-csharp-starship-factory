@@ -1,4 +1,4 @@
-using core.Components;
+using core.App.Helpers;
 using core.Repositories.StarshipRepository;
 using core.Starships;
 using core.UI;
@@ -34,50 +34,17 @@ public class InMemoryStarship : IStarshipRepository
 
 	private Starship BuildExplorer()
 	{
-		return StarshipBuilder
-			.create()
-			.WithName(StarshipName.Explorer)
-			.WithEngines(new() { Engine.Create(EngineComponent.EngineEe1) })
-			.WithHull(Hull.Create(HullComponent.HullHe1))
-			.WithWingPair(
-				(Wing.Create(WingComponent.WingWe1), Wing.Create(WingComponent.WingWe1))
-			)
-			.WithThrusters(new() { Thruster.Create(ThrusterComponent.ThrusterTe1), })
-			.Build();
+		return StarshipFactory.Create(StarshipName.Explorer);
 	}
 
 	private Starship BuildSpeeder()
 	{
-		return StarshipBuilder
-			.create()
-			.WithName(StarshipName.Speeder)
-			.WithEngines(new() { Engine.Create(EngineComponent.EngineEs1) })
-			.WithHull(Hull.Create(HullComponent.HullHs1))
-			.WithWingPair(
-				(Wing.Create(WingComponent.WingWs1), Wing.Create(WingComponent.WingWs1))
-			)
-			.WithThrusters(
-				new()
-				{
-					Thruster.Create(ThrusterComponent.ThrusterTs1),
-					Thruster.Create(ThrusterComponent.ThrusterTs1)
-				}
-			)
-			.Build();
+		return StarshipFactory.Create(StarshipName.Speeder);
 	}
 
 	private Starship CreateCargo()
 	{
-		return StarshipBuilder
-			.create()
-			.WithName(StarshipName.Cargo)
-			.WithEngines(new() { Engine.Create(EngineComponent.EngineEc1) })
-			.WithHull(Hull.Create(HullComponent.HullHc1))
-			.WithWingPair(
-				(Wing.Create(WingComponent.WingWc1), Wing.Create(WingComponent.WingWc1))
-			)
-			.WithThrusters(new() { Thruster.Create(ThrusterComponent.ThrusterTc1), })
-			.Build();
+		return StarshipFactory.Create(StarshipName.Cargo);
 	}
 
 	public void Add(Starship starship)

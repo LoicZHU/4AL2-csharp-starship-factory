@@ -1,3 +1,4 @@
+using core.App.Helpers;
 using core.Assemblies;
 using core.Services;
 using core.UI;
@@ -117,19 +118,20 @@ public class ProduceHandler : IInputHandler
 				this._componentService.GetComponentsOutFromStock(componentName, componentCount);
 			}
 
-			var componentAssembly = ComponentAssembly.Create(String.Empty, new List<String>());
-			this._componentAssemblyService.Add(componentAssembly);
-
-			foreach (var (componentName, componentCount) in starshipComponents)
-			{
-				for (var j = 1; j <= componentCount; j++)
-				{
-					this._componentAssemblyService.AddComponentAssemblyToItsInventory(
-						componentAssembly,
-						componentName
-					);
-				}
-			}
+			// var componentAssembly = ComponentAssembly.Create(String.Empty, new List<String>());
+			// this._componentAssemblyService.Add(componentAssembly);
+			//
+			// foreach (var (componentName, componentCount) in starshipComponents)
+			// {
+			// 	for (var j = 1; j <= componentCount; j++)
+			// 	{
+			// 		this._componentAssemblyService.AddComponentAssemblyToItsInventory(
+			// 			componentAssembly,
+			// 			componentName
+			// 		);
+			// 	}
+			// }
+			this._starshipService.AddStarship(StarshipFactory.Create(starshipName));
 		}
 	}
 

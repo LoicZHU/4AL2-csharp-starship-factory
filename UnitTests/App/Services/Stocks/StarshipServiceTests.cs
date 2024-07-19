@@ -1,5 +1,6 @@
 using core.Components;
 using core.Repositories.ComponentRepository;
+using core.Repositories.StarshipRepository;
 using core.Services;
 using core.Starships;
 using NSubstitute;
@@ -9,12 +10,14 @@ namespace UnitTests.App.Services.Stocks;
 public class StarshipServiceTests
 {
 	private readonly IComponentRepository _componentRepository;
+	private readonly IStarshipRepository _starshipRepository;
 	private readonly StarshipService _starshipService;
 
 	public StarshipServiceTests()
 	{
 		_componentRepository = Substitute.For<IComponentRepository>();
-		_starshipService = new StarshipService(_componentRepository);
+		_starshipRepository = Substitute.For<IStarshipRepository>();
+		_starshipService = new StarshipService(_starshipRepository, _componentRepository);
 	}
 
 	[Fact]
