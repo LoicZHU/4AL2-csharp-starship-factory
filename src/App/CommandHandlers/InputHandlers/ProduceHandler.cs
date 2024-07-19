@@ -108,16 +108,21 @@ public class ProduceHandler : IInputHandler
 
 	private void HandleStarshipAssembly(String starshipName, Int32 quantity)
 	{
+		var starshipComponents = StarshipAssembly.Components[starshipName];
+
 		for (var i = 1; i <= quantity; i++)
 		{
-			this._componentService.GetComponentsOutFromStock(starshipName);
+			foreach (var (componentName, componentCount) in starshipComponents)
+			{
+				this._componentService.GetComponentsOutFromStock(componentName, componentCount);
+			}
 
 			var componentAssembly = ComponentAssembly.Create(String.Empty, new List<String>());
 			this._componentAssemblyService.Add(componentAssembly);
 
-			foreach (var (componentName, count) in StarshipAssembly.Components[starshipName])
+			foreach (var (componentName, componentCount) in starshipComponents)
 			{
-				for (var j = 1; j <= count; j++)
+				for (var j = 1; j <= componentCount; j++)
 				{
 					this._componentAssemblyService.AddComponentAssemblyToItsInventory(
 						componentAssembly,

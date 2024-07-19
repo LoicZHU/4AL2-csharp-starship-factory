@@ -37,7 +37,7 @@ public class ComponentServiceTests
 	)
 	{
 		// Act
-		_componentService.GetComponentsOutFromStock(starshipName);
+		_componentService.GetComponentsOutFromStock(componentName, quantity);
 
 		// Assert
 		_componentRepository.Received(quantity).Remove(componentName);

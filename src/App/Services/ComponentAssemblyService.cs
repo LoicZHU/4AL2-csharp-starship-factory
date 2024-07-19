@@ -1,6 +1,5 @@
 using core.Assemblies;
 using core.Repositories.ComponentAssemblyRepository;
-using core.UI;
 
 namespace core.Services;
 
@@ -25,11 +24,6 @@ public class ComponentAssemblyService
 		String componentName
 	)
 	{
-		InstructionsDisplayHandler.PrintAssemblingComponents(
-			componentAssembly,
-			componentName
-		);
-
 		this._componentAssemblyRepository.AddComponent(componentAssembly.Id, componentName);
 	}
 }

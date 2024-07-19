@@ -1,6 +1,4 @@
-using core.Assemblies;
 using core.Repositories.ComponentRepository;
-using core.UI;
 
 namespace core.Services;
 
@@ -13,16 +11,11 @@ public class ComponentService
 		this._componentRepository = componentRepository;
 	}
 
-	public void GetComponentsOutFromStock(String starshipName)
+	public void GetComponentsOutFromStock(String componentName, Int32 quantity)
 	{
-		foreach (var (componentName, quantity) in StarshipAssembly.Components[starshipName])
+		for (var i = 1; i <= quantity; i++)
 		{
-			InstructionsDisplayHandler.PrintGetOutStock(quantity, componentName);
-
-			for (var i = 1; i <= quantity; i++)
-			{
-				this._componentRepository.Remove(componentName);
-			}
+			this._componentRepository.Remove(componentName);
 		}
 	}
 }

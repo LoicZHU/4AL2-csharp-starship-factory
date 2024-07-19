@@ -111,15 +111,25 @@ public class InstructionsHandler : IInputHandler
 
 			try
 			{
-				this._componentService.GetComponentsOutFromStock(starshipName);
+				var starshipComponents = StarshipAssembly.Components[starshipName];
+
+				foreach (var (componentName, componentCount) in starshipComponents)
+				{
+					InstructionsDisplayHandler.PrintGetOutStock(componentCount, componentName);
+					this._componentService.GetComponentsOutFromStock(componentName, componentCount);
+				}
 
 				var componentAssembly = ComponentAssembly.Create(String.Empty, new());
 				this._componentAssemblyService.Add(componentAssembly);
 
-				foreach (var (componentName, count) in StarshipAssembly.Components[starshipName])
+				foreach (var (componentName, componentCount) in starshipComponents)
 				{
-					for (var j = 1; j <= count; j++)
+					for (var j = 1; j <= componentCount; j++)
 					{
+						InstructionsDisplayHandler.PrintAssemblingComponents(
+							componentAssembly,
+							componentName
+						);
 						this._componentAssemblyService.AddComponentAssemblyToItsInventory(
 							componentAssembly,
 							componentName
