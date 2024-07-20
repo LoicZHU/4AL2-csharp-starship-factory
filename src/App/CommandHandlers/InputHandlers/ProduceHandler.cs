@@ -11,17 +11,14 @@ public class ProduceHandler : IInputHandler
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
 	private readonly ComponentService _componentService;
-	private readonly InventoryService _inventoryService;
 	private readonly StarshipService _starshipService;
 
 	public ProduceHandler(
 		ComponentService componentService,
-		InventoryService inventoryService,
 		StarshipService starshipService
 	)
 	{
 		this._componentService = componentService;
-		this._inventoryService = inventoryService;
 		this._starshipService = starshipService;
 	}
 
@@ -47,10 +44,17 @@ public class ProduceHandler : IInputHandler
 				inputContent,
 				this.PrintInvalidCommand
 			);
-			if (!UtilsFunction.IsDictionaryEmpty(starshipCounts))
+			if (UtilsFunction.IsDictionaryEmpty(starshipCounts))
 			{
-				this.AssembleStarships(starshipCounts);
+				return;
 			}
+			if (this._componentService.IsComponentStockInsufficient(starshipCounts))
+			{
+				this.PrintInsufficientStock();
+				return;
+			}
+
+			this.HandleStarshipAssemblies(starshipCounts);
 		}
 		catch (Exception e)
 		{
@@ -63,31 +67,13 @@ public class ProduceHandler : IInputHandler
 		ProduceDisplayHandler.PrintInvalidCommand(message);
 	}
 
-	private void AssembleStarships(Dictionary<String, Int32> starshipCounts)
+	private void HandleStarshipAssemblies(Dictionary<String, Int32> starshipCounts)
 	{
 		try
 		{
 			foreach (var (starshipName, quantity) in starshipCounts)
 			{
-				var (engineCount, hullCount, wingCount, thrusterCount) =
-					this._componentService.GetComponentsCountFromInventories(starshipName);
-
-				if (
-					this._inventoryService.IsMoreInventoryRequired(
-						starshipName,
-						quantity,
-						hullCount,
-						engineCount,
-						wingCount,
-						thrusterCount
-					)
-				)
-				{
-					this.PrintInsufficientStock();
-					return;
-				}
-
-				this.HandleStarshipAssembly(starshipName, quantity);
+				this.AssembleStarships(starshipName, quantity);
 			}
 
 			this.PrintStockUpdatedMessage();
@@ -104,7 +90,7 @@ public class ProduceHandler : IInputHandler
 		Terminal.PrintLinebreak();
 	}
 
-	private void HandleStarshipAssembly(String starshipName, Int32 quantity)
+	private void AssembleStarships(String starshipName, Int32 quantity)
 	{
 		var starshipComponents = StarshipAssembly.Components[starshipName];
 
@@ -116,7 +102,7 @@ public class ProduceHandler : IInputHandler
 		}
 	}
 
-	private void GetComponentsOutOfStock(Dictionary<string, int> starshipComponents)
+	private void GetComponentsOutOfStock(Dictionary<String, Int32> starshipComponents)
 	{
 		foreach (var (componentName, componentCount) in starshipComponents)
 		{

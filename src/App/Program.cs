@@ -33,7 +33,7 @@ public static class Program
 	private static void ConfigureDependencies()
 	{
 		SetRepositories();
-		SetAllHandlers();
+		SetCommandsHandlers();
 		SetUserInterface();
 	}
 
@@ -49,7 +49,7 @@ public static class Program
 		_starshipRepository = AbstractSingleton<InMemoryStarship>.Instance;
 	}
 
-	private static void SetAllHandlers()
+	private static void SetCommandsHandlers()
 	{
 		_handlers = new Dictionary<String, IHandler>
 		{
@@ -63,45 +63,25 @@ public static class Program
 		{
 			{
 				Command.Instructions,
-				new InstructionsHandler(
-					GetNewComponentService(),
-					GetNewInventoryService(),
-					GetNewStarshipService()
-				)
+				new InstructionsHandler(GetComponentService(), GetStarshipService())
 			},
 			{ Command.NeededStocks, new NeededStocksHandler() },
 			{ Command.Order, new OrderHandler(_orderRepository) },
 			{
 				Command.Produce,
-				new ProduceHandler(
-					GetNewComponentService(),
-					GetNewInventoryService(),
-					GetNewStarshipService()
-				)
+				new ProduceHandler(GetComponentService(), GetStarshipService())
 			},
 			{ Command.Send, new SendHandler(_orderRepository, _starshipRepository) },
-			{
-				Command.Verify,
-				new VerifyHandler(
-					GetNewComponentService(),
-					GetNewInventoryService(),
-					GetNewStarshipService()
-				)
-			},
+			{ Command.Verify, new VerifyHandler(GetComponentService(), GetStarshipService()) },
 		};
 	}
 
-	private static ComponentService GetNewComponentService()
+	private static ComponentService GetComponentService()
 	{
 		return new ComponentService(_componentRepository);
 	}
 
-	private static InventoryService GetNewInventoryService()
-	{
-		return new InventoryService();
-	}
-
-	private static StarshipService GetNewStarshipService()
+	private static StarshipService GetStarshipService()
 	{
 		return new StarshipService(_starshipRepository);
 	}

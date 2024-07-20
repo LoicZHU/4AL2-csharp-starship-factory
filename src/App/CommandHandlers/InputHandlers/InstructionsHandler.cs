@@ -11,17 +11,14 @@ public class InstructionsHandler : IInputHandler
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
 	private readonly ComponentService _componentService;
-	private readonly InventoryService _inventoryService;
 	private readonly StarshipService _starshipService;
 
 	public InstructionsHandler(
 		ComponentService componentService,
-		InventoryService inventoryService,
 		StarshipService starshipService
 	)
 	{
 		this._componentService = componentService;
-		this._inventoryService = inventoryService;
 		this._starshipService = starshipService;
 	}
 
@@ -47,10 +44,17 @@ public class InstructionsHandler : IInputHandler
 				inputContent,
 				this.PrintInvalidCommand
 			);
-			if (!UtilsFunction.IsDictionaryEmpty(starshipCounts))
+			if (UtilsFunction.IsDictionaryEmpty(starshipCounts))
 			{
-				this.AssembleStarships(starshipCounts);
+				return;
 			}
+			if (this._componentService.IsComponentStockInsufficient(starshipCounts))
+			{
+				this.PrintInsufficientStock();
+				return;
+			}
+
+			this.HandleStarshipAssemblies(starshipCounts);
 		}
 		catch (Exception e)
 		{
@@ -63,31 +67,13 @@ public class InstructionsHandler : IInputHandler
 		InstructionsDisplayHandler.PrintInvalidCommand(message);
 	}
 
-	private void AssembleStarships(Dictionary<String, Int32> starshipCounts)
+	private void HandleStarshipAssemblies(Dictionary<String, Int32> starshipCounts)
 	{
 		try
 		{
 			foreach (var (starshipName, quantity) in starshipCounts)
 			{
-				var (engineCount, hullCount, wingCount, thrusterCount) =
-					this._componentService.GetComponentsCountFromInventories(starshipName);
-
-				if (
-					this._inventoryService.IsMoreInventoryRequired(
-						starshipName,
-						quantity,
-						hullCount,
-						engineCount,
-						wingCount,
-						thrusterCount
-					)
-				)
-				{
-					this.PrintInsufficientStock();
-					return;
-				}
-
-				this.HandleStarshipAssembly(starshipName, quantity);
+				this.AssembleStarships(starshipName, quantity);
 			}
 		}
 		catch (Exception e)
@@ -101,7 +87,7 @@ public class InstructionsHandler : IInputHandler
 		Terminal.PrintMessageWithLinebreak("Stock insuffisant.");
 	}
 
-	private void HandleStarshipAssembly(String starshipName, Int32 quantity)
+	private void AssembleStarships(String starshipName, Int32 quantity)
 	{
 		for (var i = 1; i <= quantity; i++)
 		{
@@ -112,7 +98,6 @@ public class InstructionsHandler : IInputHandler
 				var starshipComponents = StarshipAssembly.Components[starshipName];
 
 				this.PrintAndGetComponentsOutOfStock(starshipComponents);
-
 				this.PrintAssemblingComponents(starshipComponents);
 				InstructionsDisplayHandler.PrintStarshipProductionFinishing(starshipName, i);
 
@@ -127,7 +112,7 @@ public class InstructionsHandler : IInputHandler
 		Terminal.PrintLinebreak();
 	}
 
-	private void PrintAssemblingComponents(Dictionary<string, int> starshipComponents)
+	private void PrintAssemblingComponents(Dictionary<String, Int32> starshipComponents)
 	{
 		var components = new List<String>();
 		foreach (var (componentName, componentCount) in starshipComponents)

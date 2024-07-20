@@ -9,17 +9,11 @@ public class VerifyHandler : IInputHandler
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
 	private readonly ComponentService _componentService;
-	private readonly InventoryService _inventoryService;
 	private readonly StarshipService _starshipService;
 
-	public VerifyHandler(
-		ComponentService componentService,
-		InventoryService inventoryService,
-		StarshipService starshipService
-	)
+	public VerifyHandler(ComponentService componentService, StarshipService starshipService)
 	{
 		this._componentService = componentService;
-		this._inventoryService = inventoryService;
 		this._starshipService = starshipService;
 	}
 
@@ -50,7 +44,12 @@ public class VerifyHandler : IInputHandler
 				return;
 			}
 
-			VerifyStockAvailability(starshipCounts);
+			if (this._componentService.IsComponentStockInsufficient(starshipCounts))
+			{
+				this.PrintInsufficientStock();
+			}
+
+			this.PrintSufficientStock();
 		}
 		catch (Exception e)
 		{
@@ -61,32 +60,6 @@ public class VerifyHandler : IInputHandler
 	private void PrintInvalidCommand(String message)
 	{
 		VerifyDisplayHandler.PrintInvalidCommand(message);
-	}
-
-	private void VerifyStockAvailability(Dictionary<String, Int32> starshipCounts)
-	{
-		foreach (var (starshipName, quantity) in starshipCounts)
-		{
-			var (engineCount, hullCount, wingCount, thrusterCount) =
-				this._componentService.GetComponentsCountFromInventories(starshipName);
-
-			if (
-				this._inventoryService.IsMoreInventoryRequired(
-					starshipName,
-					quantity,
-					hullCount,
-					engineCount,
-					wingCount,
-					thrusterCount
-				)
-			)
-			{
-				this.PrintInsufficientStock();
-				return;
-			}
-		}
-
-		this.PrintSufficientStock();
 	}
 
 	private void PrintSufficientStock()
