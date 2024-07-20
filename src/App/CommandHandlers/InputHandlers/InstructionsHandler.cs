@@ -70,7 +70,7 @@ public class InstructionsHandler : IInputHandler
 			foreach (var (starshipName, quantity) in starshipCounts)
 			{
 				var (engineCount, hullCount, wingCount, thrusterCount) =
-					this._starshipService.GetStarshipComponentsCountFromInventories(starshipName);
+					this._componentService.GetComponentsCountFromInventories(starshipName);
 
 				if (
 					this._inventoryService.IsMoreInventoryRequired(

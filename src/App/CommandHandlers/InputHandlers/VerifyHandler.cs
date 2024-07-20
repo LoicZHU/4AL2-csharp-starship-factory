@@ -8,13 +8,19 @@ public class VerifyHandler : IInputHandler
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
+	private readonly ComponentService _componentService;
 	private readonly InventoryService _inventoryService;
 	private readonly StarshipService _starshipService;
 
-	public VerifyHandler(InventoryService inventoryService, StarshipService starshipService)
+	public VerifyHandler(
+		ComponentService componentService,
+		InventoryService inventoryService,
+		StarshipService starshipService
+	)
 	{
-		_inventoryService = inventoryService;
-		_starshipService = starshipService;
+		this._componentService = componentService;
+		this._inventoryService = inventoryService;
+		this._starshipService = starshipService;
 	}
 
 	public void Handle(String input)
@@ -62,7 +68,7 @@ public class VerifyHandler : IInputHandler
 		foreach (var (starshipName, quantity) in starshipCounts)
 		{
 			var (engineCount, hullCount, wingCount, thrusterCount) =
-				this._starshipService.GetStarshipComponentsCountFromInventories(starshipName);
+				this._componentService.GetComponentsCountFromInventories(starshipName);
 
 			if (
 				this._inventoryService.IsMoreInventoryRequired(
