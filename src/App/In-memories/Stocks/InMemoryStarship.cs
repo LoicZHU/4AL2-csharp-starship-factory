@@ -21,10 +21,9 @@ public class InMemoryStarship : IStarshipRepository
 	{
 		try
 		{
-			this.Add(BuildExplorer());
+			this.Add(CreateCargo());
 			this.Add(BuildExplorer());
 			this.Add(BuildSpeeder());
-			this.Add(CreateCargo());
 		}
 		catch (Exception e)
 		{
