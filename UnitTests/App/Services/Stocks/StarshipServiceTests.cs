@@ -125,4 +125,26 @@ public class StarshipServiceTests
 		// Assert
 		Assert.Equal((0, 0, 0, 0), result);
 	}
+
+	[Fact]
+	public void AddStarship_CallsRepositoryAddMethod()
+	{
+		// Arrange
+		var starship = StarshipBuilder
+			.create()
+			.WithName(StarshipName.Cargo)
+			.WithEngines(new() { Engine.Create(EngineComponent.EngineEc1) })
+			.WithHull(Hull.Create(HullComponent.HullHc1))
+			.WithWingPair(
+				(Wing.Create(WingComponent.WingWc1), Wing.Create(WingComponent.WingWc1))
+			)
+			.WithThrusters(new() { Thruster.Create(ThrusterComponent.ThrusterTc1) })
+			.Build();
+
+		// Act
+		_starshipService.AddStarship(starship);
+
+		// Assert
+		_starshipRepository.Received(1).Add(starship);
+	}
 }
