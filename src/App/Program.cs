@@ -63,19 +63,16 @@ public static class Program
 		{
 			{
 				Command.Instructions,
-				new InstructionsHandlerWithArgs(GetComponentService(), GetStarshipService())
+				new InstructionsHandler(GetComponentService(), GetStarshipService())
 			},
-			{ Command.NeededStocks, new NeededStocksHandlerWithArgs() },
-			{ Command.Order, new OrderHandlerWithArgs(_orderRepository) },
+			{ Command.NeededStocks, new NeededStocksHandler() },
+			{ Command.Order, new OrderHandler(_orderRepository) },
 			{
 				Command.Produce,
-				new ProduceHandlerWithArgs(GetComponentService(), GetStarshipService())
+				new ProduceHandler(GetComponentService(), GetStarshipService())
 			},
-			{ Command.Send, new SendHandlerWithArgs(_orderRepository, _starshipRepository) },
-			{
-				Command.Verify,
-				new VerifyHandlerWithArgs(GetComponentService(), GetStarshipService())
-			},
+			{ Command.Send, new SendHandler(_orderRepository, _starshipRepository) },
+			{ Command.Verify, new VerifyHandler(GetComponentService(), GetStarshipService()) },
 		};
 	}
 

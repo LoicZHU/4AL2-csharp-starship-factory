@@ -6,14 +6,14 @@ using core.Utils;
 
 namespace core.InputHandlers;
 
-public class InstructionsHandlerWithArgs : IHandlerWithArgs
+public class InstructionsHandler : IHandlerWithArgs
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
 	private readonly ComponentService _componentService;
 	private readonly StarshipService _starshipService;
 
-	public InstructionsHandlerWithArgs(
+	public InstructionsHandler(
 		ComponentService componentService,
 		StarshipService starshipService
 	)

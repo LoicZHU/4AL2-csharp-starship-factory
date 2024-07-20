@@ -3,7 +3,7 @@ using core.UI.constants;
 
 namespace core.InputHandlers;
 
-public class UnknownInstructionHandlerWithArgs : IHandlerWithArgs
+public class UnknownInstructionHandler : IHandlerWithArgs
 {
 	public void Handle(String input)
 	{

@@ -66,7 +66,7 @@ public class Menu : IUserInterface
 				continue;
 			}
 
-			this.Handle(new UnknownInstructionHandlerWithArgs(), input);
+			this.Handle(new UnknownInstructionHandler(), input);
 		}
 	}
 
