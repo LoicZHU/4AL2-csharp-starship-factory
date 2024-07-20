@@ -47,6 +47,7 @@ public class VerifyHandler : IHandlerWithArgs
 			if (this._componentService.IsComponentStockInsufficient(starshipCounts))
 			{
 				this.PrintInsufficientStock();
+				return;
 			}
 
 			this.PrintSufficientStock();
