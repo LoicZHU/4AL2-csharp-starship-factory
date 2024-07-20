@@ -9,7 +9,7 @@ public class UnknownInstructionHandlerTests
 	public void Handle_PrintsUnknownInstructionMessage()
 	{
 		// Arrange
-		var unknownInstructionHandler = new UnknownInstructionHandlerWithArgs();
+		var unknownInstructionHandler = new UnknownInstructionHandler();
 		var input = "invalid_command";
 		var expectedMessage =
 			$"🚫 Instruction inconnue : {input} ({Command.Help} pour de l'aide) :";
