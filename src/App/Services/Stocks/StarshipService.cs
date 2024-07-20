@@ -96,7 +96,6 @@ public class StarshipService
 		}
 	}
 
-	// Other methods
 	public void AddStarship(Starship starship)
 	{
 		this._starshipRepository.Add(starship);

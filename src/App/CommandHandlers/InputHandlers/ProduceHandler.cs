@@ -110,12 +110,17 @@ public class ProduceHandler : IInputHandler
 
 		for (var i = 1; i <= quantity; i++)
 		{
-			foreach (var (componentName, componentCount) in starshipComponents)
-			{
-				this._componentService.GetComponentsOutFromStock(componentName, componentCount);
-			}
+			this.GetComponentsOutOfStock(starshipComponents);
 
 			this._starshipService.AddStarship(StarshipFactory.Create(starshipName));
+		}
+	}
+
+	private void GetComponentsOutOfStock(Dictionary<string, int> starshipComponents)
+	{
+		foreach (var (componentName, componentCount) in starshipComponents)
+		{
+			this._componentService.GetComponentsOutFromStock(componentName, componentCount);
 		}
 	}
 
