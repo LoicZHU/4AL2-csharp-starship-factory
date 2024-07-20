@@ -8,16 +8,16 @@ namespace core.UI;
 
 public class Menu : IUserInterface
 {
-	private readonly Dictionary<String, IHandler> _handlers;
-	private readonly Dictionary<String, IInputHandler> _inputHandlers;
+	private readonly Dictionary<String, IHandler> _commandHandlers;
+	private readonly Dictionary<String, IHandlerWithArgs> _commandHandlersWithArgs;
 
 	public Menu(
-		Dictionary<String, IHandler> handlers,
-		Dictionary<String, IInputHandler> inputHandlers
+		Dictionary<String, IHandler> commandHandlers,
+		Dictionary<String, IHandlerWithArgs> commandHandlersWithArgs
 	)
 	{
-		this._handlers = handlers;
-		this._inputHandlers = inputHandlers;
+		this._commandHandlers = commandHandlers;
+		this._commandHandlersWithArgs = commandHandlersWithArgs;
 	}
 
 	public void Start()
@@ -43,7 +43,7 @@ public class Menu : IUserInterface
 				continue;
 			}
 
-			var handler = this._handlers.FirstOrDefault(handler =>
+			var handler = this._commandHandlers.FirstOrDefault(handler =>
 				this.IsInputStartingWithCommand(input, handler.Key)
 			);
 			if (!UtilsFunction.IsNull(handler.Value))
@@ -57,7 +57,7 @@ public class Menu : IUserInterface
 				continue;
 			}
 
-			var inputHandler = this._inputHandlers.FirstOrDefault(inputHandler =>
+			var inputHandler = this._commandHandlersWithArgs.FirstOrDefault(inputHandler =>
 				this.IsInputStartingWithCommand(input, inputHandler.Key)
 			);
 			if (!UtilsFunction.IsNull(inputHandler.Value))
@@ -66,7 +66,7 @@ public class Menu : IUserInterface
 				continue;
 			}
 
-			this.Handle(new UnknownInstructionHandler(), input);
+			this.Handle(new UnknownInstructionHandlerWithArgs(), input);
 		}
 	}
 
@@ -95,8 +95,8 @@ public class Menu : IUserInterface
 		handler.Handle();
 	}
 
-	private void Handle(IInputHandler inputHandler, String input)
+	private void Handle(IHandlerWithArgs handlerWithArgs, String input)
 	{
-		inputHandler.Handle(input);
+		handlerWithArgs.Handle(input);
 	}
 }

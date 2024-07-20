@@ -4,14 +4,17 @@ using core.Utils;
 
 namespace core.InputHandlers;
 
-public class VerifyHandler : IInputHandler
+public class VerifyHandlerWithArgs : IHandlerWithArgs
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
 	private readonly ComponentService _componentService;
 	private readonly StarshipService _starshipService;
 
-	public VerifyHandler(ComponentService componentService, StarshipService starshipService)
+	public VerifyHandlerWithArgs(
+		ComponentService componentService,
+		StarshipService starshipService
+	)
 	{
 		this._componentService = componentService;
 		this._starshipService = starshipService;

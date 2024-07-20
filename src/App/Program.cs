@@ -17,8 +17,8 @@ public static class Program
 {
 	private static IUserInterface? _userInterface;
 
-	private static Dictionary<String, IHandler>? _handlers;
-	private static Dictionary<String, IInputHandler>? _inputHandlers;
+	private static Dictionary<String, IHandler>? _commandHandlers;
+	private static Dictionary<String, IHandlerWithArgs>? _commandHandlersWithArgs;
 
 	private static IComponentRepository? _componentRepository;
 	private static IOrderRepository? _orderRepository;
@@ -51,7 +51,7 @@ public static class Program
 
 	private static void SetCommandsHandlers()
 	{
-		_handlers = new Dictionary<String, IHandler>
+		_commandHandlers = new Dictionary<String, IHandler>
 		{
 			{ Command.Exit, new ExitHandler() },
 			{ Command.Help, new HelpDisplayHandler() },
@@ -59,20 +59,23 @@ public static class Program
 			{ Command.Stocks, new StockHandler(_starshipRepository, _componentRepository) },
 		};
 
-		_inputHandlers = new Dictionary<String, IInputHandler>
+		_commandHandlersWithArgs = new Dictionary<String, IHandlerWithArgs>
 		{
 			{
 				Command.Instructions,
-				new InstructionsHandler(GetComponentService(), GetStarshipService())
+				new InstructionsHandlerWithArgs(GetComponentService(), GetStarshipService())
 			},
-			{ Command.NeededStocks, new NeededStocksHandler() },
-			{ Command.Order, new OrderHandler(_orderRepository) },
+			{ Command.NeededStocks, new NeededStocksHandlerWithArgs() },
+			{ Command.Order, new OrderHandlerWithArgs(_orderRepository) },
 			{
 				Command.Produce,
-				new ProduceHandler(GetComponentService(), GetStarshipService())
+				new ProduceHandlerWithArgs(GetComponentService(), GetStarshipService())
 			},
-			{ Command.Send, new SendHandler(_orderRepository, _starshipRepository) },
-			{ Command.Verify, new VerifyHandler(GetComponentService(), GetStarshipService()) },
+			{ Command.Send, new SendHandlerWithArgs(_orderRepository, _starshipRepository) },
+			{
+				Command.Verify,
+				new VerifyHandlerWithArgs(GetComponentService(), GetStarshipService())
+			},
 		};
 	}
 
@@ -88,6 +91,6 @@ public static class Program
 
 	private static void SetUserInterface()
 	{
-		_userInterface = new Menu(_handlers, _inputHandlers);
+		_userInterface = new Menu(_commandHandlers, _commandHandlersWithArgs);
 	}
 }

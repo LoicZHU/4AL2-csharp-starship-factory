@@ -6,14 +6,14 @@ using core.Utils;
 
 namespace core.InputHandlers;
 
-public class InstructionsHandler : IInputHandler
+public class ProduceHandlerWithArgs : IHandlerWithArgs
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
 
 	private readonly ComponentService _componentService;
 	private readonly StarshipService _starshipService;
 
-	public InstructionsHandler(
+	public ProduceHandlerWithArgs(
 		ComponentService componentService,
 		StarshipService starshipService
 	)
@@ -64,7 +64,7 @@ public class InstructionsHandler : IInputHandler
 
 	private void PrintInvalidCommand(String message)
 	{
-		InstructionsDisplayHandler.PrintInvalidCommand(message);
+		ProduceDisplayHandler.PrintInvalidCommand(message);
 	}
 
 	private void HandleStarshipAssemblies(Dictionary<String, Int32> starshipCounts)
@@ -75,6 +75,8 @@ public class InstructionsHandler : IInputHandler
 			{
 				this.AssembleStarships(starshipName, quantity);
 			}
+
+			this.PrintStockUpdatedMessage();
 		}
 		catch (Exception e)
 		{
@@ -84,55 +86,32 @@ public class InstructionsHandler : IInputHandler
 
 	private void PrintInsufficientStock()
 	{
-		Terminal.PrintMessageWithLinebreak("Stock insuffisant.");
+		VerifyTerminal.PrintUnavailableMessage();
+		Terminal.PrintLinebreak();
 	}
 
 	private void AssembleStarships(String starshipName, Int32 quantity)
 	{
+		var starshipComponents = StarshipAssembly.Components[starshipName];
+
 		for (var i = 1; i <= quantity; i++)
 		{
-			InstructionsDisplayHandler.PrintStarshipProductionStarting(starshipName, i);
+			this.GetComponentsOutOfStock(starshipComponents);
 
-			try
-			{
-				var starshipComponents = StarshipAssembly.Components[starshipName];
-
-				this.PrintAndGetComponentsOutOfStock(starshipComponents);
-				this.PrintAssemblingComponents(starshipComponents);
-				InstructionsDisplayHandler.PrintStarshipProductionFinishing(starshipName, i);
-
-				this._starshipService.AddStarship(StarshipFactory.Create(starshipName));
-			}
-			catch (Exception e)
-			{
-				Terminal.PrintMessageWithLinebreak(e.Message);
-			}
-		}
-
-		Terminal.PrintLinebreak();
-	}
-
-	private void PrintAssemblingComponents(Dictionary<String, Int32> starshipComponents)
-	{
-		var components = new List<String>();
-		foreach (var (componentName, componentCount) in starshipComponents)
-		{
-			for (var j = 1; j <= componentCount; j++)
-			{
-				InstructionsDisplayHandler.PrintAssemblingComponents(components, componentName);
-				components.Add(componentName);
-			}
+			this._starshipService.AddStarship(StarshipFactory.Create(starshipName));
 		}
 	}
 
-	private void PrintAndGetComponentsOutOfStock(
-		Dictionary<String, Int32> starshipComponents
-	)
+	private void GetComponentsOutOfStock(Dictionary<String, Int32> starshipComponents)
 	{
 		foreach (var (componentName, componentCount) in starshipComponents)
 		{
-			InstructionsDisplayHandler.PrintGetOutStock(componentCount, componentName);
 			this._componentService.GetComponentsOutFromStock(componentName, componentCount);
 		}
+	}
+
+	private void PrintStockUpdatedMessage()
+	{
+		ProduceDisplayHandler.PrintStockUpdated();
 	}
 }

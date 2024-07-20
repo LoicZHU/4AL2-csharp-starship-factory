@@ -1,6 +1,6 @@
 namespace core.InputHandlers;
 
-public interface IInputHandler
+public interface IHandlerWithArgs
 {
 	void Handle(String input);
 }
