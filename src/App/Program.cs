@@ -3,7 +3,6 @@ using core.App.UI;
 using core.InputHandlers;
 using core.In_memories;
 using core.In_memories.Items;
-using core.Repositories.ComponentAssemblyRepository;
 using core.Repositories.ComponentRepository;
 using core.Repositories.OrderRepository;
 using core.Repositories.StarshipRepository;
@@ -26,12 +25,10 @@ public static class Program
 
 	private static void ConfigureDependencies()
 	{
-		IComponentAssemblyRepository componentAssemblyRepository =
-			AbstractSingleton<InMemoryComponentAssembly>.Instance;
-		IComponentRepository componentRepository =
-			AbstractSingleton<InMemoryComponent>.Instance;
 		IOrderRepository orderRepository = AbstractSingleton<InMemoryOrder>.Instance;
 		IStarshipRepository starshipRepository = AbstractSingleton<InMemoryStarship>.Instance;
+		IComponentRepository componentRepository =
+			AbstractSingleton<InMemoryComponent>.Instance;
 
 		var handlers = new Dictionary<String, IHandler>
 		{
@@ -46,7 +43,6 @@ public static class Program
 			{
 				Command.Instructions,
 				new InstructionsHandler(
-					new ComponentAssemblyService(componentAssemblyRepository),
 					new ComponentService(componentRepository),
 					new InventoryService(),
 					new StarshipService(starshipRepository, componentRepository)

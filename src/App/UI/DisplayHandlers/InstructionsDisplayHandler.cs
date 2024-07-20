@@ -1,5 +1,3 @@
-using core.Assemblies;
-
 namespace core.UI;
 
 public static class InstructionsDisplayHandler
@@ -10,11 +8,11 @@ public static class InstructionsDisplayHandler
 	}
 
 	public static void PrintAssemblingComponents(
-		ComponentAssembly componentAssembly,
+		List<String> components,
 		String componentToAdd
 	)
 	{
-		InstructionsTerminal.PrintAssemblingComponents(componentAssembly, componentToAdd);
+		InstructionsTerminal.PrintAssemblingComponents(components, componentToAdd);
 	}
 
 	public static void PrintGetOutStock(Int32 quantity, String componentModel)
