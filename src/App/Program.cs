@@ -17,6 +17,13 @@ public static class Program
 {
 	private static IUserInterface? _userInterface;
 
+	private static Dictionary<String, IHandler>? _handlers;
+	private static Dictionary<String, IInputHandler>? _inputHandlers;
+
+	private static IComponentRepository? _componentRepository;
+	private static IOrderRepository? _orderRepository;
+	private static IStarshipRepository? _starshipRepository;
+
 	public static void Main(string[] args)
 	{
 		ConfigureDependencies();
@@ -25,54 +32,82 @@ public static class Program
 
 	private static void ConfigureDependencies()
 	{
-		IOrderRepository orderRepository = AbstractSingleton<InMemoryOrder>.Instance;
-		IStarshipRepository starshipRepository = AbstractSingleton<InMemoryStarship>.Instance;
-		IComponentRepository componentRepository =
-			AbstractSingleton<InMemoryComponent>.Instance;
-
-		var handlers = new Dictionary<String, IHandler>
-		{
-			{ Command.Exit, new ExitHandler() },
-			{ Command.Help, new HelpDisplayHandler() },
-			{ Command.ListOrder, new ListOrderHandler(orderRepository) },
-			{ Command.Stocks, new StockHandler(starshipRepository, componentRepository) },
-		};
-
-		var inputHandlers = new Dictionary<String, IInputHandler>
-		{
-			{
-				Command.Instructions,
-				new InstructionsHandler(
-					new ComponentService(componentRepository),
-					new InventoryService(),
-					new StarshipService(starshipRepository, componentRepository)
-				)
-			},
-			{ Command.NeededStocks, new NeededStocksHandler() },
-			{ Command.Order, new OrderHandler(orderRepository) },
-			{
-				Command.Produce,
-				new ProduceHandler(
-					new ComponentService(componentRepository),
-					new InventoryService(),
-					new StarshipService(starshipRepository, componentRepository)
-				)
-			},
-			{ Command.Send, new SendHandler(orderRepository, starshipRepository) },
-			{
-				Command.Verify,
-				new VerifyHandler(
-					new InventoryService(),
-					new StarshipService(starshipRepository, componentRepository)
-				)
-			},
-		};
-
-		_userInterface = new Menu(handlers, inputHandlers);
+		SetRepositories();
+		SetAllHandlers();
+		SetUserInterface();
 	}
 
 	private static void StartUserInterface()
 	{
 		_userInterface?.Start();
+	}
+
+	private static void SetRepositories()
+	{
+		_componentRepository = AbstractSingleton<InMemoryComponent>.Instance;
+		_orderRepository = AbstractSingleton<InMemoryOrder>.Instance;
+		_starshipRepository = AbstractSingleton<InMemoryStarship>.Instance;
+	}
+
+	private static void SetAllHandlers()
+	{
+		_handlers = new Dictionary<String, IHandler>
+		{
+			{ Command.Exit, new ExitHandler() },
+			{ Command.Help, new HelpDisplayHandler() },
+			{ Command.ListOrder, new ListOrderHandler(_orderRepository) },
+			{ Command.Stocks, new StockHandler(_starshipRepository, _componentRepository) },
+		};
+
+		_inputHandlers = new Dictionary<String, IInputHandler>
+		{
+			{
+				Command.Instructions,
+				new InstructionsHandler(
+					GetNewComponentService(),
+					GetNewInventoryService(),
+					GetNewStarshipService()
+				)
+			},
+			{ Command.NeededStocks, new NeededStocksHandler() },
+			{ Command.Order, new OrderHandler(_orderRepository) },
+			{
+				Command.Produce,
+				new ProduceHandler(
+					GetNewComponentService(),
+					GetNewInventoryService(),
+					GetNewStarshipService()
+				)
+			},
+			{ Command.Send, new SendHandler(_orderRepository, _starshipRepository) },
+			{
+				Command.Verify,
+				new VerifyHandler(
+					GetNewComponentService(),
+					GetNewInventoryService(),
+					GetNewStarshipService()
+				)
+			},
+		};
+	}
+
+	private static ComponentService GetNewComponentService()
+	{
+		return new ComponentService(_componentRepository);
+	}
+
+	private static InventoryService GetNewInventoryService()
+	{
+		return new InventoryService();
+	}
+
+	private static StarshipService GetNewStarshipService()
+	{
+		return new StarshipService(_starshipRepository);
+	}
+
+	private static void SetUserInterface()
+	{
+		_userInterface = new Menu(_handlers, _inputHandlers);
 	}
 }
