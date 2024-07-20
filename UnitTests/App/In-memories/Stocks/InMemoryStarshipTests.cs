@@ -59,7 +59,7 @@ public class InMemoryStarshipTests
 		var starships = _repository.GetAll();
 
 		// Assert
-		Assert.Equal(4, starships.Count);
+		Assert.Equal(3, starships.Count);
 	}
 
 	[Fact]
@@ -82,16 +82,16 @@ public class InMemoryStarshipTests
 		Assert.False(exists);
 	}
 
-	// [Fact]
-	// public void Remove_RemovesStarshipByName()
-	// {
-	// 	// Act
-	// 	_repository.Remove(StarshipName.Explorer);
-	//
-	// 	// Assert
-	// 	var exists = _repository.Exists(StarshipName.Explorer);
-	// 	Assert.False(exists);
-	// }
+	[Fact]
+	public void Remove_RemovesStarshipByName()
+	{
+		// Act
+		_repository.Remove(StarshipName.Explorer);
+
+		// Assert
+		var exists = _repository.Exists(StarshipName.Explorer);
+		Assert.False(exists);
+	}
 
 	[Fact]
 	public void GetStock_ReturnsCorrectStock()
@@ -100,7 +100,7 @@ public class InMemoryStarshipTests
 		var stock = _repository.GetStock();
 
 		// Assert
-		Assert.Equal(2, stock[StarshipName.Explorer]);
+		Assert.Equal(1, stock[StarshipName.Explorer]);
 		Assert.Equal(1, stock[StarshipName.Speeder]);
 		Assert.Equal(1, stock[StarshipName.Cargo]);
 	}
