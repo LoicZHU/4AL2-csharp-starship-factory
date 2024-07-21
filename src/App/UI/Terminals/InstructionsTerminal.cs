@@ -12,13 +12,13 @@ public static class InstructionsTerminal
 	}
 
 	public static void PrintAssemblingComponents(
-		ComponentAssembly componentAssembly,
+		List<String> components,
 		String componentToAdd
 	)
 	{
 		TerminalHelper.ColorizeMessageWithoutLinebreak(Instruction.Assemble, Green);
 		Terminal.PrintMessageWithLinebreak(
-			$" [{string.Join(", ", componentAssembly.Components)}] {componentToAdd}"
+			$" [{String.Join(", ", components)}] {componentToAdd}"
 		);
 	}
 

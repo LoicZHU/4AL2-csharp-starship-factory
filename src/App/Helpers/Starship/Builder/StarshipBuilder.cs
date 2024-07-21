@@ -156,13 +156,16 @@ public sealed class StarshipBuilder : IStarshipBuilder
 
 	private void CheckWingPair((Wing, Wing) wingPair)
 	{
-		if (
-			!this.IsValidWingComponent(wingPair.Item1.Name)
-			|| !this.IsValidWingComponent(wingPair.Item2.Name)
-		)
+		if (this.AreWingComponentsInvalid(wingPair))
 		{
 			throw new ArgumentException("Aile invalide");
 		}
+	}
+
+	private Boolean AreWingComponentsInvalid((Wing, Wing) wingPair)
+	{
+		return !this.IsValidWingComponent(wingPair.Item1.Name)
+			|| !this.IsValidWingComponent(wingPair.Item2.Name);
 	}
 
 	private Boolean IsValidWingComponent(String name)

@@ -3,7 +3,7 @@ using core.Utils;
 
 namespace core.InputHandlers;
 
-public class NeededStocksHandler : IInputHandler
+public class NeededStocksHandler : IHandlerWithArgs
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
 

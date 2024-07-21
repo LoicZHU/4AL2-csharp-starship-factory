@@ -85,11 +85,12 @@ public static class HandlerHelper
 		}
 
 		var parts = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+		// seems to be useless:
 		if (!Int32.TryParse(parts[0], out var quantity))
 		{
 			return (false, String.Empty, quantity, InvalidCommandMessage);
 		}
-		if (quantity <= 0)
+		if (IsLessThanOrEqualToZero(quantity))
 		{
 			return (false, String.Empty, quantity, "La quantité doit être >= 1.");
 		}
@@ -107,5 +108,10 @@ public static class HandlerHelper
 				quantity,
 				$"Vaisseau inconnu : {starshipNameInputInTitleCase}"
 			);
+	}
+
+	private static Boolean IsLessThanOrEqualToZero(Int32 quantity)
+	{
+		return quantity <= 0;
 	}
 }

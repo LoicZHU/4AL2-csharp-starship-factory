@@ -11,7 +11,7 @@ public class ListOrderHandler : IHandler
 
 	public ListOrderHandler(IOrderRepository orderRepository)
 	{
-		_orderRepository = orderRepository;
+		this._orderRepository = orderRepository;
 	}
 
 	public void Handle()

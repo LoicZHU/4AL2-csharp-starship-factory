@@ -4,14 +4,14 @@ using core.Utils;
 
 namespace core.InputHandlers;
 
-public class OrderHandler : IInputHandler
+public class OrderHandler : IHandlerWithArgs
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
 	private readonly IOrderRepository _orderRepository;
 
 	public OrderHandler(IOrderRepository orderRepository)
 	{
-		_orderRepository = orderRepository;
+		this._orderRepository = orderRepository;
 	}
 
 	public void Handle(String input)

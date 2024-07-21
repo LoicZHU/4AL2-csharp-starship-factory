@@ -1,10 +1,6 @@
 using core.App.Handlers;
 using core.App.UI;
 using core.InputHandlers;
-using core.Repositories.ComponentAssemblyRepository;
-using core.Repositories.ComponentRepository;
-using core.Repositories.OrderRepository;
-using core.Repositories.StarshipRepository;
 using core.UI.constants;
 using core.Utils;
 
@@ -12,39 +8,16 @@ namespace core.UI;
 
 public class Menu : IUserInterface
 {
-	private readonly Dictionary<String, IHandler> _handlers;
-	private readonly Dictionary<String, IInputHandler> _inputHandlers;
+	private readonly Dictionary<String, IHandler> _commandHandlers;
+	private readonly Dictionary<String, IHandlerWithArgs> _commandHandlersWithArgs;
 
 	public Menu(
-		IComponentAssemblyRepository componentAssemblyRepository,
-		IComponentRepository componentRepository,
-		IOrderRepository orderRepository,
-		IStarshipRepository starshipRepository
+		Dictionary<String, IHandler> commandHandlers,
+		Dictionary<String, IHandlerWithArgs> commandHandlersWithArgs
 	)
 	{
-		this._handlers = new Dictionary<String, IHandler>
-		{
-			{ Command.Exit, new ExitHandler() },
-			{ Command.Help, new HelpDisplayHandler() },
-			{ Command.ListOrder, new ListOrderHandler(orderRepository) },
-			{ Command.Stocks, new StockHandler(starshipRepository, componentRepository) },
-		};
-
-		this._inputHandlers = new Dictionary<String, IInputHandler>
-		{
-			{
-				Command.Instructions,
-				new InstructionsHandler(componentAssemblyRepository, componentRepository)
-			},
-			{ Command.NeededStocks, new NeededStocksHandler() },
-			{ Command.Order, new OrderHandler(orderRepository) },
-			{
-				Command.Produce,
-				new ProduceHandler(componentAssemblyRepository, componentRepository)
-			},
-			{ Command.Send, new SendHandler(orderRepository, starshipRepository) },
-			{ Command.Verify, new VerifyHandler(componentRepository) },
-		};
+		this._commandHandlers = commandHandlers;
+		this._commandHandlersWithArgs = commandHandlersWithArgs;
 	}
 
 	public void Start()
@@ -70,7 +43,7 @@ public class Menu : IUserInterface
 				continue;
 			}
 
-			var handler = this._handlers.FirstOrDefault(handler =>
+			var handler = this._commandHandlers.FirstOrDefault(handler =>
 				this.IsInputStartingWithCommand(input, handler.Key)
 			);
 			if (!UtilsFunction.IsNull(handler.Value))
@@ -84,7 +57,7 @@ public class Menu : IUserInterface
 				continue;
 			}
 
-			var inputHandler = this._inputHandlers.FirstOrDefault(inputHandler =>
+			var inputHandler = this._commandHandlersWithArgs.FirstOrDefault(inputHandler =>
 				this.IsInputStartingWithCommand(input, inputHandler.Key)
 			);
 			if (!UtilsFunction.IsNull(inputHandler.Value))
@@ -122,8 +95,8 @@ public class Menu : IUserInterface
 		handler.Handle();
 	}
 
-	private void Handle(IInputHandler inputHandler, String input)
+	private void Handle(IHandlerWithArgs handlerWithArgs, String input)
 	{
-		inputHandler.Handle(input);
+		handlerWithArgs.Handle(input);
 	}
 }

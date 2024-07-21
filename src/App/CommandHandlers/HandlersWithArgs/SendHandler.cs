@@ -6,7 +6,7 @@ using core.Utils;
 
 namespace core.InputHandlers;
 
-public class SendHandler : IInputHandler
+public class SendHandler : IHandlerWithArgs
 {
 	private const String InvalidCommandMessage = "La commande est invalide.";
 	private readonly IOrderRepository _orderRepository;
