@@ -54,7 +54,7 @@ public static class Program
 		_commandHandlers = new Dictionary<String, IHandler>
 		{
 			{ Command.Exit, new ExitHandler() },
-			{ Command.Help, new HelpDisplayHandler() },
+			{ Command.Help, new HelpHandler() },
 			{ Command.ListOrder, new ListOrderHandler(_orderRepository) },
 			{ Command.Stocks, new StockHandler(_starshipRepository, _componentRepository) },
 		};

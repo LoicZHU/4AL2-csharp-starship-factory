@@ -2,7 +2,7 @@ using core.App.Handlers;
 
 namespace core.UI;
 
-public class HelpDisplayHandler : IHandler
+public class HelpHandler : IHandler
 {
 	public void Handle()
 	{
