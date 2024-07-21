@@ -3,7 +3,7 @@ using core.UI;
 
 namespace UnitTests.App.CommandHandlers.Handlers;
 
-public class ExistHandlerTests
+public class ExitHandlerTests
 {
 	[Fact]
 	public void Handle_CallsPrintExitMessage()
@@ -32,7 +32,7 @@ public class ExistHandlerTests
 		Console.SetOut(stringWriter);
 
 		// Act
-		ExitDisplayHandler.PrintExitMessage(message);
+		ExitPrintingHandler.PrintExitMessage(message);
 
 		// Assert
 		var output = stringWriter.ToString();
