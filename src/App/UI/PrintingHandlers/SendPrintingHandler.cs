@@ -1,22 +1,22 @@
 namespace core.UI;
 
-public static class SendDisplayHandler
+public static class SendPrintingHandler
 {
 	public static void PrintInvalidCommand(String message)
 	{
-		SendTerminal.PrintInvalidCommand(message);
+		SendPrinter.PrintInvalidCommand(message);
 		TerminalHelper.PrintLineBreak();
 	}
 
 	public static void PrintCompletedMessage(String message)
 	{
-		SendTerminal.PrintCompletedMessage(message);
+		SendPrinter.PrintCompletedMessage(message);
 		TerminalHelper.PrintLineBreak();
 	}
 
 	public static void PrintOrderRemainingStarships(String message)
 	{
-		SendTerminal.PrintOrderRemainingStarships(message);
+		SendPrinter.PrintOrderRemainingStarships(message);
 		TerminalHelper.PrintLineBreak();
 	}
 }

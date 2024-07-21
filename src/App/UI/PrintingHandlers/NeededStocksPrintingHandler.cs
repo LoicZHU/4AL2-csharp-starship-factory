@@ -2,11 +2,11 @@ using core.Assemblies;
 
 namespace core.UI;
 
-public static class NeededStocksDisplayHandler
+public static class NeededStocksPrintingHandler
 {
 	public static void PrintInvalidCommand(String message)
 	{
-		Terminal.PrintInvalidCommand(message);
+		Printer.PrintInvalidCommand(message);
 	}
 
 	public static void PrintNeededStocks(Dictionary<String, Int32> starshipCounts)
@@ -15,7 +15,7 @@ public static class NeededStocksDisplayHandler
 
 		PrintNeededStarshipsAndComponents(starshipCounts);
 		PrintTotalComponents(totalComponents);
-		Terminal.PrintLinebreak();
+		Printer.PrintLinebreak();
 	}
 
 	private static Dictionary<String, Int32> GetTotalComponents(
@@ -40,23 +40,23 @@ public static class NeededStocksDisplayHandler
 	{
 		foreach (var (starshipName, starshipCount) in counts)
 		{
-			NeededStockTerminal.PrintStarshipQuantity(starshipName, starshipCount);
+			NeededStockPrinter.PrintStarshipQuantity(starshipName, starshipCount);
 
 			foreach (var (component, count) in StarshipAssembly.Components[starshipName])
 			{
 				Int32 componentQuantity = starshipCount * count;
-				NeededStockTerminal.PrintItem(component, componentQuantity);
+				NeededStockPrinter.PrintItem(component, componentQuantity);
 			}
 		}
 	}
 
 	private static void PrintTotalComponents(Dictionary<string, int> totalComponents)
 	{
-		Terminal.PrintMessageWithLinebreak("Total :");
+		Printer.PrintMessageWithLinebreak("Total :");
 
 		foreach (var (component, count) in totalComponents)
 		{
-			NeededStockTerminal.PrintItem(component, count);
+			NeededStockPrinter.PrintItem(component, count);
 		}
 	}
 }

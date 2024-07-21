@@ -1,14 +1,13 @@
-using core.Assemblies;
 using core.UI.constants;
 using static System.ConsoleColor;
 
 namespace core.UI;
 
-public static class InstructionsTerminal
+public static class InstructionsPrinter
 {
 	public static void PrintUnknownStarship(String message)
 	{
-		Terminal.PrintMessageWithLinebreak(message);
+		Printer.PrintMessageWithLinebreak(message);
 	}
 
 	public static void PrintAssemblingComponents(
@@ -17,7 +16,7 @@ public static class InstructionsTerminal
 	)
 	{
 		TerminalHelper.ColorizeMessageWithoutLinebreak(Instruction.Assemble, Green);
-		Terminal.PrintMessageWithLinebreak(
+		Printer.PrintMessageWithLinebreak(
 			$" [{String.Join(", ", components)}] {componentToAdd}"
 		);
 	}
@@ -26,18 +25,18 @@ public static class InstructionsTerminal
 	{
 		TerminalHelper.ColorizeMessageWithoutLinebreak(Instruction.GetOutStock, Green);
 		TerminalHelper.ColorizeMessageWithoutLinebreak($" {quantity}", Yellow);
-		Terminal.PrintMessageWithLinebreak($" {componentModel}");
+		Printer.PrintMessageWithLinebreak($" {componentModel}");
 	}
 
 	public static void PrintStarshipProductionStarting(String starshipModel, Int32 i)
 	{
 		TerminalHelper.ColorizeMessageWithoutLinebreak(Instruction.Producing, Green);
-		Terminal.PrintMessageWithLinebreak($" {starshipModel} {i}");
+		Printer.PrintMessageWithLinebreak($" {starshipModel} {i}");
 	}
 
 	public static void PrintStarshipProductionFinishing(String starshipModel, Int32 i)
 	{
 		TerminalHelper.ColorizeMessageWithoutLinebreak(Instruction.Finished, Green);
-		Terminal.PrintMessageWithLinebreak($" {starshipModel} {i}");
+		Printer.PrintMessageWithLinebreak($" {starshipModel} {i}");
 	}
 }

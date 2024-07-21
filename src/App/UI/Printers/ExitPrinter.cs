@@ -1,9 +1,9 @@
 namespace core.UI;
 
-public static class ExitTerminal
+public static class ExitPrinter
 {
 	public static void PrintExitMessage(String message)
 	{
-		Terminal.PrintMessageWithoutLinebreak(message);
+		Printer.PrintMessageWithoutLinebreak(message);
 	}
 }

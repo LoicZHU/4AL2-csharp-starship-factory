@@ -40,7 +40,7 @@ public class InMemoryComponent : IComponentRepository
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 
@@ -57,7 +57,7 @@ public class InMemoryComponent : IComponentRepository
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 
@@ -74,7 +74,7 @@ public class InMemoryComponent : IComponentRepository
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 
@@ -91,7 +91,7 @@ public class InMemoryComponent : IComponentRepository
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 	#endregion set caches

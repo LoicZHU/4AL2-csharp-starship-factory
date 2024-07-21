@@ -1,10 +1,10 @@
 namespace core.UI;
 
-public static class ExitDisplayHandler
+public static class ExitPrintingHandler
 {
 	public static void PrintExitMessage(String message)
 	{
-		ExitTerminal.PrintExitMessage(message);
+		ExitPrinter.PrintExitMessage(message);
 		TerminalHelper.PrintLineBreak();
 	}
 }

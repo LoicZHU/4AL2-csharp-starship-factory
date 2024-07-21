@@ -28,8 +28,8 @@ public class Menu : IUserInterface
 
 	private void PrintStartingMessages()
 	{
-		MenuDisplayHandler.PrintWelcome();
-		MenuDisplayHandler.PrintUserInteractionInvitation();
+		MenuPrintingHandler.PrintWelcome();
+		MenuPrintingHandler.PrintUserInteractionInvitation();
 	}
 
 	private void HandleTerminalUserInteractions()
@@ -82,7 +82,7 @@ public class Menu : IUserInterface
 
 	private void PrintEmptyInstructionMessage(String message)
 	{
-		MenuDisplayHandler.PrintEmptyInstructionMessage(message);
+		MenuPrintingHandler.PrintEmptyInstructionMessage(message);
 	}
 
 	private Boolean IsInputStartingWithCommand(String input, String command)

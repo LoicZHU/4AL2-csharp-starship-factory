@@ -1,6 +1,6 @@
 namespace core.UI;
 
-public static class Terminal
+public static class Printer
 {
 	public static void PrintMessageWithoutLinebreak(String message)
 	{

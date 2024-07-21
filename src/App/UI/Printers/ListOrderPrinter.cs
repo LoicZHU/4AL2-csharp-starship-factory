@@ -1,14 +1,14 @@
 namespace core.UI;
 
-public static class ListOrderTerminal
+public static class ListOrderPrinter
 {
 	public static void PrintInvalidCommand(String message)
 	{
-		Terminal.PrintInvalidCommand(message);
+		Printer.PrintInvalidCommand(message);
 	}
 
 	public static void PrintMessage(String message)
 	{
-		Terminal.PrintMessageWithoutLinebreak(message);
+		Printer.PrintMessageWithoutLinebreak(message);
 	}
 }

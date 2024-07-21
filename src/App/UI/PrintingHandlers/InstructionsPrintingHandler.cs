@@ -1,10 +1,10 @@
 namespace core.UI;
 
-public static class InstructionsDisplayHandler
+public static class InstructionsPrintingHandler
 {
 	public static void PrintInvalidCommand(String message)
 	{
-		Terminal.PrintInvalidCommand(message);
+		Printer.PrintInvalidCommand(message);
 	}
 
 	public static void PrintAssemblingComponents(
@@ -12,21 +12,21 @@ public static class InstructionsDisplayHandler
 		String componentToAdd
 	)
 	{
-		InstructionsTerminal.PrintAssemblingComponents(components, componentToAdd);
+		InstructionsPrinter.PrintAssemblingComponents(components, componentToAdd);
 	}
 
 	public static void PrintGetOutStock(Int32 quantity, String componentModel)
 	{
-		InstructionsTerminal.PrintGetOutStock(quantity, componentModel);
+		InstructionsPrinter.PrintGetOutStock(quantity, componentModel);
 	}
 
 	public static void PrintStarshipProductionStarting(String starshipModel, Int32 i)
 	{
-		InstructionsTerminal.PrintStarshipProductionStarting(starshipModel, i);
+		InstructionsPrinter.PrintStarshipProductionStarting(starshipModel, i);
 	}
 
 	public static void PrintStarshipProductionFinishing(String starshipModel, Int32 i)
 	{
-		InstructionsTerminal.PrintStarshipProductionFinishing(starshipModel, i);
+		InstructionsPrinter.PrintStarshipProductionFinishing(starshipModel, i);
 	}
 }

@@ -1,22 +1,22 @@
 namespace core.UI;
 
-public static class ListOrderDisplayHandler
+public static class ListOrderPrintingHandler
 {
 	public static void PrintInvalidCommand(String message)
 	{
-		ListOrderTerminal.PrintInvalidCommand(message);
+		ListOrderPrinter.PrintInvalidCommand(message);
 		TerminalHelper.PrintLineBreak();
 	}
 
 	public static void PrintNoOrders(String message)
 	{
-		ListOrderTerminal.PrintMessage(message);
+		ListOrderPrinter.PrintMessage(message);
 		TerminalHelper.PrintLineBreak();
 	}
 
 	public static void PrintListOrder(String message)
 	{
-		ListOrderTerminal.PrintMessage(message);
+		ListOrderPrinter.PrintMessage(message);
 		TerminalHelper.PrintLineBreak();
 	}
 }

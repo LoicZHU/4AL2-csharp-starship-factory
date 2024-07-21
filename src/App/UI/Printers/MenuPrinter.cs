@@ -3,16 +3,16 @@ using static System.ConsoleColor;
 
 namespace core.UI;
 
-public static class MenuTerminal
+public static class MenuPrinter
 {
 	public static void PrintWelcome(String message)
 	{
-		Terminal.PrintMessageWithoutLinebreak(message);
+		Printer.PrintMessageWithoutLinebreak(message);
 	}
 
 	public static void PrintUserInteractionInvitation(String message)
 	{
-		Terminal.PrintMessageWithoutLinebreak(message);
+		Printer.PrintMessageWithoutLinebreak(message);
 	}
 
 	public static void PrintHelp()
@@ -40,16 +40,16 @@ public static class MenuTerminal
 	private static void PrintCommandMessage(String command, String message)
 	{
 		TerminalHelper.ColorizeMessageWithoutLinebreak(command, Magenta);
-		Terminal.PrintMessageWithLinebreak(message);
+		Printer.PrintMessageWithLinebreak(message);
 	}
 
 	public static void PrintAvailableCommandsMessage(String message)
 	{
-		Terminal.PrintMessageWithoutLinebreak(message);
+		Printer.PrintMessageWithoutLinebreak(message);
 	}
 
 	public static void PrintEmptyInstructionMessage(String message)
 	{
-		Terminal.PrintMessageWithoutLinebreak(message);
+		Printer.PrintMessageWithoutLinebreak(message);
 	}
 }

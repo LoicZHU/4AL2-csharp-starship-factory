@@ -1,10 +1,10 @@
 namespace core.UI;
 
-public static class UnknownInstructionDisplayHandler
+public static class UnknownInstructionPrintingHandler
 {
 	public static void PrintUnknownInstruction(String message)
 	{
-		UnknownInstructionTerminal.PrintUnknownInstruction(message);
+		UnknownInstructionPrinter.PrintUnknownInstruction(message);
 		TerminalHelper.PrintLineBreak();
 	}
 }

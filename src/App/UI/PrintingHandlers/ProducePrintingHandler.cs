@@ -1,14 +1,14 @@
 namespace core.UI;
 
-public static class ProduceDisplayHandler
+public static class ProducePrintingHandler
 {
 	public static void PrintInvalidCommand(String message)
 	{
-		ProduceTerminal.PrintError(message);
+		ProducePrinter.PrintError(message);
 	}
 
 	public static void PrintStockUpdated()
 	{
-		ProduceTerminal.PrintStockUpdated();
+		ProducePrinter.PrintStockUpdated();
 	}
 }

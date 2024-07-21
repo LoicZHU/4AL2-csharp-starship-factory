@@ -4,7 +4,7 @@ public static class OrderDisplayHandler
 {
 	public static void PrintAddedOrderConfirmation(Guid orderId)
 	{
-		OrderTerminal.PrintAddedOrderConfirmation(orderId);
+		OrderPrinter.PrintAddedOrderConfirmation(orderId);
 		TerminalHelper.PrintLineBreak();
 	}
 }

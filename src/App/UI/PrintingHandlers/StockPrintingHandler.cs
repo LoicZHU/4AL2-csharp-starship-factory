@@ -1,15 +1,15 @@
 namespace core.UI;
 
-public static class StockDisplayHandler
+public static class StockPrintingHandler
 {
 	public static void PrintStarshipStock(Dictionary<String, Int32> starshipCounts)
 	{
 		foreach (var (starshipKey, value) in starshipCounts)
 		{
-			StockTerminal.PrintCurrentStocks(starshipKey, value);
+			StockPrinter.PrintCurrentStocks(starshipKey, value);
 		}
 
-		Terminal.PrintLinebreak();
+		Printer.PrintLinebreak();
 	}
 
 	public static void PrintComponentStock(List<Dictionary<String, Int32>> counts)
@@ -18,10 +18,10 @@ public static class StockDisplayHandler
 		{
 			foreach (var (componentKey, value) in componentCounts)
 			{
-				StockTerminal.PrintCurrentStocks(componentKey, value);
+				StockPrinter.PrintCurrentStocks(componentKey, value);
 			}
 		}
 
-		Terminal.PrintLinebreak();
+		Printer.PrintLinebreak();
 	}
 }

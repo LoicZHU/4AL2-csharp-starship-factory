@@ -11,6 +11,6 @@ public class HelpHandler : IHandler
 
 	private void PrintHelpMenu()
 	{
-		HelpTerminal.PrintHelpMenu();
+		HelpPrinter.PrintHelpMenu();
 	}
 }
