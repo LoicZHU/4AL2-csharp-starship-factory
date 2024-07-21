@@ -58,13 +58,13 @@ public class InstructionsHandler : IHandlerWithArgs
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 
 	private void PrintInvalidCommand(String message)
 	{
-		InstructionsDisplayHandler.PrintInvalidCommand(message);
+		InstructionsPrintingHandler.PrintInvalidCommand(message);
 	}
 
 	private void HandleStarshipAssemblies(Dictionary<String, Int32> starshipCounts)
@@ -78,20 +78,20 @@ public class InstructionsHandler : IHandlerWithArgs
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 
 	private void PrintInsufficientStock()
 	{
-		Terminal.PrintMessageWithLinebreak("Stock insuffisant.");
+		Printer.PrintMessageWithLinebreak("Stock insuffisant.");
 	}
 
 	private void AssembleStarships(String starshipName, Int32 quantity)
 	{
 		for (var i = 1; i <= quantity; i++)
 		{
-			InstructionsDisplayHandler.PrintStarshipProductionStarting(starshipName, i);
+			InstructionsPrintingHandler.PrintStarshipProductionStarting(starshipName, i);
 
 			try
 			{
@@ -99,17 +99,17 @@ public class InstructionsHandler : IHandlerWithArgs
 
 				this.PrintAndGetComponentsOutOfStock(starshipComponents);
 				this.PrintAssemblingComponents(starshipComponents);
-				InstructionsDisplayHandler.PrintStarshipProductionFinishing(starshipName, i);
+				InstructionsPrintingHandler.PrintStarshipProductionFinishing(starshipName, i);
 
 				this._starshipService.AddStarship(StarshipFactory.Create(starshipName));
 			}
 			catch (Exception e)
 			{
-				Terminal.PrintMessageWithLinebreak(e.Message);
+				Printer.PrintMessageWithLinebreak(e.Message);
 			}
 		}
 
-		Terminal.PrintLinebreak();
+		Printer.PrintLinebreak();
 	}
 
 	private void PrintAssemblingComponents(Dictionary<String, Int32> starshipComponents)
@@ -119,7 +119,7 @@ public class InstructionsHandler : IHandlerWithArgs
 		{
 			for (var j = 1; j <= componentCount; j++)
 			{
-				InstructionsDisplayHandler.PrintAssemblingComponents(components, componentName);
+				InstructionsPrintingHandler.PrintAssemblingComponents(components, componentName);
 				components.Add(componentName);
 			}
 		}
@@ -131,7 +131,7 @@ public class InstructionsHandler : IHandlerWithArgs
 	{
 		foreach (var (componentName, componentCount) in starshipComponents)
 		{
-			InstructionsDisplayHandler.PrintGetOutStock(componentCount, componentName);
+			InstructionsPrintingHandler.PrintGetOutStock(componentCount, componentName);
 			this._componentService.GetComponentsOutFromStock(componentName, componentCount);
 		}
 	}

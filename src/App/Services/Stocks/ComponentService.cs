@@ -64,7 +64,7 @@ public class ComponentService
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 			return (0, 0, 0, 0);
 		}
 	}

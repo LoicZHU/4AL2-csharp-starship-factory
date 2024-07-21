@@ -11,6 +11,6 @@ public class ExitHandler : IHandler
 
 	private void PrintExitMessage(String message)
 	{
-		ExitDisplayHandler.PrintExitMessage(message);
+		ExitPrintingHandler.PrintExitMessage(message);
 	}
 }

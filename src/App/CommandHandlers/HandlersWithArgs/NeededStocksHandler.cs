@@ -26,13 +26,13 @@ public class NeededStocksHandler : IHandlerWithArgs
 		var starshipCounts = this.GetStarshipSumsFromInput(inputBody);
 		if (!UtilsFunction.IsDictionaryEmpty(starshipCounts))
 		{
-			NeededStocksDisplayHandler.PrintNeededStocks(starshipCounts);
+			NeededStocksPrintingHandler.PrintNeededStocks(starshipCounts);
 		}
 	}
 
 	private void PrintInvalidCommand(String message)
 	{
-		NeededStocksDisplayHandler.PrintInvalidCommand(message);
+		NeededStocksPrintingHandler.PrintInvalidCommand(message);
 	}
 
 	private Dictionary<String, Int32> GetStarshipSumsFromInput(String input)

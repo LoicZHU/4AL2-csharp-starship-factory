@@ -58,13 +58,13 @@ public class ProduceHandler : IHandlerWithArgs
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 
 	private void PrintInvalidCommand(String message)
 	{
-		ProduceDisplayHandler.PrintInvalidCommand(message);
+		ProducePrintingHandler.PrintInvalidCommand(message);
 	}
 
 	private void HandleStarshipAssemblies(Dictionary<String, Int32> starshipCounts)
@@ -80,14 +80,14 @@ public class ProduceHandler : IHandlerWithArgs
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 
 	private void PrintInsufficientStock()
 	{
-		VerifyTerminal.PrintUnavailableMessage();
-		Terminal.PrintLinebreak();
+		VerifyPrinter.PrintUnavailableMessage();
+		Printer.PrintLinebreak();
 	}
 
 	private void AssembleStarships(String starshipName, Int32 quantity)
@@ -112,6 +112,6 @@ public class ProduceHandler : IHandlerWithArgs
 
 	private void PrintStockUpdatedMessage()
 	{
-		ProduceDisplayHandler.PrintStockUpdated();
+		ProducePrintingHandler.PrintStockUpdated();
 	}
 }

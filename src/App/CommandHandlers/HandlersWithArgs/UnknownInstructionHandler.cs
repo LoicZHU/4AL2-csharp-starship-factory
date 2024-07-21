@@ -14,6 +14,6 @@ public class UnknownInstructionHandler : IHandlerWithArgs
 
 	private void PrintUnknownInstruction(String message)
 	{
-		UnknownInstructionDisplayHandler.PrintUnknownInstruction(message);
+		UnknownInstructionPrintingHandler.PrintUnknownInstruction(message);
 	}
 }

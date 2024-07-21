@@ -27,7 +27,7 @@ public class InMemoryStarship : IStarshipRepository
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 

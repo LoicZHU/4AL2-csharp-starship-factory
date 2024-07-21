@@ -43,13 +43,13 @@ public class OrderHandler : IHandlerWithArgs
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 
 	private void PrintInvalidCommand(String message)
 	{
-		ListOrderDisplayHandler.PrintInvalidCommand(message);
+		ListOrderPrintingHandler.PrintInvalidCommand(message);
 	}
 
 	private Order? GetCompleteOrderFrom(String starshipsPart)

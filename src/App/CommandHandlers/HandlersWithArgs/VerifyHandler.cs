@@ -54,22 +54,22 @@ public class VerifyHandler : IHandlerWithArgs
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 
 	private void PrintInvalidCommand(String message)
 	{
-		VerifyDisplayHandler.PrintInvalidCommand(message);
+		VerifyPrintingHandler.PrintInvalidCommand(message);
 	}
 
 	private void PrintSufficientStock()
 	{
-		VerifyDisplayHandler.PrintSufficientStock();
+		VerifyPrintingHandler.PrintSufficientStock();
 	}
 
 	private void PrintInsufficientStock()
 	{
-		VerifyDisplayHandler.PrintInsufficientStock();
+		VerifyPrintingHandler.PrintInsufficientStock();
 	}
 }

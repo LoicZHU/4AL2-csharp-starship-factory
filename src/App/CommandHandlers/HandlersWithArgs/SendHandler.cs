@@ -58,7 +58,7 @@ public class SendHandler : IHandlerWithArgs
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 
@@ -70,7 +70,7 @@ public class SendHandler : IHandlerWithArgs
 	private void RemoveOrderAndPrintCompleted(Guid orderId)
 	{
 		this._orderRepository.Remove(orderId);
-		SendDisplayHandler.PrintCompletedMessage(orderId.ToString());
+		SendPrintingHandler.PrintCompletedMessage(orderId.ToString());
 	}
 
 	private Boolean IsCommandInputValid(String[] input)
@@ -80,7 +80,7 @@ public class SendHandler : IHandlerWithArgs
 
 	private void PrintInvalidCommand(String message)
 	{
-		SendDisplayHandler.PrintInvalidCommand(message);
+		SendPrintingHandler.PrintInvalidCommand(message);
 	}
 
 	private void RemoveStarshipsFromStock(Dictionary<String, Int32>? order, Guid orderId)
@@ -101,7 +101,7 @@ public class SendHandler : IHandlerWithArgs
 				}
 				catch (Exception e)
 				{
-					Terminal.PrintMessageWithLinebreak(e.Message);
+					Printer.PrintMessageWithLinebreak(e.Message);
 				}
 			}
 		}
@@ -113,7 +113,7 @@ public class SendHandler : IHandlerWithArgs
 	)
 	{
 		var message = this.GetOrderRemainingStarshipsMessage(order, orderId);
-		SendDisplayHandler.PrintOrderRemainingStarships(message);
+		SendPrintingHandler.PrintOrderRemainingStarships(message);
 	}
 
 	private String GetOrderRemainingStarshipsMessage(

@@ -29,11 +29,11 @@ public class StockHandler : IHandler
 		try
 		{
 			var starshipCounts = this._starshipRepository.GetStock();
-			StockDisplayHandler.PrintStarshipStock(starshipCounts);
+			StockPrintingHandler.PrintStarshipStock(starshipCounts);
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 
@@ -42,11 +42,11 @@ public class StockHandler : IHandler
 		try
 		{
 			var componentCounts = this._componentRepository.GetStockOfEachComponent();
-			StockDisplayHandler.PrintComponentStock(componentCounts);
+			StockPrintingHandler.PrintComponentStock(componentCounts);
 		}
 		catch (Exception e)
 		{
-			Terminal.PrintMessageWithLinebreak(e.Message);
+			Printer.PrintMessageWithLinebreak(e.Message);
 		}
 	}
 }
