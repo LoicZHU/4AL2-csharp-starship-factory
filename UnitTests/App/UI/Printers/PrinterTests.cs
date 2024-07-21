@@ -1,20 +1,20 @@
 using core.UI;
 
-namespace UnitTests.App.UI.Terminals;
+namespace UnitTests.App.UI.Printers;
 
-public class TerminalTests
+public class PrinterTests
 {
 	private readonly StringWriter _stringWriter;
 	private readonly TextWriter _originalOutput;
 
-	public TerminalTests()
+	public PrinterTests()
 	{
 		_stringWriter = new StringWriter();
 		_originalOutput = Console.Out;
 		Console.SetOut(_stringWriter);
 	}
 
-	~TerminalTests()
+	~PrinterTests()
 	{
 		Console.SetOut(_originalOutput);
 	}
@@ -26,7 +26,7 @@ public class TerminalTests
 		var message = "Test message";
 
 		// Act
-		Terminal.PrintMessageWithoutLinebreak(message);
+		Printer.PrintMessageWithoutLinebreak(message);
 
 		// Assert
 		var output = _stringWriter.ToString();
@@ -40,7 +40,7 @@ public class TerminalTests
 		var message = "Test message";
 
 		// Act
-		Terminal.PrintMessageWithLinebreak(message);
+		Printer.PrintMessageWithLinebreak(message);
 
 		// Assert
 		var output = _stringWriter.ToString();
@@ -51,7 +51,7 @@ public class TerminalTests
 	public void PrintLinebreak_WritesLinebreakToConsole()
 	{
 		// Act
-		Terminal.PrintLinebreak();
+		Printer.PrintLinebreak();
 
 		// Assert
 		var output = _stringWriter.ToString();
@@ -65,7 +65,7 @@ public class TerminalTests
 		var message = "Invalid command";
 
 		// Act
-		Terminal.PrintInvalidCommand(message);
+		Printer.PrintInvalidCommand(message);
 
 		// Assert
 		var output = _stringWriter.ToString();
